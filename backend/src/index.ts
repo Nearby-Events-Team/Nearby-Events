@@ -11,6 +11,7 @@ import { errorHandler, notFoundHandler } from './middleware/error';
 import { readLimiter, writeLimiter } from './middleware/rateLimit';
 import { requestContext } from './middleware/requestContext';
 import { aiRouter } from './routes/ai';
+import { commentsRouter } from './routes/comments';
 import { eventsRouter } from './routes/events';
 import { metaRouter } from './routes/meta';
 import { rsvpsRouter } from './routes/rsvps';
@@ -117,6 +118,7 @@ export function createApp(): express.Express {
   app.use('/api', metaRouter);
   app.use('/api/events', eventsRouter);
   app.use('/api/events', rsvpsRouter);
+  app.use('/api/events/:eventId/comments', commentsRouter);
   app.use('/api/me', usersRouter);
   // The AI router accepts up to ~2 KB of user text in a prompt. Give it its own
   // JSON limit so we do not raise the bar for every other route.

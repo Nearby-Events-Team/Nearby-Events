@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, LayoutGrid, Map as MapIcon } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { SegmentedControl } from '@/components/ui/Primitives';
@@ -94,8 +94,17 @@ function writeFiltersToUrl(filters: EventFiltersState, page: number, view: ViewM
 }
 
 export default function Explore() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { theme } = useTheme();
+
+  const targetEventId = searchParams.get('event') || searchParams.get('id');
+
+  useEffect(() => {
+    if (targetEventId) {
+      navigate(`/events/${targetEventId}`, { replace: true });
+    }
+  }, [targetEventId, navigate]);
 
   const [filters, setFilters] = useState<EventFiltersState>(() => readFiltersFromUrl(searchParams));
   const [page, setPage] = useState(() => Math.max(1, Number(searchParams.get('page')) || 1));

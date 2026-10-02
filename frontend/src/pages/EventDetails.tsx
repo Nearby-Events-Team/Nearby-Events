@@ -19,6 +19,8 @@ import { RsvpButton } from '@/components/events/RsvpButton';
 import { CopyLinkButton, ShareMenu } from '@/components/events/ShareMenu';
 import { EventCard } from '@/components/events/EventCard';
 import { EventMap } from '@/components/events/EventMap';
+import { WeatherWidget } from '@/components/events/WeatherWidget';
+import { CommentsSection } from '@/components/events/CommentsSection';
 import { ErrorState, EventDetailSkeleton } from '@/components/common/States';
 import { useAuth } from '@/context/AuthContext';
 import { useRsvp } from '@/hooks/useRsvp';
@@ -478,6 +480,9 @@ export default function EventDetails() {
                 <AttendeeList attendees={attendees} total={event.rsvpCount} />
               </div>
             </section>
+
+            {/* -------------------------------------------- comments / Q&A */}
+            <CommentsSection eventId={event.id} />
           </div>
 
           {/* ----------------------------------------------------- sidebar */}
@@ -504,6 +509,9 @@ export default function EventDetails() {
               </div>
 
               <Separator />
+
+              {/* ----------------------------------------- weather forecast */}
+              <WeatherWidget event={event} />
 
               {/* --------------------------------------------- organiser */}
               <div>

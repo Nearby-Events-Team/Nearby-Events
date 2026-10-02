@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowRight, CalendarDays, CalendarPlus, Flame, MapPin, Sparkles, TrendingUp, Users } from 'lucide-react';
 import { ButtonLink } from '@/components/ui/Button';
 import { Badge, Card } from '@/components/ui/Primitives';
@@ -265,6 +265,17 @@ function HowItWorks() {
 }
 
 export default function Home() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const targetEventId = searchParams.get('event') || searchParams.get('id');
+
+  useEffect(() => {
+    if (targetEventId) {
+      navigate(`/events/${targetEventId}`, { replace: true });
+    }
+  }, [targetEventId, navigate]);
+
   // "Most popular" has no date or category constraint, so it is the honest proxy for
   // whether the board holds anything at all.
   const [boardHasEvents, setBoardHasEvents] = useState<boolean | null>(null);

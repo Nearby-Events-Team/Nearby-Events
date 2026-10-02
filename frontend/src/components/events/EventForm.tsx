@@ -5,6 +5,7 @@ import {
   Check,
   ImagePlus,
   Loader2,
+  MapPin,
   Sparkles,
   Trash2,
   Upload,
@@ -446,6 +447,30 @@ function ImageField({
   );
 }
 
+async function lookupCoordinates(city: string, neighborhood?: string): Promise<{ lat: number; lng: number } | null> {
+  const target = city.trim() || neighborhood?.trim();
+  if (!target) return null;
+  try {
+    let res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(target)}&count=1`);
+    let data = res.ok ? await res.json() : null;
+
+    if (!data?.results?.length && neighborhood && target !== neighborhood.trim()) {
+      res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(neighborhood.trim())}&count=1`);
+      data = res.ok ? await res.json() : null;
+    }
+
+    if (data?.results?.[0]?.latitude != null && data?.results?.[0]?.longitude != null) {
+      return {
+        lat: Number(data.results[0].latitude),
+        lng: Number(data.results[0].longitude),
+      };
+    }
+  } catch {
+    // network or parse error
+  }
+  return null;
+}
+
 /* --------------------------------------------------------------- the form */
 
 export function EventForm({
@@ -463,6 +488,7 @@ export function EventForm({
   );
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
+  const [geocoding, setGeocoding] = useState(false);
   const [aiAvailable, setAiAvailable] = useState(false);
   /**
    * A toast disappears after five seconds. Someone who looks away, or who uses a screen
@@ -527,6 +553,17 @@ export function EventForm({
     setErrors({});
     setSubmitError(null);
 
+    let resolvedLat = form.latitude.trim() ? Number(form.latitude) : null;
+    let resolvedLng = form.longitude.trim() ? Number(form.longitude) : null;
+
+    if (resolvedLat === null && resolvedLng === null && form.city.trim()) {
+      const coords = await lookupCoordinates(form.city, form.neighborhood);
+      if (coords) {
+        resolvedLat = coords.lat;
+        resolvedLng = coords.lng;
+      }
+    }
+
     const payload: EventFormPayload = {
       title: form.title.trim(),
       description: form.description.trim(),
@@ -544,8 +581,8 @@ export function EventForm({
       tzOffsetMinutes: new Date().getTimezoneOffset(),
       location: form.location.trim(),
       address: form.address.trim(),
-      latitude: form.latitude.trim() ? Number(form.latitude) : null,
-      longitude: form.longitude.trim() ? Number(form.longitude) : null,
+      latitude: resolvedLat,
+      longitude: resolvedLng,
       neighborhood: form.neighborhood.trim(),
       city: form.city.trim(),
       imageUrl: form.imageUrl,
@@ -845,6 +882,33 @@ export function EventForm({
             placeholder="76.9558"
             inputMode="decimal"
           />
+        </div>
+
+        <div className="flex items-center justify-between pt-1">
+          <button
+            type="button"
+            onClick={async () => {
+              if (!form.city.trim()) {
+                toast.info('Enter a city first', 'Please fill in the City field above to auto-detect coordinates.');
+                return;
+              }
+              setGeocoding(true);
+              const coords = await lookupCoordinates(form.city, form.neighborhood);
+              setGeocoding(false);
+              if (coords) {
+                set('latitude', String(coords.lat));
+                set('longitude', String(coords.lng));
+                toast.success('Coordinates found', `Set to ${coords.lat}, ${coords.lng} for ${form.city}`);
+              } else {
+                toast.error('Not found', 'Could not locate coordinates for this city.');
+              }
+            }}
+            disabled={geocoding || submitting}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand hover:underline disabled:opacity-50"
+          >
+            {geocoding ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <MapPin className="h-3.5 w-3.5" />}
+            Auto-detect coordinates from city
+          </button>
         </div>
       </Card>
 

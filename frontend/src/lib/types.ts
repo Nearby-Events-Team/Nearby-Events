@@ -164,3 +164,21 @@ export interface CategoryCount {
   category: Category;
   count: number;
 }
+
+export interface CommentRecord {
+  id: string;
+  eventId: string;
+  parentId: string | null;
+  authorId: string;
+  authorName: string;
+  authorPhotoURL: string | null;
+  body: string;
+  likeCount: number;
+  replyCount: number;
+  createdAt: string | null;
+  updatedAt: string | null;
+  isAuthor?: boolean;
+  isLiked?: boolean;
+  /** Loaded on demand when user expands replies */
+  replies?: CommentRecord[];
+}

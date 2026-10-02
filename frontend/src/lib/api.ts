@@ -3,6 +3,7 @@ import type {
   AiSuggestion,
   Attendee,
   CategoryCount,
+  CommentRecord,
   EventDetailResponse,
   EventFiltersState,
   EventFormPayload,
@@ -232,4 +233,37 @@ export const api = {
       auth: true,
     });
   },
+
+  /** Comments */
+  listComments: (eventId: string, signedIn: boolean) =>
+    request<{ comments: CommentRecord[]; total: number }>(`/events/${eventId}/comments`, { auth: signedIn }),
+
+  listReplies: (eventId: string, commentId: string, signedIn: boolean) =>
+    request<{ replies: CommentRecord[]; total: number }>(
+      `/events/${eventId}/comments/${commentId}/replies`,
+      { auth: signedIn },
+    ),
+
+  addComment: (eventId: string, body: string, parentId?: string) =>
+    request<{ comment: CommentRecord }>(`/events/${eventId}/comments`, {
+      method: 'POST',
+      body: { body, ...(parentId ? { parentId } : {}) },
+      auth: true,
+    }),
+
+  editComment: (eventId: string, commentId: string, body: string) =>
+    request<{ comment: CommentRecord }>(`/events/${eventId}/comments/${commentId}`, {
+      method: 'PATCH',
+      body: { body },
+      auth: true,
+    }),
+
+  deleteComment: (eventId: string, commentId: string) =>
+    request<void>(`/events/${eventId}/comments/${commentId}`, { method: 'DELETE', auth: true }),
+
+  toggleCommentLike: (eventId: string, commentId: string) =>
+    request<{ liked: boolean; likeCount: number }>(`/events/${eventId}/comments/${commentId}/like`, {
+      method: 'POST',
+      auth: true,
+    }),
 };

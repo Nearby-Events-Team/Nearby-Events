@@ -10,6 +10,11 @@ export function eventShareUrl(eventId: string): string {
   return `${window.location.origin}/events/${eventId}`;
 }
 
+/** Query-string based URL for deep-linking — ?event=ID or ?id=ID */
+export function eventQueryShareUrl(eventId: string): string {
+  return `${window.location.origin}/?event=${eventId}`;
+}
+
 async function copyToClipboard(text: string): Promise<boolean> {
   try {
     await navigator.clipboard.writeText(text);
