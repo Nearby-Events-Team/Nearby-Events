@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Local Event Bulletin Board: Hackathon Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&family=Newsreader:wght@500;700&display=swap">
+<style>
+:root{--bg:#f6f8f7;--ink:#14212b;--mute:#5a6b76;--line:#d5dede;--accent:#0b6e6e;--flag:#e0a100;--card:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a20;--ink:#e6eef0;--mute:#93a5ad;--line:#27373f;--accent:#4fc3c3;--flag:#f0b72f;--card:#16252d}}
+:root[data-theme="dark"]{--bg:#0f1a20;--ink:#e6eef0;--mute:#93a5ad;--line:#27373f;--accent:#4fc3c3;--flag:#f0b72f;--card:#16252d}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Instrument Sans",system-ui,sans-serif}
+main{max-width:860px;margin:0 auto;padding:40px 20px 80px}
+h1,h2{font-family:Newsreader,Georgia,serif;line-height:1.15}
+h1{font-size:clamp(2rem,6vw,3.1rem);margin:0 0 12px}
+h2{font-size:1.65rem;margin:52px 0 12px;padding-top:18px;border-top:2px solid var(--accent)}
+h3{font-size:1.05rem;margin:24px 0 6px}
+p{margin:8px 0;max-width:68ch}
+.lead{font-size:1.2rem;color:var(--mute);max-width:60ch}
+.meta{color:var(--mute);font-size:.92rem;margin-top:14px}
+.tw{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:6px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.93rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:700;background:color-mix(in srgb,var(--accent) 10%,var(--card))}
+tr:last-child td{border-bottom:0}
+tr.pick td{background:color-mix(in srgb,var(--flag) 16%,var(--card))}
+.note{border-left:4px solid var(--flag);padding:8px 14px;margin:16px 0;background:var(--card)}
+ul{padding-left:1.2rem}li{margin:4px 0}
+pre.mermaid{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px;overflow-x:auto}
+.tag{font-weight:700;color:var(--accent)}
+</style>
+</head>
+<body>
+<main>
+<h1>Local Event Bulletin Board</h1>
+<p class="lead">Any event info, in any format, becomes a structured, trusted, discoverable event in seconds.</p>
+<p class="meta">Cognizant GCP Hackathon, Use Case 5. Build window 2 to 5 Oct 2026. Evaluation 6 Oct 2026.</p>
+
+<h2>1. Why Use Case 5</h2>
+<p>Use cases 1, 3, 4 and 5 are all basic CRUD with SQLite, so most teams will submit near-identical apps. The panel scores architecture, alternatives considered, real-time capability, monitoring, UX and presentation. Those are where we win.</p>
+<div class="tw"><table>
+<tr><th>#</th><th>Use case</th><th>Difficulty</th><th>Wow ceiling</th><th>Note</th></tr>
+<tr><td>1</td><td>Task manager</td><td>Easy</td><td>Low</td><td>Most common pick</td></tr>
+<tr><td>2</td><td>Log monitoring dashboard</td><td>Medium-hard</td><td>High</td><td>Most cloud-native, needs real log data</td></tr>
+<tr><td>3</td><td>Flashcard app</td><td>Easy</td><td>Medium</td><td>Fun UI, thin backend</td></tr>
+<tr><td>4</td><td>Recipe box and shopping list</td><td>Easy-medium</td><td>Medium</td><td>Nothing GCP-specific</td></tr>
+<tr class="pick"><td>5</td><td>Event bulletin board</td><td>Easy-medium</td><td>High</td><td>Public, shareable, location-based, real-time; room for AI and Maps</td></tr>
+</table></div>
+
+<h2>2. Core features (required, must be flawless)</h2>
+<ul>
+<li>Card grid with the next upcoming event first</li>
+<li>Post form: title, date/time, location, description</li>
+<li>Date-sorted query</li>
+<li>Expiry: hide past events in the query and clean up on a schedule</li>
+<li>"I'm Going" counter, one RSVP per device, rate limited</li>
+<li>Color-coded category badges</li>
+<li>Neighborhood search</li>
+<li>Shareable links with a unique event ID</li>
+</ul>
+
+<h2>3. Standout features</h2>
+<div class="tw"><table>
+<tr><th>#</th><th>Feature</th><th>What the judges see</th><th>Plan</th></tr>
+<tr class="pick"><td>1</td><td>Snap-a-Poster</td><td>Upload a poster photo or paste a WhatsApp forward; Gemini pre-fills title, date, venue, category, description</td><td>Core</td></tr>
+<tr><td>2</td><td>Voice Post</td><td>Speak the event in Tamil, Hindi or English and get a card</td><td>Stretch</td></tr>
+<tr class="pick"><td>3</td><td>Ask the Board</td><td>Natural-language search ("free this weekend for my parents") with ranked cards and a reason for each</td><td>Core</td></tr>
+<tr class="pick"><td>4</td><td>Smart Trust Layer</td><td>AI moderation plus embedding-based duplicate detection</td><td>Core</td></tr>
+<tr class="pick"><td>5</td><td>Plan My Trip</td><td>Travel time, leave-by time, rain warning for outdoor events, Add to Calendar</td><td>Core</td></tr>
+<tr class="pick"><td>6</td><td>Live board</td><td>RSVP counts update instantly on every screen; Trending badge on spikes</td><td>Core</td></tr>
+<tr><td>7</td><td>Weekly Digest</td><td>Auto-generated "This weekend near you" summary</td><td>Stretch</td></tr>
+<tr class="pick"><td>8</td><td>Community Pulse dashboard</td><td>Posts per day, hot categories and neighborhoods, RSVP trends</td><td>Core (simple version)</td></tr>
+</table></div>
+<p>Further stretch ideas: AI-generated banners for events without images, "events like this" recommendations, check-in QR codes at the venue.</p>
+<div class="note">Every AI feature must degrade gracefully. If Gemini fails during the demo, the manual form and plain search still work.</div>
+
+<h2>4. GCP services and why</h2>
+<div class="tw"><table>
+<tr><th>Need</th><th>Service</th><th>Why</th></tr>
+<tr><td>Hosting</td><td>Cloud Run</td><td>Container deploy, scales to zero, public HTTPS URL</td></tr>
+<tr><td>Events and live RSVPs</td><td>Firestore</td><td>Real-time listeners; TTL policy for expiry</td></tr>
+<tr><td>Poster reading, search, moderation, digest</td><td>Vertex AI (Gemini)</td><td>One multimodal model for images, text and language</td></tr>
+<tr><td>Duplicates, similar events</td><td>Vertex AI embeddings + Firestore vector search</td><td>Semantic matching, not just keywords</td></tr>
+<tr><td>Voice Post</td><td>Speech-to-Text</td><td>Supports Indian languages</td></tr>
+<tr><td>Multilingual UI</td><td>Cloud Translation</td><td>Cheap and reliable</td></tr>
+<tr><td>Venue autocomplete, map, travel time, weather</td><td>Maps Platform (Places, Maps JS, Routes, Weather)</td><td>Map view and Plan My Trip</td></tr>
+<tr><td>Poster storage</td><td>Cloud Storage</td><td>Uploads and generated banners</td></tr>
+<tr><td>Expiry cleanup, digest</td><td>Cloud Scheduler + Pub/Sub + Cloud Run functions</td><td>Event-driven, no cron on a VM</td></tr>
+<tr><td>Logs and alerts</td><td>Cloud Logging + Cloud Monitoring</td><td>Real dashboards and alerts</td></tr>
+<tr><td>Analytics</td><td>BigQuery + Looker Studio</td><td>Fast, impressive charts (if time allows)</td></tr>
+<tr><td>API keys</td><td>Secret Manager</td><td>Security talking point</td></tr>
+<tr><td>Login (optional)</td><td>Firebase Authentication</td><td>Verified organizers</td></tr>
+</table></div>
+
+<h3>Architecture</h3>
+<pre class="mermaid">
+flowchart LR
+U[User: PWA web app] --> CR[Cloud Run: Flask API]
+CR --> FS[(Firestore)]
+FS -- live listeners --> U
+CR --> V[Vertex AI: Gemini + embeddings]
+CR --> M[Maps Platform]
+CR --> GCS[Cloud Storage]
+SCH[Cloud Scheduler] --> PS[Pub/Sub] --> CF[Cloud Run functions]
+CF --> FS
+CR --> LOG[Cloud Logging + Monitoring]
+</pre>
+
+<h3>Alternatives considered</h3>
+<ul>
+<li><span class="tag">VM + SQLite</span> is simple but needs manual scaling, patching and polling for live updates.</li>
+<li><span class="tag">Cloud SQL</span> handles the sorted query fine but adds cost and lacks built-in real-time listeners.</li>
+<li><span class="tag">Cloud Run + Firestore</span> (chosen) gives serverless scaling, live updates, TTL expiry and a one-command deploy.</li>
+</ul>
+
+<h2>5. Mapping to the evaluation criteria</h2>
+<div class="tw"><table>
+<tr><th>Criterion</th><th>Our answer</th></tr>
+<tr><td>Architecture and alternatives</td><td>Event-driven serverless design with a documented comparison</td></tr>
+<tr><td>Real-time decision capability</td><td>Live RSVPs, trending detection, AI search</td></tr>
+<tr><td>Integration options</td><td>Calendar, Maps, WhatsApp share card</td></tr>
+<tr><td>Reusability</td><td>Same engine fits college clubs, apartment communities, municipal notices</td></tr>
+<tr><td>Monitoring</td><td>Cloud Monitoring alerts plus Community Pulse dashboard</td></tr>
+<tr><td>Limits and roadmap</td><td>Moderation is AI-assisted, not perfect; privacy review needed before real use</td></tr>
+</table></div>
+
+<h2>6. Deliverables and timeline</h2>
+<p>Required: architecture diagram, working demoable UI on a public Cloud Run URL, short walkthrough video, roadmap (built now vs next), and a presentation covering problem, demo, impact and limits.</p>
+<div class="tw"><table>
+<tr><th>Day</th><th>Focus</th></tr>
+<tr><td>Fri 2 Oct</td><td>Lock features, draw architecture, set up GCP project, scaffold repo</td></tr>
+<tr><td>Sat 3 Oct</td><td>Core app deployed to Cloud Run</td></tr>
+<tr><td>Sun 4 Oct</td><td>Snap-a-Poster, Ask the Board, trust layer, maps, live RSVPs</td></tr>
+<tr><td>Mon 5 Oct</td><td>Monitoring dashboard, polish, video, slides, rehearsal</td></tr>
+<tr><td>Tue 6 Oct</td><td>Evaluation</td></tr>
+</table></div>
+<p>Suggested roles (up to 7 members): backend and database, frontend and UX, AI features, Maps and sharing, DevOps and monitoring, docs/video/presentation.</p>
+
+<h2>7. Open decisions</h2>
+<ul>
+<li>Confirm a GCP project with billing or credits enabled (Gemini, Speech and Maps need it; Maps needs an API key).</li>
+<li>Lock the core wow set: Snap-a-Poster, Ask the Board, Trust Layer, Plan My Trip, Live board. Voice Post and Weekly Digest are the first to cut.</li>
+</ul>
+</main>
+
+<!--claude-mermaid-runtime-begin:3477-->
+<style>.mermaid-diagram{margin-block:4px}.mermaid-diagram svg{display:block;margin:0 auto;max-width:100%;height:auto}</style>
+<script src="/_runtime/mermaid-11.16.1.min.js"></script>
+<script>(function(){
+var CFG={"palettes":{"light":{"surface":"#f4efe4","text":"#42392e","line":"#8a7f6d","border":"#7a6c52","bg":"#fffdf8"},"dark":{"surface":"#262b34","text":"#f2f3f5","line":"#a8adb8","border":"#9aa4b8","bg":"#1f232b"}}};
+if(typeof mermaid==='undefined')return;
+var pres=Array.prototype.slice.call(document.querySelectorAll('pre.mermaid')).filter(function(p){if(p.hasAttribute('data-claude-mermaid-claimed'))return false;p.setAttribute('data-claude-mermaid-claimed','1');return true;});
+if(!pres.length)return;
+var mq=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;
+var root=document.documentElement;
+var items=pres.map(function(pre){
+var mount=document.createElement('div');mount.className='mermaid-diagram';
+return {pre:pre,mount:mount,src:pre.textContent||''};
+});
+var seq=0;
+var renderGen=0;
+var lastKey='';
+function pageBg(fallback){
+var els=[document.body,document.documentElement];
+for(var i=0;i<els.length;i++){
+var c=els[i]&&getComputedStyle(els[i]).backgroundColor;
+if(c&&c!=='transparent'&&c!=='rgba(0, 0, 0, 0)')return c;
+}
+return fallback;
+}
+function render(){
+var theme=root.getAttribute('data-theme');
+var dark=theme==='dark'||(!!(mq&&mq.matches)&&theme!=='light');
+var pal=dark?CFG.palettes.dark:CFG.palettes.light;
+var bg=pageBg(pal.bg);
+var key=(dark?'d':'l')+'|'+bg;
+if(key===lastKey)return;
+lastKey=key;
+var gen=++renderGen;
+var font=getComputedStyle(document.body).fontFamily||'sans-serif';
+var nat={useMaxWidth:false};
+mermaid.initialize({
+startOnLoad:false,securityLevel:'strict',theme:'base',
+flowchart:nat,sequence:nat,er:nat,state:nat,class:nat,pie:nat,
+gantt:nat,journey:nat,timeline:nat,gitGraph:nat,mindmap:nat,xyChart:nat,
+quadrantChart:nat,sankey:nat,c4:nat,requirement:nat,block:nat,
+packet:nat,kanban:nat,architecture:nat,radar:nat,
+themeVariables:{background:bg,mainBkg:pal.surface,primaryColor:pal.surface,
+primaryTextColor:pal.text,lineColor:pal.line,primaryBorderColor:pal.border,
+nodeBorder:pal.border,clusterBorder:pal.border,edgeLabelBackground:bg,
+clusterBkg:'rgba(127,127,127,0.07)',titleColor:pal.text,
+darkMode:dark,rowOdd:bg,rowEven:'rgba(127,127,127,0.07)',
+attributeBackgroundColorOdd:bg,attributeBackgroundColorEven:'rgba(127,127,127,0.07)',
+fontSize:'16px',fontFamily:font},
+themeCSS:'.node rect, .node circle, .node polygon, .node path, .cluster rect { stroke-width: 2px; }'
+});
+items.forEach(function(it){
+var id='claude-mermaid-'+seq++;
+mermaid.render(id,it.src).then(function(r){
+if(gen!==renderGen)return;
+var prev=it.pre.previousElementSibling;
+if(prev&&prev.className==='mermaid-diagram'&&prev!==it.mount)return;
+it.mount.innerHTML=r.svg;
+if(!it.mount.parentNode)it.pre.parentNode.insertBefore(it.mount,it.pre);
+it.pre.style.display='none';
+},function(){
+var scratch=document.getElementById(id);
+if(scratch)scratch.parentNode.removeChild(scratch);
+scratch=document.getElementById('d'+id);
+if(scratch)scratch.parentNode.removeChild(scratch);
+if(gen!==renderGen)return;
+if(it.mount.parentNode)it.mount.parentNode.removeChild(it.mount);
+it.pre.style.display='';
+});
+});
+}
+render();
+if(mq&&mq.addEventListener)mq.addEventListener('change',render);
+if(typeof MutationObserver!=='undefined')new MutationObserver(render).observe(root,{attributes:true,attributeFilter:['data-theme']});
+})();</script>
+<!--claude-mermaid-runtime-end-->
+</body>
+</html>
