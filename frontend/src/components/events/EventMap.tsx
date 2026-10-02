@@ -166,12 +166,7 @@ export function EventMap({
           zoomControl: true,
         });
 
-        const tileUrl =
-          theme === 'dark'
-            ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-            : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-
-        const layer = L.tileLayer(tileUrl, {
+        const layer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
           maxZoom: 19,
         }).addTo(map);
@@ -202,20 +197,6 @@ export function EventMap({
   useEffect(() => {
     if (mapEngine === 'google') {
       googleMapRef.current?.setOptions({ styles: theme === 'dark' ? DARK_STYLE : LIGHT_STYLE });
-    } else if (mapEngine === 'leaflet' && leafletMapRef.current && (window as any).L) {
-      const L = (window as any).L;
-      if (leafletLayerRef.current) {
-        leafletMapRef.current.removeLayer(leafletLayerRef.current);
-      }
-      const tileUrl =
-        theme === 'dark'
-          ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-          : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-
-      leafletLayerRef.current = L.tileLayer(tileUrl, {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        maxZoom: 19,
-      }).addTo(leafletMapRef.current);
     }
   }, [theme, mapEngine]);
 

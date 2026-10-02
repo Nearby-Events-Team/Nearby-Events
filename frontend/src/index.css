@@ -200,4 +200,13 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+  /* Sleek dark mode filter for OpenStreetMap tiles (100% free, zero watermarks) */
+  [data-theme='dark'] .leaflet-tile {
+    filter: brightness(0.65) invert(1) contrast(2.5) hue-rotate(195deg) saturate(0.35);
+  }
+
+  [data-theme='dark'] .leaflet-container {
+    background: #0f172a;
+  }
 }
