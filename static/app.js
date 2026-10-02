@@ -22,6 +22,9 @@
         rsvpSet: new Set(JSON.parse(localStorage.getItem("eb_rsvps") || "[]")),
         posterFile: null,
         posterBase64: null,
+        // Auth
+        currentUser: JSON.parse(localStorage.getItem("eb_user") || "null"),
+        token: localStorage.getItem("eb_token") || null,
     };
 
     function getDeviceId() {
@@ -47,9 +50,11 @@
             return res.json();
         },
         async createEvent(data) {
+            const headers = { "Content-Type": "application/json" };
+            if (state.token) headers.Authorization = `Bearer ${state.token}`;
             const res = await fetch("/api/events", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers,
                 body: JSON.stringify(data),
             });
             return { ok: res.ok, data: await res.json() };
@@ -81,6 +86,55 @@
         async getPulse() {
             const res = await fetch("/api/pulse");
             return res.json();
+        },
+        async login(username, password) {
+            const res = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password }),
+            });
+            return { ok: res.ok, data: await res.json() };
+        },
+        async register(username, password, display_name) {
+            const res = await fetch("/api/auth/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, password, display_name }),
+            });
+            return { ok: res.ok, data: await res.json() };
+        },
+        async logout() {
+            await fetch("/api/auth/logout", { method: "POST" });
+        },
+        async getDeleteRequests() {
+            const headers = state.token ? { Authorization: `Bearer ${state.token}` } : {};
+            const res = await fetch("/api/delete-requests", { headers });
+            return res.json();
+        },
+        async requestDelete(event_id, reason) {
+            const headers = { "Content-Type": "application/json" };
+            if (state.token) headers.Authorization = `Bearer ${state.token}`;
+            const res = await fetch("/api/delete-requests", {
+                method: "POST",
+                headers,
+                body: JSON.stringify({ event_id, reason }),
+            });
+            return { ok: res.ok, data: await res.json() };
+        },
+        async approveDeleteRequest(req_id) {
+            const headers = state.token ? { Authorization: `Bearer ${state.token}` } : {};
+            const res = await fetch(`/api/delete-requests/${req_id}/approve`, { method: "POST", headers });
+            return { ok: res.ok, data: await res.json() };
+        },
+        async rejectDeleteRequest(req_id) {
+            const headers = state.token ? { Authorization: `Bearer ${state.token}` } : {};
+            const res = await fetch(`/api/delete-requests/${req_id}/reject`, { method: "POST", headers });
+            return { ok: res.ok, data: await res.json() };
+        },
+        async adminDeleteEvent(event_id) {
+            const headers = state.token ? { Authorization: `Bearer ${state.token}` } : {};
+            const res = await fetch(`/api/events/${event_id}`, { method: "DELETE", headers });
+            return { ok: res.ok };
         },
     };
 
@@ -142,6 +196,31 @@
         pulseTrending: $("#pulse-trending"),
         // Toast
         toastContainer: $("#toast-container"),
+        // Auth
+        navUser: $("#nav-user"),
+        navUsername: $("#nav-username"),
+        navRole: $("#nav-role"),
+        navAdmin: $("#nav-admin"),
+        btnLoginNav: $("#btn-login-nav"),
+        btnLogout: $("#btn-logout"),
+        authOverlay: $("#auth-overlay"),
+        authModal: $("#auth-modal"),
+        authModalClose: $("#auth-modal-close"),
+        tabLogin: $("#tab-login"),
+        tabRegister: $("#tab-register"),
+        formLogin: $("#form-login"),
+        formRegister: $("#form-register"),
+        loginUsername: $("#login-username"),
+        loginPassword: $("#login-password"),
+        loginError: $("#login-error"),
+        regDisplayName: $("#reg-display-name"),
+        regUsername: $("#reg-username"),
+        regPassword: $("#reg-password"),
+        regError: $("#reg-error"),
+        // Admin panel
+        adminDeleteRequests: $("#admin-delete-requests"),
+        adminEventsList: $("#admin-events-list"),
+        adminReqCount: $("#admin-req-count"),
     };
 
     // ======================================================================
@@ -166,6 +245,7 @@
         // Load data for view
         if (view === "board") loadEvents();
         if (view === "pulse") loadPulse();
+        if (view === "admin" && state.currentUser?.role === "admin") loadAdmin();
     }
 
     els.navLinks.forEach((link) => {
@@ -183,6 +263,130 @@
         e.preventDefault();
         switchView("board");
         window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // ======================================================================
+    // AUTH STATE
+    // ======================================================================
+    function applyAuthUI() {
+        const user = state.currentUser;
+        if (user) {
+            els.navUser.classList.remove("hidden");
+            els.btnLoginNav.classList.add("hidden");
+            els.navUsername.textContent = user.display_name || user.username;
+            els.navRole.textContent = user.role;
+            if (user.role === "admin") {
+                els.navRole.classList.add("nav__role-pill--admin");
+                els.navAdmin.classList.remove("hidden");
+            } else {
+                els.navRole.classList.remove("nav__role-pill--admin");
+                els.navAdmin.classList.add("hidden");
+            }
+        } else {
+            els.navUser.classList.add("hidden");
+            els.btnLoginNav.classList.remove("hidden");
+            els.navAdmin.classList.add("hidden");
+        }
+    }
+
+    function saveAuth(token, user) {
+        state.token = token;
+        state.currentUser = user;
+        localStorage.setItem("eb_token", token);
+        localStorage.setItem("eb_user", JSON.stringify(user));
+        applyAuthUI();
+    }
+
+    function clearAuth() {
+        state.token = null;
+        state.currentUser = null;
+        localStorage.removeItem("eb_token");
+        localStorage.removeItem("eb_user");
+        applyAuthUI();
+    }
+
+    // Boot
+    applyAuthUI();
+
+    // Login nav button
+    els.btnLoginNav.addEventListener("click", () => openAuthModal("login"));
+
+    // Logout
+    els.btnLogout.addEventListener("click", async () => {
+        await API.logout();
+        clearAuth();
+        toast("Signed out", "info");
+        switchView("board");
+    });
+
+    // ======================================================================
+    // AUTH MODAL
+    // ======================================================================
+    function openAuthModal(tab = "login") {
+        els.authOverlay.classList.remove("hidden");
+        els.authOverlay.classList.add("modal-overlay--active");
+        switchAuthTab(tab);
+    }
+
+    function closeAuthModal() {
+        els.authOverlay.classList.add("hidden");
+        els.authOverlay.classList.remove("modal-overlay--active");
+    }
+
+    function switchAuthTab(tab) {
+        const isLogin = tab === "login";
+        els.tabLogin.classList.toggle("auth-tab--active", isLogin);
+        els.tabRegister.classList.toggle("auth-tab--active", !isLogin);
+        els.formLogin.classList.toggle("hidden", !isLogin);
+        els.formRegister.classList.toggle("hidden", isLogin);
+        els.loginError.classList.add("hidden");
+        els.regError.classList.add("hidden");
+    }
+
+    els.tabLogin.addEventListener("click", () => switchAuthTab("login"));
+    els.tabRegister.addEventListener("click", () => switchAuthTab("register"));
+    els.authModalClose.addEventListener("click", closeAuthModal);
+    els.authOverlay.addEventListener("click", (e) => { if (e.target === els.authOverlay) closeAuthModal(); });
+
+    els.formLogin.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const username = els.loginUsername.value.trim();
+        const password = els.loginPassword.value;
+        try {
+            const result = await API.login(username, password);
+            if (result.ok) {
+                saveAuth(result.data.token, result.data.user);
+                closeAuthModal();
+                toast(`Welcome back, ${result.data.user.display_name}!`, "success");
+            } else {
+                els.loginError.textContent = result.data.error || "Login failed";
+                els.loginError.classList.remove("hidden");
+            }
+        } catch (err) {
+            els.loginError.textContent = "Network error. Please try again.";
+            els.loginError.classList.remove("hidden");
+        }
+    });
+
+    els.formRegister.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const display_name = els.regDisplayName.value.trim();
+        const username = els.regUsername.value.trim();
+        const password = els.regPassword.value;
+        try {
+            const result = await API.register(username, password, display_name);
+            if (result.ok) {
+                saveAuth(result.data.token, result.data.user);
+                closeAuthModal();
+                toast(`Account created! Welcome, ${result.data.user.display_name}!`, "success");
+            } else {
+                els.regError.textContent = result.data.error || "Registration failed";
+                els.regError.classList.remove("hidden");
+            }
+        } catch (err) {
+            els.regError.textContent = "Network error. Please try again.";
+            els.regError.classList.remove("hidden");
+        }
     });
 
     // ======================================================================
@@ -301,7 +505,7 @@
 
         // Click card → detail
         card.addEventListener("click", (e) => {
-            if (e.target.closest(".event-card__rsvp-btn") || e.target.closest(".event-card__share")) return;
+            if (e.target.closest(".event-card__rsvp-btn") || e.target.closest(".event-card__share") || e.target.closest(".event-card__delete-btn")) return;
             showEventDetail(ev);
         });
 
@@ -318,6 +522,39 @@
             e.stopPropagation();
             handleShare(ev);
         });
+
+        // Delete / Request Delete button — show if user is creator or admin
+        const user = state.currentUser;
+        const isOwner = user && (ev.created_by === user.username);
+        const isAdmin = user && user.role === "admin";
+        if (isOwner || isAdmin) {
+            const delBtn = document.createElement("button");
+            delBtn.className = "event-card__delete-btn";
+            delBtn.title = isAdmin ? "Delete event" : "Request deletion";
+            delBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg> ${isAdmin ? "Delete" : "Request Delete"}`;
+            card.querySelector(".event-card__footer").appendChild(delBtn);
+            delBtn.addEventListener("click", async (e) => {
+                e.stopPropagation();
+                if (isAdmin) {
+                    if (!confirm(`Delete "${ev.title}"? This cannot be undone.`)) return;
+                    const res = await API.adminDeleteEvent(ev.id);
+                    if (res.ok) {
+                        toast("Event deleted.", "success");
+                        loadEvents();
+                    } else {
+                        toast("Delete failed.", "error");
+                    }
+                } else {
+                    const reason = prompt("Reason for deletion request (optional):") || "";
+                    const res = await API.requestDelete(ev.id, reason);
+                    if (res.ok) {
+                        toast("Deletion request sent to admin!", "success");
+                    } else {
+                        toast(res.data?.error || "Request failed.", "error");
+                    }
+                }
+            });
+        }
 
         return card;
     }
@@ -407,6 +644,12 @@
     // CREATE EVENT MODAL
     // ======================================================================
     function openCreateModal(prefill = {}) {
+        // Require login
+        if (!state.currentUser) {
+            toast("Please sign in to post an event.", "info");
+            openAuthModal("login");
+            return;
+        }
         els.modalOverlay.classList.remove("hidden");
         document.body.style.overflow = "hidden";
 
@@ -757,6 +1000,113 @@
             toast("Failed to load Community Pulse", "error");
         }
     }
+
+    // ======================================================================
+    // ADMIN PANEL
+    // ======================================================================
+    async function loadAdmin() {
+        try {
+            // Load delete requests
+            const reqData = await API.getDeleteRequests();
+            const requests = reqData.requests || [];
+            els.adminReqCount.textContent = requests.length;
+
+            if (requests.length === 0) {
+                els.adminDeleteRequests.innerHTML = `<div class="empty-state" style="padding:28px"><p style="color:var(--mute)">No pending deletion requests.</p></div>`;
+            } else {
+                els.adminDeleteRequests.innerHTML = "";
+                requests.forEach((req) => {
+                    const card = document.createElement("div");
+                    card.className = "admin-req-card";
+                    const ts = new Date(req.created_at).toLocaleString("en-IN");
+                    card.innerHTML = `
+                        <div class="admin-req-card__info">
+                            <div class="admin-req-card__event-title">${escHtml(req.event_title)}</div>
+                            <div class="admin-req-card__meta">
+                                Requested by <strong>${escHtml(req.requested_by)}</strong> &middot; ${ts}
+                            </div>
+                            ${req.reason ? `<div class="admin-req-card__reason">"${escHtml(req.reason)}"</div>` : ""}
+                        </div>
+                        <div class="admin-req-card__actions">
+                            <button class="btn btn--approve btn--sm" data-req-id="${req.id}">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                                Approve
+                            </button>
+                            <button class="btn btn--reject btn--sm" data-req-id="${req.id}">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                Reject
+                            </button>
+                        </div>
+                    `;
+                    card.querySelector(".btn--approve").addEventListener("click", async () => {
+                        const res = await API.approveDeleteRequest(req.id);
+                        if (res.ok) {
+                            toast("Event deleted and request approved.", "success");
+                            loadAdmin();
+                            if (state.activeView === "board") loadEvents();
+                        } else {
+                            toast(res.data?.error || "Failed to approve.", "error");
+                        }
+                    });
+                    card.querySelector(".btn--reject").addEventListener("click", async () => {
+                        const res = await API.rejectDeleteRequest(req.id);
+                        if (res.ok) {
+                            toast("Request rejected.", "info");
+                            loadAdmin();
+                        } else {
+                            toast(res.data?.error || "Failed to reject.", "error");
+                        }
+                    });
+                    els.adminDeleteRequests.appendChild(card);
+                });
+            }
+
+            // Load all events for admin management
+            const evData = await API.getEvents();
+            const events = evData.events || [];
+            if (events.length === 0) {
+                els.adminEventsList.innerHTML = `<div class="empty-state" style="padding:28px"><p style="color:var(--mute)">No upcoming events.</p></div>`;
+            } else {
+                els.adminEventsList.innerHTML = "";
+                events.forEach((ev) => {
+                    const cats = evData.categories || {};
+                    const cat = cats[ev.category] || { label: "Other", color: "#64748b" };
+                    const row = document.createElement("div");
+                    row.className = "admin-event-row";
+                    row.innerHTML = `
+                        <div class="admin-event-row__title">
+                            <span class="event-card__badge" style="background:${cat.color};margin-right:8px;font-size:0.7rem;padding:2px 8px">${cat.label}</span>
+                            ${escHtml(ev.title)}
+                        </div>
+                        <div class="admin-event-row__meta">
+                            ${formatDate(ev.date)} &middot; <em>${escHtml(ev.created_by || "unknown")}</em>
+                        </div>
+                        <div class="admin-event-row__actions">
+                            <button class="btn btn--reject btn--sm admin-del-ev" data-ev-id="${ev.id}">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+                                Delete
+                            </button>
+                        </div>
+                    `;
+                    row.querySelector(".admin-del-ev").addEventListener("click", async () => {
+                        if (!confirm(`Delete "${ev.title}"?`)) return;
+                        const res = await API.adminDeleteEvent(ev.id);
+                        if (res.ok) {
+                            toast("Event deleted.", "success");
+                            loadAdmin();
+                        } else {
+                            toast("Delete failed.", "error");
+                        }
+                    });
+                    els.adminEventsList.appendChild(row);
+                });
+            }
+        } catch (err) {
+            console.error("Admin panel load failed:", err);
+            toast("Failed to load admin panel.", "error");
+        }
+    }
+
 
     function renderPulseStats(data) {
         els.pulseStats.innerHTML = `
