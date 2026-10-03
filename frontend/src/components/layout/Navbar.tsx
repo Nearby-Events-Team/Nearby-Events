@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { Avatar } from '@/components/ui/Primitives';
+import { NotificationBell } from '@/components/notifications/NotificationBell';
 import { useAuth, useDisplayName } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/Toast';
 import { cn } from '@/lib/utils';
@@ -137,6 +138,8 @@ export function Navbar({ theme, onToggleTheme }: { theme: 'light' | 'dark'; onTo
                 <Moon className="h-[1.125rem] w-[1.125rem]" aria-hidden="true" />
               )}
             </Button>
+
+            <NotificationBell />
 
             <ButtonLink to="/events/new" variant="primary" size="sm" className="hidden sm:inline-flex">
               <CalendarPlus className="h-4 w-4" aria-hidden="true" />

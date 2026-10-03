@@ -16,6 +16,7 @@ import { buildKeywords, normalise, placeKey, relevanceScore } from '../utils/sea
 import { generateCheckInCode } from './checkinService';
 import { pointsDelta } from './gamificationService';
 import { geocode } from './geocodeService';
+import { publishNotification } from './notificationService';
 import { deleteImage, isOwnedImagePath } from './storageService';
 
 const EVENTS = 'events';
@@ -368,13 +369,39 @@ export async function updateEvent(
   await ref.update(update);
   const fresh = await ref.get();
 
+  // Detect venue or time changes worth notifying attendees about.
+  const changes: string[] = [];
+  if (input.location && input.location !== String(data.location ?? '')) changes.push('venue changed');
+  if (input.address && input.address !== String(data.address ?? '')) changes.push('address changed');
+  if (input.date && input.date !== String(data.date ?? '')) changes.push('date changed');
+  if (input.startTime && input.startTime !== String(data.startTime ?? '')) changes.push('start time changed');
+
+  if (changes.length > 0) {
+    // Fire-and-forget: notify attendees of important changes.
+    void publishNotification(
+      'event.updated',
+      id,
+      merged.title,
+      user.displayName,
+      changes,
+    );
+  }
+
   logger.info('Event updated', { eventId: id, creatorId: user.uid });
   return { ...toEventRecord(fresh), isOwner: true, isAttending: await isAttending(id, user.uid) };
 }
 
 export async function cancelEvent(id: string, user: AuthUser): Promise<EventRecord> {
-  const { ref } = await loadOwnedEvent(id, user);
+  const { ref, data } = await loadOwnedEvent(id, user);
   await ref.update({ status: 'CANCELLED', updatedAt: FieldValue.serverTimestamp() });
+
+  // Fire-and-forget: push a Pub/Sub message so attendees are notified asynchronously.
+  void publishNotification(
+    'event.cancelled',
+    id,
+    String(data.title ?? ''),
+    user.displayName,
+  );
 
   logger.info('Event cancelled', { eventId: id, creatorId: user.uid });
   const fresh = await ref.get();
@@ -402,6 +429,16 @@ export async function reactivateEvent(id: string, user: AuthUser): Promise<Event
   const status = endsAtMs && endsAtMs < Date.now() ? 'EXPIRED' : 'ACTIVE';
 
   await ref.update({ status, updatedAt: FieldValue.serverTimestamp() });
+
+  // Notify attendees that the event is back on.
+  if (status === 'ACTIVE') {
+    void publishNotification(
+      'event.reactivated',
+      id,
+      String(data.title ?? ''),
+      user.displayName,
+    );
+  }
 
   logger.info('Event reactivated', { eventId: id, creatorId: user.uid, status });
   const fresh = await ref.get();

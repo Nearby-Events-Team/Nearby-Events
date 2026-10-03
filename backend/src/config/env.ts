@@ -76,6 +76,9 @@ export const env = {
   maintenanceToken: optional('MAINTENANCE_TOKEN'),
   serveStatic: bool('SERVE_STATIC', nodeEnv === 'production'),
   firestoreEmulatorHost: optional('FIRESTORE_EMULATOR_HOST'),
+
+  /** Cloud Pub/Sub: disabled in local mode, enabled when a real project is configured. */
+  pubsubEnabled: bool('PUBSUB_ENABLED', !localMode && Boolean(configuredProjectId)),
 } as const;
 
 /**
