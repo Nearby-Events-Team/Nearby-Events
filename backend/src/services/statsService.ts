@@ -209,6 +209,43 @@ export async function getNeighborhoodOptions(): Promise<Array<{ name: string; co
     .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
 }
 
+/**
+ * Cities with upcoming events, for the city switcher. Grouped by placeKey so "Coimbatore"
+ * and "coimbatore " count as one; the most common spelling is the one shown.
+ */
+export async function getCityOptions(): Promise<Array<{ name: string; count: number }>> {
+  const snapshot = await getDb()
+    .collection('events')
+    .where('status', '==', 'ACTIVE')
+    .select('city', 'endsAt')
+    .get();
+
+  const now = Date.now();
+  const groups = new Map<string, { count: number; spellings: Map<string, number> }>();
+
+  for (const doc of snapshot.docs) {
+    const data = doc.data();
+    const endsAt = toIso(data.endsAt);
+    if (!endsAt || new Date(endsAt).getTime() < now) continue;
+
+    const name = String(data.city ?? '').trim();
+    const key = placeKey(name);
+    if (!key) continue;
+
+    const group = groups.get(key) ?? { count: 0, spellings: new Map<string, number>() };
+    group.count += 1;
+    group.spellings.set(name, (group.spellings.get(name) ?? 0) + 1);
+    groups.set(key, group);
+  }
+
+  return Array.from(groups.values())
+    .map(({ count, spellings }) => ({
+      name: Array.from(spellings.entries()).sort((a, b) => b[1] - a[1])[0]![0],
+      count,
+    }))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+}
+
 let placeCache: { value: { neighborhoods: string[]; cities: string[] }; expiresAt: number } | null = null;
 
 /**

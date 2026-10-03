@@ -55,6 +55,8 @@ export interface RecommendationContext {
     lng?: number;
     /** Categories the user is interested in. Empty array = no preference. */
     interests?: Category[];
+    /** Restrict candidates to one city (the city switcher). */
+    city?: string;
     page?: number;
     pageSize?: number;
 }
@@ -289,7 +291,7 @@ export async function getRecommendations(
     // Fetch a wider candidate set using the existing service. We sort by 'soonest'
     // first so the time-relevance signal has a reasonable candidate pool.
     const candidates = await listEvents(
-        { dateFilter: 'upcoming', sort: 'soonest', pageSize: CANDIDATE_FETCH_SIZE, page: 1 },
+        { dateFilter: 'upcoming', sort: 'soonest', pageSize: CANDIDATE_FETCH_SIZE, page: 1, city: context.city },
         viewerUid,
     );
 

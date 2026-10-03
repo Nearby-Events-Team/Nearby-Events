@@ -1,16 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CalendarDays, CalendarPlus, Flame, MapPin, Sparkles, TrendingUp, Users } from 'lucide-react';
-import { ButtonLink } from '@/components/ui/Button';
+import { Button, ButtonLink } from '@/components/ui/Button';
 import { Badge, Card } from '@/components/ui/Primitives';
 import { EventCard } from '@/components/events/EventCard';
 import { CategoryIcon } from '@/components/events/CategoryBadge';
 import { NearbyEvents } from '@/components/events/NearbyEvents';
 import { RecommendedSection } from '@/components/events/RecommendedSection';
 import { TrendingSection } from '@/components/events/TrendingSection';
+import { CitySwitcher } from '@/components/events/CitySwitcher';
 import { EmptyState, EventGridSkeleton, ErrorState } from '@/components/common/States';
 import { useEvents } from '@/hooks/useEvents';
 import { useRsvp } from '@/hooks/useRsvp';
+import { useCity } from '@/hooks/useCity';
 import { api } from '@/lib/api';
 import { CATEGORIES, type CategoryCount } from '@/lib/types';
 import { CATEGORY_STYLES, cn } from '@/lib/utils';
@@ -50,7 +52,8 @@ function Hero() {
 
           <dl className="mt-10 grid max-w-lg animate-fade-up grid-cols-3 gap-6 [animation-delay:240ms]">
             {[
-              { label: 'City', value: 'Coimbatore', icon: MapPin },
+              // The city is a control, not a fact: the board works for any city.
+              { label: 'City', value: <CitySwitcher />, icon: MapPin },
               { label: 'Categories', value: '8 kinds', icon: Flame },
               { label: 'Always', value: 'Up to date', icon: CalendarDays },
             ].map((stat) => (
@@ -267,8 +270,11 @@ function HowItWorks() {
 }
 
 export default function Home() {
+  // Every section follows the city picked in the hero ('' = all cities).
+  const [city, setCity] = useCity();
+
   // "Most popular" has no date or category constraint, so it is the honest proxy for
-  // whether the board holds anything at all.
+  // whether the board (in this city) holds anything at all.
   const [boardHasEvents, setBoardHasEvents] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -287,15 +293,15 @@ export default function Home() {
       */}
       <NearbyEvents />
 
-      <RecommendedSection />
+      <RecommendedSection city={city} />
 
-      <TrendingSection />
+      <TrendingSection city={city} />
 
       <EventSection
         title="Happening this week"
         description="The next few days on the board, soonest first."
         icon={<CalendarDays className="h-6 w-6 text-brand" aria-hidden="true" />}
-        filters={{ date: 'week', sort: 'soonest' }}
+        filters={{ date: 'week', sort: 'soonest', city }}
         viewAllHref="/explore?date=week"
       />
 
@@ -303,7 +309,7 @@ export default function Home() {
         title="Most popular"
         description="Where your neighbours are already going."
         icon={<TrendingUp className="h-6 w-6 text-accent" aria-hidden="true" />}
-        filters={{ sort: 'popular' }}
+        filters={{ sort: 'popular', city }}
         viewAllHref="/explore?sort=popular"
         onResolved={onPopularResolved}
       />
@@ -312,7 +318,27 @@ export default function Home() {
         Without this, an empty board renders a hero followed by nothing at all, because
         every section hides itself when it has no events.
       */}
-      {boardHasEvents === false && (
+      {boardHasEvents === false && city && (
+        <section className="container-page py-8">
+          <EmptyState
+            icon={<MapPin className="h-7 w-7" aria-hidden="true" />}
+            title={`No events in ${city} yet`}
+            description={`Nobody has posted anything in ${city} so far. If you know of something happening there, you can be the first to put it on the board.`}
+            action={
+              <>
+                <ButtonLink to={`/events/new?city=${encodeURIComponent(city)}`} variant="primary">
+                  Be the first to post in {city}
+                </ButtonLink>
+                <Button variant="secondary" onClick={() => setCity('')}>
+                  Show all cities
+                </Button>
+              </>
+            }
+          />
+        </section>
+      )}
+
+      {boardHasEvents === false && !city && (
         <section className="container-page py-8">
           <EmptyState
             icon={<CalendarPlus className="h-7 w-7" aria-hidden="true" />}
@@ -338,7 +364,7 @@ export default function Home() {
         title="Just added"
         description="The newest listings from people nearby."
         icon={<Flame className="h-6 w-6 text-warning" aria-hidden="true" />}
-        filters={{ sort: 'recent' }}
+        filters={{ sort: 'recent', city }}
         viewAllHref="/explore?sort=recent"
       />
 

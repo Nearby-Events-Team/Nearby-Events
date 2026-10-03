@@ -16,7 +16,7 @@ import type { RecommendedEvent } from '@/lib/types';
  *
  * Renders nothing on error or empty state, consistent with other home sections.
  */
-export function RecommendedSection() {
+export function RecommendedSection({ city = '' }: { city?: string }) {
     const { position } = useNearby();
 
     const [events, setEvents] = useState<RecommendedEvent[]>([]);
@@ -43,6 +43,7 @@ export function RecommendedSection() {
             .recommended({
                 lat: position?.lat,
                 lng: position?.lng,
+                city,
                 pageSize: 3,
             })
             .then((result) => {
@@ -59,7 +60,7 @@ export function RecommendedSection() {
         return () => {
             active = false;
         };
-    }, [position?.lat, position?.lng]);
+    }, [position?.lat, position?.lng, city]);
 
     // Don't reserve space if there are no recommendations.
     if (!loading && events.length === 0) return null;

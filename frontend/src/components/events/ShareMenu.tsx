@@ -5,9 +5,13 @@ import { useToast } from '@/components/ui/Toast';
 import { googleCalendarLink } from '@/lib/utils';
 import type { EventRecord } from '@/lib/types';
 
-/** Absolute URL for the event — the shareable permalink the brief requires. */
+/**
+ * Absolute URL for the event in the form the brief asks for: "a unique ID query string
+ * for each post" (/?event=<id>). App forwards it to the /events/<id> permalink, which
+ * keeps working too.
+ */
 export function eventShareUrl(eventId: string): string {
-  return `${window.location.origin}/events/${eventId}`;
+  return `${window.location.origin}/?event=${encodeURIComponent(eventId)}`;
 }
 
 async function copyToClipboard(text: string): Promise<boolean> {

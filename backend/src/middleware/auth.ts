@@ -8,6 +8,8 @@ export interface AuthUser {
   email: string | null;
   displayName: string;
   photoURL: string | null;
+  /** From the token's `email_verified` claim; Google accounts arrive already verified. */
+  emailVerified?: boolean;
 }
 
 export interface AuthedRequest extends Request {
@@ -39,7 +41,24 @@ async function resolveUser(req: Request): Promise<AuthUser | null> {
     email: decoded.email ?? null,
     displayName: (decoded.name as string | undefined) || decoded.email?.split('@')[0] || 'Neighbour',
     photoURL: (decoded.picture as string | undefined) ?? null,
+    emailVerified: decoded.email_verified === true,
   };
+}
+
+/**
+ * Posting needs a confirmed email address, so an account made with a made-up address
+ * cannot fill the board. Use after requireAuth. Google sign-ins are verified by Google.
+ * The Auth emulator (local mode and the test scripts) has no real inbox, so it is exempt.
+ */
+export function requireVerifiedEmail(req: AuthedRequest, _res: Response, next: NextFunction): void {
+  if (req.user?.emailVerified || process.env.FIREBASE_AUTH_EMULATOR_HOST) return next();
+  next(
+    new AppError(
+      403,
+      'EMAIL_NOT_VERIFIED',
+      'Please verify your email address before posting. Open the link we emailed you, then try again.',
+    ),
+  );
 }
 
 /** Rejects the request unless a valid ID token is present. */

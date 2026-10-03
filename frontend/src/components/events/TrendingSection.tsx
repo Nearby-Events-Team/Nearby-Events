@@ -15,7 +15,7 @@ import type { TrendingEvent } from '@/lib/types';
  *
  * Renders nothing on empty state or error — consistent with other home sections.
  */
-export function TrendingSection() {
+export function TrendingSection({ city = '' }: { city?: string }) {
     const [events, setEvents] = useState<TrendingEvent[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -36,7 +36,7 @@ export function TrendingSection() {
         setLoading(true);
 
         api
-            .trending({ pageSize: 3 })
+            .trending({ pageSize: 3, city: city || undefined })
             .then((result) => {
                 if (active) setEvents(result.items);
             })
@@ -50,7 +50,7 @@ export function TrendingSection() {
         return () => {
             active = false;
         };
-    }, []);
+    }, [city]);
 
     if (!loading && events.length === 0) return null;
 
