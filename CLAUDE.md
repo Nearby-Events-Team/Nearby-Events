@@ -430,3 +430,11 @@ Single `app.py` Flask app + plain HTML/JS PWA. Nice UI and good ideas, but:
   to enable live: merge the fix, enable Pub/Sub API, create topic `event-notifications`, give the runtime SA
   pubsub.publisher + viewer, push subscription to `<run-url>/api/notifications/pubsub-push?token=<maintenance
   token>`, redeploy.
+- Oct 3 (night): **Email verification, ?event= links, notifications live.** Posting needs a verified email
+  (`requireVerifiedEmail` on POST /api/events; sign-up sends the Firebase link; Create page shows a verify panel;
+  Google sign-in and the Auth emulator are exempt). Share links are now `/?event=<id>` (the brief's "unique ID
+  query string"), forwarded to `/events/<id>`. Pub/Sub set up: topic `event-notifications`, runtime SA has
+  publisher + viewer on it, push subscription `event-notifications-push` -> `/api/notifications/pubsub-push?token=`
+  maintenance token. Deployed suhas-dev. Live: API test 8/8 (unverified 403, verified 201, cancel notification
+  arrives via Pub/Sub, fake push 403), Chrome 18/18. Verification emails come from
+  noreply@nearby-events-510418.firebaseapp.com and may land in spam.

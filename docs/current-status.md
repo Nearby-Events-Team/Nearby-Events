@@ -24,14 +24,14 @@
 
 ## Beyond the brief (all live)
 
-Snap-a-Poster (Gemini via Vertex AI; idea by Adhi) · AI assist · AI search · Google map + Places
+Snap-a-Poster (Gemini via Vertex AI; idea by Adhi) · notification bell via Cloud Pub/Sub (Sanjay) · verified email to post · AI assist · AI search · Google map + Places
 autocomplete · month calendar · Recommended for you · Trending · Popular badge · near-me filter · voice
 search · QR check-in · neighbour points + leaderboard · Q&A · save for later · event-day weather ·
 edit / cancel / reactivate / delete · insights dashboard · dark mode · installable PWA.
 
 ## Google Cloud services in use
 
-Cloud Run · Cloud Firestore · Firebase Authentication · Cloud Storage · Vertex AI (Gemini 3.5 Flash-Lite,
+Cloud Run · Cloud Firestore · Firebase Authentication · Cloud Storage · Cloud Pub/Sub · Vertex AI (Gemini 3.5 Flash-Lite,
 fallback 3.1 Flash-Lite) · Google Maps JavaScript API + Places API (New) · Cloud Scheduler · Secret Manager ·
 Cloud Build · Artifact Registry · Cloud Logging · Cloud Monitoring (dashboard, log-based metrics, uptime
 check + alert) · Billing budget.
