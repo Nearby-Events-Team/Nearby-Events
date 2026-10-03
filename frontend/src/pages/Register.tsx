@@ -8,6 +8,7 @@ import { useToast } from '@/components/ui/Toast';
 import { LoadingState } from '@/components/common/States';
 import { AuthNotConfigured, AuthShell } from './Login';
 import { cn, safeRedirectPath } from '@/lib/utils';
+import { isLocalAuth } from '@/lib/firebase';
 
 /** Four cheap checks that cover most weak passwords without a dependency. */
 function passwordStrength(password: string): { score: 0 | 1 | 2 | 3 | 4; label: string } {
@@ -70,7 +71,10 @@ export default function Register() {
     setBusy('email');
     try {
       await register(email.trim(), password, displayName.trim());
-      toast.success('Account created', 'Welcome to Nearby-Events.');
+      toast.success(
+        'Account created',
+        isLocalAuth ? 'Welcome to Nearby-Events.' : 'We emailed you a link: verify your address to post events.',
+      );
       navigate(next, { replace: true });
     } catch (caught) {
       setError((caught as Error).message);

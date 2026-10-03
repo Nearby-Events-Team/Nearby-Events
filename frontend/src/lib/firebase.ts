@@ -5,6 +5,7 @@ import {
   connectAuthEmulator,
   createUserWithEmailAndPassword,
   getAuth,
+  sendEmailVerification,
   setPersistence,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -148,7 +149,39 @@ export async function registerWithEmail(
     await credential.user.getIdToken(true);
   }
 
+  // Posting requires a verified address (the API checks the token's email_verified claim).
+  // A failed send must not fail the sign-up: the Create page offers "Resend".
+  await sendEmailVerification(credential.user, verificationLinkSettings()).catch(() => undefined);
+
   return credential.user;
+}
+
+/** After clicking the emailed link, the user lands back on the Create page. */
+function verificationLinkSettings() {
+  return { url: `${window.location.origin}/events/new` };
+}
+
+/** True when the signed-in user still has to confirm their email before posting. */
+export function needsEmailVerification(user: User | null): boolean {
+  return Boolean(user && !user.emailVerified && !isLocalAuth);
+}
+
+export async function resendVerificationEmail(): Promise<void> {
+  const user = getFirebaseAuth().currentUser;
+  if (!user) throw new Error('Sign in first.');
+  await sendEmailVerification(user, verificationLinkSettings());
+}
+
+/**
+ * Re-reads the account after the user clicked the link in another tab. The ID token is
+ * refreshed too, because the API reads email_verified from the token, not the account.
+ */
+export async function refreshEmailVerified(): Promise<boolean> {
+  const user = getFirebaseAuth().currentUser;
+  if (!user) return false;
+  await user.reload();
+  if (user.emailVerified) await user.getIdToken(true);
+  return user.emailVerified;
 }
 
 export async function signInWithEmail(email: string, password: string): Promise<User> {

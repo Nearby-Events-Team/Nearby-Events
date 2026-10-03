@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { optionalAuth, requireAuth, currentUser, type AuthedRequest } from '../middleware/auth';
+import { optionalAuth, requireAuth, requireVerifiedEmail, currentUser, type AuthedRequest } from '../middleware/auth';
 import { asyncHandler } from '../middleware/error';
 import { calendarQuerySchema, eventInputSchema, eventQuerySchema, eventUpdateSchema } from '../middleware/validate';
 import {
@@ -91,6 +91,7 @@ eventsRouter.get(
 eventsRouter.post(
   '/',
   requireAuth,
+  requireVerifiedEmail,
   asyncHandler(async (req: AuthedRequest, res) => {
     const user = currentUser(req);
     const input = eventInputSchema.parse(req.body);

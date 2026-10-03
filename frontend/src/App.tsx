@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { Layout } from '@/components/layout/Layout';
 import { ProtectedRoute } from '@/components/common/ProtectedRoute';
 import { PageSkeleton } from '@/components/common/States';
@@ -29,7 +29,18 @@ function Deferred({ children }: { children: React.ReactNode }) {
   return <Suspense fallback={<PageSkeleton />}>{children}</Suspense>;
 }
 
+/** Event ids are Firestore auto-ids; anything else in ?event= is ignored. */
+const EVENT_ID = /^[A-Za-z0-9_-]{1,64}$/;
+
 export default function App() {
+  // Share links use the brief's query-string form (/?event=<id>); send them straight to
+  // the event page before any other page starts loading.
+  const { search } = useLocation();
+  const sharedId = new URLSearchParams(search).get('event');
+  if (sharedId && EVENT_ID.test(sharedId)) {
+    return <Navigate to={`/events/${sharedId}`} replace />;
+  }
+
   return (
     <Routes>
       <Route element={<Layout />}>
