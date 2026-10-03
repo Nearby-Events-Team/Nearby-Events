@@ -449,3 +449,6 @@ Single `app.py` Flask app + plain HTML/JS PWA. Nice UI and good ideas, but:
   after the feature, su***@gmail.com before it (use Resend). Likely Gmail spam: default sender
   noreply@nearby-events-510418.firebaseapp.com, subject uses the Firebase public-facing name. Template/sender
   edits are console-only (API returns EMAIL_TEMPLATE_UPDATE_NOT_ALLOWED).
+- Oct 3 (late): **Delete now notifies attendees** ("Event Removed", type event.deleted). Attendee uids are captured
+  before the delete (it removes the RSVP list) and sent in the Pub/Sub message as recipientUids; bell shows it
+  without a "View event" link. Local 7/7, live 6/6 via Pub/Sub (incl. organiser RSVPd to own event); deployed.
