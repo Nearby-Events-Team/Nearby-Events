@@ -142,7 +142,7 @@ export default function Explore() {
   }, [debouncedCity]);
 
   useEffect(() => {
-    document.title = 'Explore events — Nearby-Events';
+    document.title = 'Explore events — Radius';
   }, []);
 
   useEffect(() => {

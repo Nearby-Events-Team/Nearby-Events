@@ -1,4 +1,4 @@
-# Nearby-Events — System Architecture Diagram
+# Radius — System Architecture Diagram
 
 > As deployed on Google Cloud (project `nearby-events-510418`, region `asia-south1`).
 > Live: https://nearby-events-x2gneiue7a-el.a.run.app · Vector version for slides: [`architecture-diagram.svg`](architecture-diagram.svg)

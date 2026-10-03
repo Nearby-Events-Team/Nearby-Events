@@ -38,7 +38,7 @@ export default function Register() {
   const next = safeRedirectPath(searchParams.get('next'));
 
   useEffect(() => {
-    document.title = 'Create an account — Nearby-Events';
+    document.title = 'Create an account — Radius';
   }, []);
 
   if (!configured) return <AuthNotConfigured />;
@@ -73,7 +73,7 @@ export default function Register() {
       await register(email.trim(), password, displayName.trim());
       toast.success(
         'Account created',
-        isLocalAuth ? 'Welcome to Nearby-Events.' : 'We emailed you a link: verify your address to post events.',
+        isLocalAuth ? 'Welcome to Radius.' : 'We emailed you a link: verify your address to post events.',
       );
       navigate(next, { replace: true });
     } catch (caught) {

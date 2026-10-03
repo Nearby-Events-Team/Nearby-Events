@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
-import { AlertTriangle, FlaskConical, LogIn, Mail, MapPin } from 'lucide-react';
+import { AlertTriangle, FlaskConical, LogIn, Mail } from 'lucide-react';
+import { RadiusMark } from '@/components/layout/RadiusMark';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Field';
 import { Card } from '@/components/ui/Primitives';
@@ -52,9 +53,11 @@ export function AuthShell({
         className="mx-auto flex items-center gap-2.5 font-display text-lg font-extrabold tracking-tight text-ink"
       >
         <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand text-white shadow-sm">
-          <MapPin className="h-5 w-5" aria-hidden="true" />
+          <RadiusMark className="h-5 w-5" />
         </span>
-        Nearby-Events
+        <span>
+          Radius<span className="text-accent">.</span>
+        </span>
       </Link>
 
       <Card className="mt-8 p-6 sm:p-8">
@@ -115,7 +118,7 @@ export default function Login() {
   const next = safeRedirectPath(searchParams.get('next'));
 
   useEffect(() => {
-    document.title = 'Sign in — Nearby-Events';
+    document.title = 'Sign in — Radius';
   }, []);
 
   if (!configured) return <AuthNotConfigured />;

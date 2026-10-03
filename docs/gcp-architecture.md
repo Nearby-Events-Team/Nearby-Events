@@ -1,4 +1,4 @@
-# Google Cloud architecture — Nearby-Events
+# Google Cloud architecture — Radius
 
 > Written for judges and reviewing engineers: what each Google Cloud service does here,
 > why it was chosen over the alternatives, and how it fails.

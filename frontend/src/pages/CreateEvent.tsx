@@ -18,7 +18,7 @@ export default function CreateEvent() {
   const [mustVerify, setMustVerify] = useState(() => needsEmailVerification(user));
 
   useEffect(() => {
-    document.title = 'Create an event — Nearby-Events';
+    document.title = 'Create an event — Radius';
   }, []);
 
   useEffect(() => {

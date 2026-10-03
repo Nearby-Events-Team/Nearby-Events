@@ -131,7 +131,7 @@ async function requestOnce<T>(path: string, options: RequestOptions = {}): Promi
     throw new ApiError(
       0,
       'NETWORK',
-      'We could not reach Nearby-Events. Check your connection and try again.',
+      'We could not reach Radius. Check your connection and try again.',
     );
   }
 
