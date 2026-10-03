@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Crosshair, Mic, Search, SlidersHorizontal, Sparkles, X } from 'lucide-react';
+import { Crosshair, MapPin, Mic, Search, SlidersHorizontal, Sparkles, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Primitives';
 import { CategoryIcon } from './CategoryBadge';
@@ -334,6 +334,16 @@ export function EventFilters({
         role="group"
         aria-label="Filter by date"
       >
+        {/* The city usually comes from the home page's city switcher, so say so up front
+            rather than leaving it hidden in the Filters panel. Press to clear it. */}
+        {filters.city && (
+          <Chip active onClick={() => onChange({ city: '' })} className="pr-2.5">
+            <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+            {filters.city}
+            <X className="h-3.5 w-3.5" aria-label={`Show all cities instead of ${filters.city}`} />
+          </Chip>
+        )}
+
         {DATE_FILTERS.map((option) => (
           <Chip
             key={option.value}

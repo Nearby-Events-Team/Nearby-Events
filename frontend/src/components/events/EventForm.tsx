@@ -32,6 +32,7 @@ import { isMapsConfigured } from '@/lib/maps';
 import { AddressSuggest } from './AddressSuggest';
 import { PlaceAutocomplete, type PickedPlace } from './PlaceAutocomplete';
 import { SnapPoster } from './SnapPoster';
+import { getSelectedCity } from '@/hooks/useCity';
 
 interface FormState {
   title: string;
@@ -178,6 +179,12 @@ const AI_HINTS: Record<AiMark, string> = {
 /** Highlights a field the AI filled until the user edits it. */
 const AI_RING = 'ring-2 ring-accent/60';
 
+/** A new event starts in ?city= (from "Be the first to post"), else the visitor's selected city. */
+function initialCity(): string {
+  const fromLink = new URLSearchParams(window.location.search).get('city')?.trim();
+  return (fromLink || getSelectedCity() || EMPTY_FORM.city).slice(0, 100);
+}
+
 /**
  * A field still holding the value the form opened with (empty, today, 18:00, Coimbatore…)
  * has not been typed by the user, so the AI may fill it without asking.
@@ -185,7 +192,7 @@ const AI_RING = 'ring-2 ring-accent/60';
 function isUntouched(key: keyof FormState, form: FormState): boolean {
   const value = form[key];
   if (value === '' || value === null) return true;
-  const initial = key === 'date' ? todayAsInputValue() : EMPTY_FORM[key];
+  const initial = key === 'date' ? todayAsInputValue() : key === 'city' ? initialCity() : EMPTY_FORM[key];
   return value === initial;
 }
 
@@ -524,7 +531,7 @@ export function EventForm({
   const toast = useToast();
 
   const [form, setForm] = useState<FormState>(() =>
-    initialEvent ? fromEvent(initialEvent) : { ...EMPTY_FORM, date: todayAsInputValue() },
+    initialEvent ? fromEvent(initialEvent) : { ...EMPTY_FORM, date: todayAsInputValue(), city: initialCity() },
   );
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);

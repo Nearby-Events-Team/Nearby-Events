@@ -11,7 +11,7 @@ import { geocode } from '../services/geocodeService';
 import { resolvePlace, suggestPlaces } from '../services/placeSearchService';
 import { expirePastEvents } from '../services/eventService';
 import { POINTS, getLeaderboard } from '../services/gamificationService';
-import { getCategoryCounts, getInsights, getNeighborhoodOptions } from '../services/statsService';
+import { getCategoryCounts, getCityOptions, getInsights, getNeighborhoodOptions } from '../services/statsService';
 import { CATEGORIES } from '../types';
 
 export const metaRouter = Router();
@@ -85,6 +85,12 @@ metaRouter.get('/categories', asyncHandler(async (_req, res) => {
 metaRouter.get('/neighborhoods', asyncHandler(async (_req, res) => {
   const neighborhoods = await getNeighborhoodOptions();
   res.json({ neighborhoods });
+}));
+
+/** Cities with upcoming events, for the city switcher (busiest first). */
+metaRouter.get('/cities', asyncHandler(async (_req, res) => {
+  const cities = await getCityOptions();
+  res.json({ cities });
 }));
 
 metaRouter.get('/categories/list', (_req, res) => {

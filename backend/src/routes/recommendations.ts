@@ -24,6 +24,8 @@ const recommendationsQuerySchema = z.object({
                 .map((s) => s.trim())
                 .filter((s): s is Category => CATEGORIES.includes(s as Category));
         }),
+    /** Only events in this city (the city switcher). */
+    city: z.string().trim().max(100).optional(),
     page: z.coerce.number().int().min(1).max(500).optional(),
     pageSize: z.coerce.number().int().min(1).max(24).optional(),
 });
@@ -51,6 +53,7 @@ recommendationsRouter.get(
                 lat: query.lat,
                 lng: query.lng,
                 interests: query.interests,
+                city: query.city || undefined,
                 page: query.page,
                 pageSize: query.pageSize,
             },

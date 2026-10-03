@@ -9,6 +9,7 @@ import { EventMap } from '@/components/events/EventMap';
 import { CalendarView, parseDayKey, toDayKey } from '@/components/events/CalendarView';
 import { EventGridSkeleton, ErrorState, NoEventsFound } from '@/components/common/States';
 import { useDebounced, useEvents } from '@/hooks/useEvents';
+import { getSelectedCity, setSelectedCity } from '@/hooks/useCity';
 import { useRsvp } from '@/hooks/useRsvp';
 import { useTheme } from '@/hooks/useTheme';
 import { api } from '@/lib/api';
@@ -112,7 +113,12 @@ export default function Explore() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { theme } = useTheme();
 
-  const [filters, setFilters] = useState<EventFiltersState>(() => readFiltersFromUrl(searchParams));
+  // A link without ?city= (the navbar, "View all", category tiles) opens on the city the
+  // visitor picked with the city switcher; a shared link's ?city= wins.
+  const [filters, setFilters] = useState<EventFiltersState>(() => {
+    const fromUrl = readFiltersFromUrl(searchParams);
+    return searchParams.has('city') ? fromUrl : { ...fromUrl, city: getSelectedCity() };
+  });
   const [page, setPage] = useState(() => Math.max(1, Number(searchParams.get('page')) || 1));
   const [view, setView] = useState<ViewMode>(() => {
     const raw = searchParams.get('view');
@@ -128,6 +134,12 @@ export default function Explore() {
 
   // Only the text query is debounced; a chip press should feel immediate.
   const debouncedSearch = useDebounced(filters.search, 350);
+
+  // Changing the city here changes it for the home page too (once typing pauses).
+  const debouncedCity = useDebounced(filters.city, 600);
+  useEffect(() => {
+    setSelectedCity(debouncedCity);
+  }, [debouncedCity]);
 
   useEffect(() => {
     document.title = 'Explore events — Nearby-Events';

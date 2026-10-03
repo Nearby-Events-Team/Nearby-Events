@@ -293,6 +293,7 @@ export const api = {
 
   /** Neighbourhoods with upcoming events, for the filter's suggestions. */
   neighborhoods: () => request<{ neighborhoods: Array<{ name: string; count: number }> }>('/neighborhoods'),
+  cities: () => request<{ cities: Array<{ name: string; count: number }> }>('/cities'),
 
   insights: () => request<InsightsPayload>('/insights'),
 
@@ -382,10 +383,12 @@ export const api = {
     lat?: number;
     lng?: number;
     interests?: string[];
+    city?: string;
     page?: number;
     pageSize?: number;
   } = {}) => {
     const query = new URLSearchParams();
+    if (params.city) query.set('city', params.city);
     if (params.lat != null && Number.isFinite(params.lat)) query.set('lat', String(params.lat));
     if (params.lng != null && Number.isFinite(params.lng)) query.set('lng', String(params.lng));
     if (params.interests && params.interests.length > 0) query.set('interests', params.interests.join(','));

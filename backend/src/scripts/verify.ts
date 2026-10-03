@@ -26,7 +26,7 @@ import {
 } from '../services/eventService';
 import { joinEvent, leaveEvent } from '../services/rsvpService';
 import { ensureProfile, updateProfile } from '../services/userService';
-import { getInsights, getNeighborhoodOptions } from '../services/statsService';
+import { getCityOptions, getInsights, getNeighborhoodOptions } from '../services/statsService';
 import { placeKey } from '../utils/search';
 import { normalizeExtraction, nowInTimezone, resolveTimezone } from '../services/aiService';
 import { isOwnedImagePath } from '../services/storageService';
@@ -605,6 +605,12 @@ async function main(): Promise<void> {
       options.filter((o) => placeKey(o.name) === 'rspuram').length === 1 &&
         options.filter((o) => placeKey(o.name) === 'peelamedu').length === 1,
     );
+
+    // The city switcher's list: each city once, with a count of upcoming events.
+    const cityOptions = await getCityOptions();
+    const coimbatore = cityOptions.filter((o) => placeKey(o.name) === 'coimbatore');
+    check('city switcher lists each city once', coimbatore.length === 1);
+    check('city switcher counts upcoming events', (coimbatore[0]?.count ?? 0) >= byCity.items.length);
   }
 
   console.log('\n=== Calendar range ===');
