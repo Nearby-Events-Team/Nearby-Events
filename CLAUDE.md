@@ -419,3 +419,14 @@ Single `app.py` Flask app + plain HTML/JS PWA. Nice UI and good ideas, but:
   clean; verify 134/134, intelligence 18/18, pulse 33/33; live Chrome smoke test 16/16 (check-in needs the board
   seeded < ~2.5 h earlier: the "Live now" event lasts 2 h 45 min from seeding, so run demo-day.ps1 shortly before
   the demo); live board 35 events, none ended, soonest first; scheduler enabled. PR #3 description updated.
+- Oct 3 (evening): **Branch audit + Sanjay's notifications (PR #4, now in main).** main = suhas-dev + in-app
+  notifications via Cloud Pub/Sub (cancel / reactivate / venue-or-time change -> bell for everyone who RSVPd). Other
+  branches: kanishkumaran, thahseen, feature/gcp-pubsub-notifications fully in main; `sanjay` extras (comments,
+  weather, share, OSM map) already exist in main via other implementations; `adhi` = separate Flask app (not
+  merged on purpose). main: typecheck/build clean, 185/185, notifications 12/14 -> **fixed on suhas-dev:**
+  (1) `POST /api/notifications/pubsub-push` had no auth - anyone could push any text to every attendee of any
+  event; now needs `?token=<MAINTENANCE_TOKEN>` (constant-time), 403 otherwise; (2) mark-read on an unknown id
+  gave 500 -> 404. After fix 16/16; bell renders, no JS errors. **Live site still runs pre-notification code;**
+  to enable live: merge the fix, enable Pub/Sub API, create topic `event-notifications`, give the runtime SA
+  pubsub.publisher + viewer, push subscription to `<run-url>/api/notifications/pubsub-push?token=<maintenance
+  token>`, redeploy.
