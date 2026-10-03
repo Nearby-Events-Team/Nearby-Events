@@ -162,7 +162,7 @@ export interface AiSuggestion {
 
 /* -------------------------------------------------------- notifications */
 
-export type NotificationType = 'event.cancelled' | 'event.updated' | 'event.reactivated';
+export type NotificationType = 'event.cancelled' | 'event.updated' | 'event.reactivated' | 'event.deleted';
 
 export interface NotificationRecord {
   id: string;

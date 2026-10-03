@@ -443,3 +443,12 @@ Single `app.py` Flask app + plain HTML/JS PWA. Nice UI and good ideas, but:
   default Coimbatore; empty city -> "No events in X yet / Be the first to post in X" (pre-fills the city).
   /api/events/recommended takes ?city=. Dropdown opens upwards (hero clips overflow). verify 136/136; Chrome
   12/12 locally and 12/12 live; deployed. Live board already has a real Erode event posted by Kanish.
+- Oct 3 (late): Suhas: "city change shows no difference" -> it filtered, but only below the fold and Coimbatore =
+  All cities in practice. Fixed: headline "Happening in <city>", toast on switch, empty-city box under the hero
+  (live 9/9). "No verification email": Firebase accepts the send (tested); account va***@gmail.com was created
+  after the feature, su***@gmail.com before it (use Resend). Likely Gmail spam: default sender
+  noreply@nearby-events-510418.firebaseapp.com, subject uses the Firebase public-facing name. Template/sender
+  edits are console-only (API returns EMAIL_TEMPLATE_UPDATE_NOT_ALLOWED).
+- Oct 3 (late): **Delete now notifies attendees** ("Event Removed", type event.deleted). Attendee uids are captured
+  before the delete (it removes the RSVP list) and sent in the Pub/Sub message as recipientUids; bell shows it
+  without a "View event" link. Local 7/7, live 6/6 via Pub/Sub (incl. organiser RSVPd to own event); deployed.

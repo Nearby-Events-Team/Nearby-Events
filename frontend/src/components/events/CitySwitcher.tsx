@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Check, ChevronDown, Globe2, MapPin, Search } from 'lucide-react';
 import { useCity } from '@/hooks/useCity';
+import { useToast } from '@/components/ui/Toast';
 import { api } from '@/lib/api';
 import { cn } from '@/lib/utils';
 
@@ -19,6 +20,7 @@ function placeKey(value: string): string {
  */
 export function CitySwitcher({ className }: { className?: string }) {
   const [city, setCity] = useCity();
+  const toast = useToast();
   const [open, setOpen] = useState(false);
   const [typed, setTyped] = useState('');
   const [cities, setCities] = useState<Array<{ name: string; count: number }> | null>(null);
@@ -68,6 +70,11 @@ export function CitySwitcher({ className }: { className?: string }) {
 
   const choose = (next: string) => {
     setCity(next);
+    // The sections that change are below the fold, so confirm the switch up front.
+    const count = (cities ?? []).find((entry) => placeKey(entry.name) === placeKey(next))?.count ?? 0;
+    if (!next) toast.info('Showing all cities', 'Every upcoming event on the board.');
+    else if (count > 0) toast.success(`Showing ${next}`, `${count} upcoming event${count === 1 ? '' : 's'} in ${next}.`);
+    else toast.info(`No events in ${next} yet`, 'Be the first to post one.');
     setTyped('');
     setOpen(false);
     triggerRef.current?.focus();

@@ -17,7 +17,7 @@ import { api } from '@/lib/api';
 import { CATEGORIES, type CategoryCount } from '@/lib/types';
 import { CATEGORY_STYLES, cn } from '@/lib/utils';
 
-function Hero() {
+function Hero({ city }: { city: string }) {
   return (
     <section className="hero-glow relative overflow-hidden border-b border-border">
       {/* Tightened from py-28: the old spacing left a dead band before the first section. */}
@@ -31,7 +31,15 @@ function Hero() {
           <h1 className="mt-5 animate-fade-up text-display-xl text-ink [animation-delay:60ms]">
             Discover What&rsquo;s
             <br />
-            Happening <span className="text-brand">Around You</span>
+            {/* Names the city picked below, so switching city visibly changes the page. */}
+            Happening{' '}
+            {city ? (
+              <>
+                in <span className="text-brand">{city}</span>
+              </>
+            ) : (
+              <span className="text-brand">Around You</span>
+            )}
           </h1>
 
           <p className="mt-5 max-w-xl animate-fade-up text-base leading-relaxed text-ink-soft [animation-delay:120ms] sm:text-lg">
@@ -285,7 +293,28 @@ export default function Home() {
 
   return (
     <>
-      <Hero />
+      <Hero city={city} />
+
+      {/* Straight under the hero, so picking an empty city is answered on screen at once. */}
+      {boardHasEvents === false && city && (
+        <section className="container-page pt-8">
+          <EmptyState
+            icon={<MapPin className="h-7 w-7" aria-hidden="true" />}
+            title={`No events in ${city} yet`}
+            description={`Nobody has posted anything in ${city} so far. If you know of something happening there, you can be the first to put it on the board.`}
+            action={
+              <>
+                <ButtonLink to={`/events/new?city=${encodeURIComponent(city)}`} variant="primary">
+                  Be the first to post in {city}
+                </ButtonLink>
+                <Button variant="secondary" onClick={() => setCity('')}>
+                  Show all cities
+                </Button>
+              </>
+            }
+          />
+        </section>
+      )}
 
       {/*
         Placed directly under the hero: "what is near me" is the question the product
@@ -318,26 +347,6 @@ export default function Home() {
         Without this, an empty board renders a hero followed by nothing at all, because
         every section hides itself when it has no events.
       */}
-      {boardHasEvents === false && city && (
-        <section className="container-page py-8">
-          <EmptyState
-            icon={<MapPin className="h-7 w-7" aria-hidden="true" />}
-            title={`No events in ${city} yet`}
-            description={`Nobody has posted anything in ${city} so far. If you know of something happening there, you can be the first to put it on the board.`}
-            action={
-              <>
-                <ButtonLink to={`/events/new?city=${encodeURIComponent(city)}`} variant="primary">
-                  Be the first to post in {city}
-                </ButtonLink>
-                <Button variant="secondary" onClick={() => setCity('')}>
-                  Show all cities
-                </Button>
-              </>
-            }
-          />
-        </section>
-      )}
-
       {boardHasEvents === false && !city && (
         <section className="container-page py-8">
           <EmptyState
