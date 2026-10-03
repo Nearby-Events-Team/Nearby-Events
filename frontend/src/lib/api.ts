@@ -16,6 +16,7 @@ import type {
   GeocodeResult,
   InsightsPayload,
   LeaderboardPayload,
+  NotificationRecord,
   Paginated,
   RecommendedEvent,
   RsvpResult,
@@ -414,4 +415,22 @@ export const api = {
     const qs = query.toString();
     return request<Paginated<TrendingEvent>>(`/events/trending${qs ? `?${qs}` : ''}`);
   },
+
+  /* -------------------------------------------------------- notifications */
+
+  /** Fetch the signed-in user's notifications, newest first. */
+  listNotifications: () =>
+    request<{ notifications: NotificationRecord[] }>('/notifications', { auth: true }),
+
+  /** Badge count for the notification bell. */
+  unreadCount: () =>
+    request<{ count: number }>('/notifications/unread-count', { auth: true }),
+
+  /** Mark a single notification as read. */
+  markNotificationRead: (id: string) =>
+    request<{ success: boolean }>(`/notifications/${id}/read`, { method: 'POST', auth: true }),
+
+  /** Mark every notification as read. */
+  markAllNotificationsRead: () =>
+    request<{ success: boolean; marked: number }>('/notifications/read-all', { method: 'POST', auth: true }),
 };

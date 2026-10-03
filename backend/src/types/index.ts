@@ -159,3 +159,18 @@ export interface AiSuggestion {
   category: Category;
   tags: string[];
 }
+
+/* -------------------------------------------------------- notifications */
+
+export type NotificationType = 'event.cancelled' | 'event.updated' | 'event.reactivated';
+
+export interface NotificationRecord {
+  id: string;
+  type: NotificationType;
+  title: string;
+  body: string;
+  eventId: string;
+  eventTitle: string;
+  read: boolean;
+  createdAt: string | null;
+}

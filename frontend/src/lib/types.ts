@@ -328,3 +328,18 @@ export interface GeocodeResult {
   /** How close the match is: the address itself, the area around it, or only the city. */
   precision: 'address' | 'area' | 'city';
 }
+
+/* -------------------------------------------------------- notifications */
+
+export type NotificationType = 'event.cancelled' | 'event.updated' | 'event.reactivated';
+
+export interface NotificationRecord {
+  id: string;
+  type: NotificationType;
+  title: string;
+  body: string;
+  eventId: string;
+  eventTitle: string;
+  read: boolean;
+  createdAt: string | null;
+}

@@ -15,6 +15,7 @@ import { aiRouter } from './routes/ai';
 import { engagementRouter } from './routes/engagement';
 import { eventsRouter } from './routes/events';
 import { metaRouter } from './routes/meta';
+import { notificationsRouter } from './routes/notifications';
 import { recommendationsRouter } from './routes/recommendations';
 import { trendingRouter } from './routes/trending';
 import { rsvpsRouter } from './routes/rsvps';
@@ -146,6 +147,7 @@ export function createApp(): express.Express {
   // JSON limit so we do not raise the bar for every other route.
   app.use('/api/ai', express.json({ limit: '131072' }), aiRouter);
   app.use('/api/uploads', uploadsRouter);
+  app.use('/api/notifications', notificationsRouter);
 
   app.use('/api', notFoundHandler);
 
@@ -234,11 +236,17 @@ function start(): void {
       mode: env.localMode ? 'local emulators (no Google Cloud credentials needed)' : 'google cloud',
       storage: capabilities.storage,
       ai: capabilities.ai ? env.aiProvider : false,
+      pubsub: env.pubsubEnabled,
       serveStatic: env.serveStatic,
     });
 
     // Local mode needs the Firebase emulators; start them if nothing else has.
     void ensureLocalStack();
+
+    // Initialise Pub/Sub topic lazily so the server is not blocked on startup.
+    if (env.pubsubEnabled) {
+      void import('./config/pubsub').then(({ initPubSub }) => initPubSub());
+    }
   });
 
   // Cloud Run sends SIGTERM before reclaiming an instance; closing cleanly avoids
