@@ -438,3 +438,8 @@ Single `app.py` Flask app + plain HTML/JS PWA. Nice UI and good ideas, but:
   maintenance token. Deployed suhas-dev. Live: API test 8/8 (unverified 403, verified 201, cancel notification
   arrives via Pub/Sub, fake push 403), Chrome 18/18. Verification emails come from
   noreply@nearby-events-510418.firebaseapp.com and may land in spam.
+- Oct 3 (late): **City switcher.** Home "City" is a dropdown (GET /api/cities with counts, All cities, any typed
+  city); home sections, Explore (removable city chip) and the post form follow it; remembered per browser;
+  default Coimbatore; empty city -> "No events in X yet / Be the first to post in X" (pre-fills the city).
+  /api/events/recommended takes ?city=. Dropdown opens upwards (hero clips overflow). verify 136/136; Chrome
+  12/12 locally and 12/12 live; deployed. Live board already has a real Erode event posted by Kanish.
