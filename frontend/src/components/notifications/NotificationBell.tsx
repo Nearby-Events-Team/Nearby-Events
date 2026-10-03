@@ -9,6 +9,7 @@ import {
   CheckCheck,
   PartyPopper,
   RefreshCw,
+  Trash2,
 } from 'lucide-react';
 import { api } from '@/lib/api';
 import { useAuth } from '@/context/AuthContext';
@@ -21,12 +22,14 @@ const ICONS: Record<NotificationType, typeof CalendarX2> = {
   'event.cancelled': CalendarX2,
   'event.updated': Calendar,
   'event.reactivated': PartyPopper,
+  'event.deleted': Trash2,
 };
 
 const ACCENT: Record<NotificationType, string> = {
   'event.cancelled': 'text-red-500',
   'event.updated': 'text-amber-500',
   'event.reactivated': 'text-emerald-500',
+  'event.deleted': 'text-red-500',
 };
 
 function timeAgo(dateString: string | null): string {
@@ -220,13 +223,16 @@ export function NotificationBell() {
                         {notification.body}
                       </p>
                       <div className="mt-1.5 flex items-center gap-2">
-                        <Link
-                          to={`/events/${notification.eventId}`}
-                          onClick={() => setOpen(false)}
-                          className="text-xs font-medium text-brand hover:underline"
-                        >
-                          View event
-                        </Link>
+                        {/* A deleted event has no page to open. */}
+                        {notification.type !== 'event.deleted' && (
+                          <Link
+                            to={`/events/${notification.eventId}`}
+                            onClick={() => setOpen(false)}
+                            className="text-xs font-medium text-brand hover:underline"
+                          >
+                            View event
+                          </Link>
+                        )}
                         <span className="text-[0.6875rem] text-ink-muted">
                           {timeAgo(notification.createdAt)}
                         </span>

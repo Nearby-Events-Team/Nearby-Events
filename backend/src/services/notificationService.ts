@@ -6,7 +6,7 @@ import { toIso } from '../utils/dates';
 
 /* ------------------------------------------------------------------ types */
 
-export type NotificationType = 'event.cancelled' | 'event.updated' | 'event.reactivated';
+export type NotificationType = 'event.cancelled' | 'event.updated' | 'event.reactivated' | 'event.deleted';
 
 export interface NotificationRecord {
   id: string;
@@ -26,6 +26,11 @@ interface PubSubMessageData {
   organizerName: string;
   /** Only for event.updated — what changed. */
   changes?: string[];
+  /**
+   * Only for event.deleted: who had RSVPd. Deleting removes the RSVP list, so it is
+   * captured before the delete and travels with the message.
+   */
+  recipientUids?: string[];
 }
 
 const NOTIFICATIONS = 'notifications';
@@ -45,6 +50,7 @@ export async function publishNotification(
   eventTitle: string,
   organizerName: string,
   changes?: string[],
+  recipientUids?: string[],
 ): Promise<void> {
   const data: PubSubMessageData = {
     action,
@@ -52,6 +58,7 @@ export async function publishNotification(
     eventTitle,
     organizerName,
     ...(changes ? { changes } : {}),
+    ...(recipientUids ? { recipientUids } : {}),
   };
 
   // Publish to GCP Cloud Pub/Sub
@@ -89,6 +96,12 @@ function buildNotificationContent(
           : `"${data.eventTitle}" has been updated by ${data.organizerName}.`,
       };
 
+    case 'event.deleted':
+      return {
+        title: 'Event Removed',
+        body: `"${data.eventTitle}" has been removed by ${data.organizerName} and is no longer on the board.`,
+      };
+
     case 'event.reactivated':
       return {
         title: 'Event Back On!',
@@ -116,19 +129,16 @@ export async function processNotificationMessage(
   const { action, eventId } = rawData;
   const db = getDb();
 
-  // 1. Load all RSVPs for the event.
-  const rsvpSnapshot = await db
-    .collection(EVENTS)
-    .doc(eventId)
-    .collection(RSVPS)
-    .get();
+  // 1. Who to notify: the list sent with a deletion (the RSVPs are gone by now), else
+  //    everyone currently RSVPd.
+  const attendeeUids = Array.isArray(rawData.recipientUids)
+    ? rawData.recipientUids.filter((uid): uid is string => typeof uid === 'string' && uid.length > 0 && uid.length <= 128)
+    : (await db.collection(EVENTS).doc(eventId).collection(RSVPS).get()).docs.map((doc) => doc.id);
 
-  if (rsvpSnapshot.empty) {
+  if (attendeeUids.length === 0) {
     logger.info('No attendees to notify', { eventId, action });
     return { delivered: 0 };
   }
-
-  const attendeeUids = rsvpSnapshot.docs.map((doc) => doc.id);
   const content = buildNotificationContent(rawData);
 
   // 2. Fan-out: write one notification per attendee, batched.

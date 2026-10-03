@@ -482,6 +482,18 @@ export async function deleteEvent(id: string, user: AuthUser): Promise<void> {
   const imagePath = data.imagePath ? String(data.imagePath) : null;
   if (imagePath && isOwnedImagePath(imagePath, user.uid)) void deleteImage(imagePath);
 
+  // Tell everyone who was going. Fire-and-forget, like cancel: the delete has succeeded.
+  if (!rsvps.empty) {
+    void publishNotification(
+      'event.deleted',
+      id,
+      String(data.title ?? ''),
+      user.displayName,
+      undefined,
+      rsvps.docs.map((doc) => doc.id),
+    );
+  }
+
   logger.info('Event deleted', { eventId: id, creatorId: user.uid, rsvpsRemoved: rsvps.size });
 }
 
