@@ -452,3 +452,7 @@ Single `app.py` Flask app + plain HTML/JS PWA. Nice UI and good ideas, but:
 - Oct 3 (late): **Delete now notifies attendees** ("Event Removed", type event.deleted). Attendee uids are captured
   before the delete (it removes the RSVP list) and sent in the Pub/Sub message as recipientUids; bell shows it
   without a "View event" link. Local 7/7, live 6/6 via Pub/Sub (incl. organiser RSVPd to own event); deployed.
+- Oct 4: **Rebrand (visible only): app name "Radius"**, tagline "Everything happening within your radius.", new
+  rings logo (favicon.svg + `components/layout/RadiusMark.tsx` in navbar/footer/sign-in). Internal names unchanged
+  (repo, package names, GCP/Firebase IDs, service names, storage keys `nearby-objects:*`, seed tags, .ics PRODID).
+  Not done: PWA PNG icons still show the old pin (artwork is hard-coded in scripts/generate-pwa-icons.mjs).

@@ -286,7 +286,7 @@ export default function Home() {
   const [boardHasEvents, setBoardHasEvents] = useState<boolean | null>(null);
 
   useEffect(() => {
-    document.title = 'Nearby-Events — Discover. Connect. Participate.';
+    document.title = 'Radius — Everything happening within your radius.';
   }, []);
 
   const onPopularResolved = useCallback((hasEvents: boolean) => setBoardHasEvents(hasEvents), []);

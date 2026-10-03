@@ -1,7 +1,7 @@
-# Nearby-Events 📍
+# Radius 📍
 
 > **Cognizant GCP Hackathon — Use Case 5: Local Event Bulletin Board**  
-> *A high-performance, real-time, AI-assisted digital community platform built on Google Cloud Platform and Firebase.*
+> *Everything happening within your radius.*
 
 [![Google Cloud Platform](https://img.shields.io/badge/GCP-Cloud%20Run%20%7C%20Firestore%20%7C%20Storage%20%7C%20Vertex%20AI-4285F4?logo=googlecloud&logoColor=white)](https://cloud.google.com)
 [![React 18](https://img.shields.io/badge/Frontend-React%2018%20%2B%20TypeScript%20%2B%20Vite-61DAFB?logo=react&logoColor=black)](https://react.dev)
@@ -15,7 +15,7 @@
 
 ## 📌 Overview
 
-**Nearby-Events** is a modern, cloud-native digital community bulletin board designed to help local residents discover, post, share, and RSVP to neighborhood events, garage sales, sports games, workshops, and meetups.
+**Radius** is a modern, cloud-native digital community bulletin board designed to help local residents discover, post, share, and RSVP to neighborhood events, garage sales, sports games, workshops, and meetups.
 
 It replaces the fragmentation and clutter of physical corkboards and generic social media feeds with a hyper-local, real-time, and AI-enhanced experience powered by **Google Cloud Run**, **Cloud Firestore**, **Google Cloud Storage**, **Gemini** (default `gemini-3.5-flash-lite`, via the Gemini API or Vertex AI), **Firebase Authentication** and **Google Maps Platform**.
 
@@ -65,7 +65,7 @@ It replaces the fragmentation and clutter of physical corkboards and generic soc
 
 ## 🏛️ System Architecture
 
-![Nearby-Events Architecture](docs/architecture-diagram.svg)
+![Radius Architecture](docs/architecture-diagram.svg)
 
 ### Google Cloud Infrastructure & Service Integration
 
@@ -248,7 +248,7 @@ npm run dev:api
 npm run dev:web
 ```
 
-Open `http://localhost:5173` in your browser to experience **Nearby-Events**!
+Open `http://localhost:5173` in your browser to experience **Radius**!
 
 ---
 

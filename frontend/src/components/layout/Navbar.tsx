@@ -7,7 +7,6 @@ import {
   CalendarPlus,
   Compass,
   LogOut,
-  MapPin,
   Menu,
   Moon,
   Sun,
@@ -18,6 +17,7 @@ import {
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { Avatar } from '@/components/ui/Primitives';
 import { NotificationBell } from '@/components/notifications/NotificationBell';
+import { RadiusMark } from './RadiusMark';
 import { useAuth, useDisplayName } from '@/context/AuthContext';
 import { useToast } from '@/components/ui/Toast';
 import { cn } from '@/lib/utils';
@@ -100,9 +100,11 @@ export function Navbar({ theme, onToggleTheme }: { theme: 'light' | 'dark'; onTo
             className="flex shrink-0 items-center gap-2.5 rounded-lg font-display text-[1.0625rem] font-extrabold tracking-tight text-ink"
           >
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-white shadow-sm">
-              <MapPin className="h-[1.125rem] w-[1.125rem]" aria-hidden="true" />
+              <RadiusMark className="h-[1.125rem] w-[1.125rem]" />
             </span>
-            Nearby-Events
+            <span>
+              Radius<span className="text-accent">.</span>
+            </span>
           </Link>
 
           {/* ------------------------------------------------- desktop links */}

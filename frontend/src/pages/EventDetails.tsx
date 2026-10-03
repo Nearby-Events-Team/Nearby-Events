@@ -207,7 +207,7 @@ export default function EventDetails() {
   }, [id, user, initialising, nonce]);
 
   useEffect(() => {
-    document.title = event ? `${event.title} — Nearby-Events` : 'Event — Nearby-Events';
+    document.title = event ? `${event.title} — Radius` : 'Event — Radius';
   }, [event]);
 
   const applyRsvp = useCallback(

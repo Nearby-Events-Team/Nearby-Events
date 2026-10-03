@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
-import { BarChart3, CalendarHeart, CalendarPlus, Compass, Home, MapPin } from 'lucide-react';
+import { BarChart3, CalendarHeart, CalendarPlus, Compass, Home } from 'lucide-react';
+import { RadiusMark } from './RadiusMark';
 import { Navbar } from './Navbar';
 import { useTheme } from '@/hooks/useTheme';
 import { useAuth } from '@/context/AuthContext';
@@ -59,13 +60,15 @@ function Footer() {
           <div className="sm:col-span-2">
             <div className="flex items-center gap-2.5 font-display text-[1.0625rem] font-extrabold tracking-tight text-ink">
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-white">
-                <MapPin className="h-[1.125rem] w-[1.125rem]" aria-hidden="true" />
+                <RadiusMark className="h-[1.125rem] w-[1.125rem]" />
               </span>
-              Nearby-Events
+              <span>
+                Radius<span className="text-accent">.</span>
+              </span>
             </div>
 
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-ink-soft">
-              Discover. Connect. Participate. A community event board for the things happening on
+              Everything happening within your radius. A community event board for the things happening on
               your own street — built on Google Cloud.
             </p>
           </div>
@@ -107,7 +110,7 @@ function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-border pt-6 text-xs text-ink-muted sm:flex-row sm:items-center">
-          <p>© {year} Nearby-Events · Cognizant NPN GCP Hackathon prototype</p>
+          <p>© {year} Radius · Cognizant NPN GCP Hackathon prototype</p>
           <p className="flex items-center gap-1.5">
             <BarChart3 className="h-3.5 w-3.5" aria-hidden="true" />
             Cloud Run · Firestore · Cloud Storage · Gemini · Maps Platform
