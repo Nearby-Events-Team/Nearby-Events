@@ -16,18 +16,19 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = path.join(root, 'frontend', 'public', 'icons');
 
-const PIN = `
-  <path d="M16 7c-3.6 0-6.5 2.9-6.5 6.5C9.5 18.3 16 25 16 25s6.5-6.7 6.5-11.5C22.5 9.9 19.6 7 16 7z" fill="#fff"/>
-  <circle cx="16" cy="13.3" r="2.4" fill="#4f46e5"/>`;
+const MARK = `
+  <circle cx="16" cy="16" r="10.5" fill="none" stroke="#fff" stroke-width="2" opacity=".45"/>
+  <circle cx="16" cy="16" r="6.5" fill="none" stroke="#fff" stroke-width="2.2" opacity=".85"/>
+  <circle cx="16" cy="16" r="3" fill="#5eead4"/>`;
 
-/** Same artwork as frontend/public/favicon.svg: a rounded indigo tile with a map pin. */
-const ROUNDED = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#4f46e5"/>${PIN}</svg>`;
+/** Same artwork as frontend/public/favicon.svg: a rounded indigo tile with the Radius rings. */
+const ROUNDED = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#4f46e5"/>${MARK}</svg>`;
 
 /**
  * Full-bleed square for maskable (Android crops it to a circle/squircle) and Apple
- * (iOS rounds the corners itself). The pin already sits inside the central 80% safe zone.
+ * (iOS rounds the corners itself). The rings already sit inside the central 80% safe zone.
  */
-const FULL_BLEED = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" fill="#4f46e5"/>${PIN}</svg>`;
+const FULL_BLEED = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" fill="#4f46e5"/>${MARK}</svg>`;
 
 const ICONS = [
   { file: 'icon-192.png', size: 192, svg: ROUNDED },

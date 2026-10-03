@@ -1,4 +1,4 @@
-# Monitoring — Nearby-Events
+# Monitoring — Radius
 
 What watches the live service (project `nearby-events-510418`, Cloud Run `nearby-events`, `asia-south1`):
 

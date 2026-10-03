@@ -1,4 +1,4 @@
-# Deploying Nearby-Events to Google Cloud
+# Deploying Radius to Google Cloud
 
 > A runbook. Every command is copy-pasteable; set the variables in step 0 and the rest
 > follow. Allow about 30 minutes end to end, most of it waiting for API enablement and

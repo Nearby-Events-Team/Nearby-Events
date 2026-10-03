@@ -1,4 +1,4 @@
-# Current status — Nearby-Events
+# Current status — Radius
 
 > Cognizant NPN Hackathon · Use Case 5 · updated 3 Oct 2026.
 > Full write-up: [`cognizant-hackathon-report.md`](cognizant-hackathon-report.md).
