@@ -1,6 +1,8 @@
+import crypto from 'node:crypto';
 import { Router } from 'express';
 import { requireAuth, currentUser, type AuthedRequest } from '../middleware/auth';
-import { asyncHandler } from '../middleware/error';
+import { AppError, asyncHandler } from '../middleware/error';
+import { env } from '../config/env';
 import { logger } from '../config/logger';
 import {
   countUnread,
@@ -71,13 +73,26 @@ notificationsRouter.post(
  *
  * On error it returns 500 so Pub/Sub retries automatically.
  *
- * Authentication: In production, configure the push subscription with an
- * OIDC token that this endpoint verifies. For the hackathon demo, we accept
- * requests with a maintenance token or from the push subscription directly.
+ * Authentication: the push subscription's endpoint URL carries MAINTENANCE_TOKEN as
+ * `?token=…`; anything without it is rejected with 403. (OIDC push auth would be the
+ * next step up.)
  */
 notificationsRouter.post(
   '/pubsub-push',
   asyncHandler(async (req, res) => {
+    // Without this check anyone could POST a fake message and push any text to every
+    // attendee of any event. A push subscription cannot add headers, so the shared
+    // secret travels in the endpoint URL (…/pubsub-push?token=…).
+    if (!env.maintenanceToken) {
+      throw AppError.unavailable('MAINTENANCE_TOKEN is not configured on this deployment.');
+    }
+    const provided = Buffer.from(String(req.query.token ?? ''));
+    const expected = Buffer.from(env.maintenanceToken);
+    if (provided.length !== expected.length || !crypto.timingSafeEqual(provided, expected)) {
+      logger.warn('Rejected Pub/Sub push with an invalid token');
+      throw AppError.forbidden('Invalid push token.');
+    }
+
     const message = req.body?.message;
 
     if (!message?.data) {

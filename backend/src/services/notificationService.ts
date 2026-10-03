@@ -1,6 +1,7 @@
 import { FieldValue, getDb, type DocumentData } from '../config/firebase';
 import { logger } from '../config/logger';
 import { publishEventNotification } from '../config/pubsub';
+import { AppError } from '../middleware/error';
 import { toIso } from '../utils/dates';
 
 /* ------------------------------------------------------------------ types */
@@ -217,12 +218,10 @@ export async function countUnread(uid: string): Promise<number> {
 
 /** Marks a single notification as read. */
 export async function markAsRead(uid: string, notificationId: string): Promise<void> {
-  await getDb()
-    .collection('users')
-    .doc(uid)
-    .collection(NOTIFICATIONS)
-    .doc(notificationId)
-    .update({ read: true });
+  const ref = getDb().collection('users').doc(uid).collection(NOTIFICATIONS).doc(notificationId);
+  const snapshot = await ref.get();
+  if (!snapshot.exists) throw AppError.notFound('That notification does not exist.');
+  await ref.update({ read: true });
 }
 
 /** Marks all notifications as read in one batch. */
