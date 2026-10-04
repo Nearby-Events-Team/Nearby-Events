@@ -298,6 +298,12 @@ export function googleMapsLink(event: Pick<EventRecord, 'latitude' | 'longitude'
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.address)}`;
 }
 
+/** Safely truncates long text strings with trailing ellipsis. */
+export function truncateText(text: string, maxLength = 100): string {
+  if (!text || text.length <= maxLength) return text;
+  return `${text.slice(0, maxLength).trimEnd()}...`;
+}
+
 /** Calendar entry for an event, so "add to calendar" needs no backend. */
 export function googleCalendarLink(event: EventRecord): string {
   const stamp = (iso: string) => new Date(iso).toISOString().replace(/[-:]|\.\d{3}/g, '');
@@ -310,3 +316,4 @@ export function googleCalendarLink(event: EventRecord): string {
   });
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
+
