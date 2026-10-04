@@ -43,12 +43,16 @@ export interface ButtonProps
     ButtonBaseProps {}
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { className, variant, size, full, loading = false, loadingLabel, children, disabled, ...props },
+  { className, variant, size, full, loading = false, loadingLabel, children, disabled, type = 'button', ...props },
   ref,
 ) {
   return (
     <button
       ref={ref}
+      // A plain <button> inside a <form> defaults to "submit", so helper buttons in the post
+      // form (Improve with AI, Snap-a-Poster, map pin) were also trying to publish it.
+      // Submit buttons say type="submit" explicitly.
+      type={type}
       className={cn(buttonStyles({ variant, size, full }), className)}
       disabled={disabled || loading}
       aria-busy={loading || undefined}

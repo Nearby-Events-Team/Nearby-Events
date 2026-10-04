@@ -54,6 +54,22 @@ export interface Searchable {
 }
 
 /**
+ * Words that carry no topic of their own ("events near me", "where can I find stuff").
+ * Free-text search skips them, so "music events near me" searches for "music", and the
+ * rule-based smart search drops them from its keywords.
+ */
+export const FILLER_WORDS = new Set([
+  'a', 'an', 'the', 'any', 'some', 'all', 'me', 'my', 'i', 'we', 'us', 'our', 'you', 'your',
+  'show', 'find', 'search', 'looking', 'look', 'want', 'need', 'give', 'list', 'see', 'get',
+  'event', 'events', 'thing', 'things', 'stuff', 'activity', 'activities', 'something',
+  'anything', 'happening', 'going', 'on', 'to', 'do', 'for', 'with', 'in', 'at', 'near',
+  'around', 'nearby', 'close', 'by', 'of', 'and', 'or', 'is', 'are', 'there', 'what',
+  "what's", 'whats', 'where', 'when', 'this', 'that', 'please', 'can', 'could', 'would',
+  'like', 'good', 'best', 'fun', 'cool', 'nice', 'local', 'area', 'from', 'up', 'coming',
+  'upcoming', 'next',
+]);
+
+/**
  * Weighted relevance score. Returns 0 when the record does not match at all, so the
  * caller can both filter and order by the same number.
  */
@@ -61,7 +77,12 @@ export function relevanceScore(record: Searchable, query: string): number {
   const q = normalise(query);
   if (!q) return 1;
 
-  const terms = q.split(/\s+/).filter(Boolean);
+  // Every remaining term must match (below), so filler words would empty the results:
+  // no event's text contains "events near me".
+  const terms = q
+    .replace(/[^\p{L}\p{N}\s'-]/gu, ' ')
+    .split(/\s+/)
+    .filter((term) => term && !FILLER_WORDS.has(term));
   if (!terms.length) return 1;
 
   const fields: Array<[string, number]> = [
@@ -94,4 +115,9 @@ export function relevanceScore(record: Searchable, query: string): number {
   // Every term has to land somewhere, otherwise "sports coimbatore" would match a
   // music event in Coimbatore.
   return matchedTerms === terms.length ? score : 0;
+}
+
+/** "music events near me", "anything nearby?" — the person wants the distance filter. */
+export function wantsNearby(query: string): boolean {
+  return /\b(near\s*me|nearby|near\s*by|around\s*me|close\s*to\s*me|close\s*by)\b/i.test(query);
 }

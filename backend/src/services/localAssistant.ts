@@ -1,4 +1,5 @@
 import type { AiSuggestion, Category, DateFilter } from '../types';
+import { FILLER_WORDS, wantsNearby } from '../utils/search';
 
 /**
  * Built-in assistant: the same two jobs the Gemini integration does — tidy a draft
@@ -30,7 +31,7 @@ const CATEGORY_KEYWORDS: Record<Exclude<Category, 'Other'>, string[]> = {
   'Yard Sale': [
     'yard sale', 'garage sale', 'sale', 'second hand', 'second-hand', 'secondhand', 'thrift',
     'flea', 'swap', 'pre-loved', 'preloved', 'used', 'bargain', 'clearance', 'exchange',
-    'declutter', 'moving out',
+    'declutter', 'moving out', 'buy', 'buying', 'shop', 'shopping', 'sell', 'selling',
   ],
   Community: [
     'community', 'cleanup', 'clean-up', 'clean up', 'volunteer', 'volunteering', 'donation',
@@ -216,21 +217,12 @@ const DATE_PATTERNS: Array<{ filter: DateFilter; pattern: RegExp }> = [
 ];
 
 /** Words that carry no search meaning once the structured filters are pulled out. */
-const FILLER = new Set([
-  'a', 'an', 'the', 'any', 'some', 'all', 'me', 'my', 'i', 'we', 'us', 'our', 'you', 'your',
-  'show', 'find', 'search', 'looking', 'look', 'want', 'need', 'give', 'list', 'see', 'get',
-  'event', 'events', 'thing', 'things', 'stuff', 'activity', 'activities', 'something',
-  'anything', 'happening', 'going', 'on', 'to', 'do', 'for', 'with', 'in', 'at', 'near',
-  'around', 'nearby', 'close', 'by', 'of', 'and', 'or', 'is', 'are', 'there', 'what',
-  "what's", 'whats', 'where', 'when', 'this', 'that', 'please', 'can', 'could', 'would',
-  'like', 'good', 'best', 'fun', 'cool', 'nice', 'local', 'area', 'from', 'up', 'coming',
-  'upcoming', 'next',
-]);
 
 /** Category names and their bare synonyms — implied by the category filter itself. */
 const CATEGORY_WORDS = new Set([
   'sport', 'sports', 'sporty', 'music', 'musical', 'food', 'foodie', 'yard', 'sale', 'sales',
   'garage', 'community', 'education', 'educational', 'technology', 'tech', 'techie',
+  'buy', 'buying', 'shop', 'shopping', 'sell', 'selling',
 ]);
 
 export interface LocalSearchIntent {
@@ -239,6 +231,7 @@ export interface LocalSearchIntent {
   dateFilter: DateFilter;
   neighborhood: string;
   city: string;
+  nearMe: boolean;
 }
 
 export interface PlaceIndex {
@@ -301,11 +294,11 @@ export function parseSearchLocally(query: string, places: PlaceIndex): LocalSear
     .toLowerCase()
     .replace(/[^a-z0-9\s'-]/g, ' ')
     .split(/\s+/)
-    .filter((word) => word.length > 1 && !FILLER.has(word))
+    .filter((word) => word.length > 1 && !FILLER_WORDS.has(word))
     // "music events" means the Music category, not the literal word "music" in a title.
     .filter((word) => !(category && CATEGORY_WORDS.has(word)))
     .join(' ')
     .slice(0, 120);
 
-  return { keywords, category, dateFilter, neighborhood, city };
+  return { keywords, category, dateFilter, neighborhood, city, nearMe: wantsNearby(query) };
 }

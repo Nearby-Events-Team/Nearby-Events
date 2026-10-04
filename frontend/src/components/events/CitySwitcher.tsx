@@ -10,6 +10,21 @@ function placeKey(value: string): string {
   return value.toLowerCase().replace(/[^\p{L}\p{N}]/gu, '');
 }
 
+/** Edit distance between two place keys, for "Did you mean Coimbatore?" on a typo. */
+function editDistance(a: string, b: string): number {
+  const row = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i += 1) {
+    let previous = row[0]!;
+    row[0] = i;
+    for (let j = 1; j <= b.length; j += 1) {
+      const current = row[j]!;
+      row[j] = Math.min(row[j]! + 1, row[j - 1]! + 1, previous + (a[i - 1] === b[j - 1] ? 0 : 1));
+      previous = current;
+    }
+  }
+  return row[b.length]!;
+}
+
 /**
  * The home page's "City" control. Lists the cities that have upcoming events (busiest
  * first), "All cities", and lets the visitor type any other city, which simply shows an
@@ -67,6 +82,14 @@ export function CitySwitcher({ className }: { className?: string }) {
   // A typed city that is not on the list yet can still be picked (it will be empty).
   const exact = (cities ?? []).find((entry) => placeKey(entry.name) === query);
   const canPickTyped = typed.trim().length >= 2 && !exact;
+  // A near-miss of a city that has events ("Coimbatre"): about one typo per four letters.
+  const suggestion =
+    query.length >= 4 && !exact && shown.length === 0
+      ? (cities ?? [])
+          .map((entry) => ({ entry, distance: editDistance(query, placeKey(entry.name)) }))
+          .filter(({ distance }) => distance <= Math.max(1, Math.floor(query.length / 4)))
+          .sort((a, b) => a.distance - b.distance)[0]?.entry ?? null
+      : null;
 
   const choose = (next: string) => {
     setCity(next);
@@ -151,6 +174,18 @@ export function CitySwitcher({ className }: { className?: string }) {
                 </button>
               </li>
             ))}
+
+            {suggestion && (
+              <li>
+                <button type="button" onClick={() => choose(suggestion.name)} className={itemClass}>
+                  <MapPin className="h-4 w-4 text-brand" aria-hidden="true" />
+                  <span className="flex-1">
+                    Did you mean <span className="font-semibold">{suggestion.name}</span>?
+                  </span>
+                  <span className="text-xs tabular-nums text-ink-muted">{suggestion.count}</span>
+                </button>
+              </li>
+            )}
 
             {canPickTyped && (
               <li>

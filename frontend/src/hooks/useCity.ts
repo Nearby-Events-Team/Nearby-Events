@@ -1,7 +1,10 @@
 import { useSyncExternalStore } from 'react';
 
-/** The board's pilot city: what a first-time visitor sees. */
-export const DEFAULT_CITY = 'Coimbatore';
+/**
+ * What a first-time visitor sees: all cities, so the page reads "Happening Around You"
+ * wherever they are. Coimbatore, the pilot city, still heads the switcher's list.
+ */
+export const DEFAULT_CITY = '';
 
 const STORAGE_KEY = 'nearby-events.city';
 

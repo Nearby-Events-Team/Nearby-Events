@@ -16,6 +16,9 @@ import {
 } from '@/lib/types';
 import { cn, DATE_FILTERS } from '@/lib/utils';
 
+/** Same phrases the API treats as "near me" (backend utils/search.ts wantsNearby). */
+const NEAR_ME = /\b(near\s*me|nearby|near\s*by|around\s*me|close\s*to\s*me|close\s*by)\b/i;
+
 const SORTS: Array<{ value: SortOption; label: string }> = [
   { value: 'soonest', label: 'Soonest' },
   { value: 'popular', label: 'Most popular' },
@@ -183,8 +186,10 @@ export function EventFilters({
     try {
       const { intent } = await api.aiSearch(query);
 
+      // Only Gemini's topic words go into the text search. Falling back to the whole
+      // sentence would require every word ("where", "buy", "stuff") to be in an event.
       onChange({
-        search: intent.keywords || query,
+        search: intent.keywords,
         category: intent.category,
         date: intent.dateFilter,
         neighborhood: intent.neighborhood,
@@ -196,7 +201,10 @@ export function EventFilters({
         intent.dateFilter !== 'upcoming' ? DATE_FILTERS.find((d) => d.value === intent.dateFilter)?.label : null,
         intent.neighborhood,
         intent.city,
+        intent.nearMe ? 'near you' : null,
       ].filter(Boolean);
+
+      if (intent.nearMe && !hasLocation) useMyLocation();
 
       toast.success(
         'Filters applied',
@@ -206,6 +214,7 @@ export function EventFilters({
       // Smart search needs an account; a spoken query still works as a plain keyword search.
       if (error instanceof ApiError && error.isAuthError) {
         onChange({ search: query });
+        if (NEAR_ME.test(query) && !hasLocation) useMyLocation();
         toast.info('Searching by keyword', 'Sign in to let smart search set the filters for you.');
         return;
       }

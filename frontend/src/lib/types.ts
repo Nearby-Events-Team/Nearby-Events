@@ -221,6 +221,8 @@ export interface SearchIntent {
   dateFilter: DateFilter;
   neighborhood: string;
   city: string;
+  /** "near me": switch on the distance filter around the visitor's location. */
+  nearMe?: boolean;
   source?: AiProvider;
 }
 
