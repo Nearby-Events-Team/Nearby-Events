@@ -469,3 +469,9 @@ Single `app.py` Flask app + plain HTML/JS PWA. Nice UI and good ideas, but:
   first: Button type="button" fix kept, typecheck/build clean. Live 13/13 (no AI calls). Thahseen pushed
   "Architecture diagram.png" + README link straight to main: diagram lacks Pub/Sub, Secret Manager, Cloud Build and
   has a typo ("autosclding"); asked to fix and to use PRs.
+- Oct 4: **CI added** (`.github/workflows/ci.yml`, GitHub Actions, no secrets, never deploys): on every PR + push to
+  main, job 1 typecheck + build, job 2 Firestore/Auth emulators + seed + verify/intelligence/pulse (~1 min each).
+  First run caught a real bug: against the emulators with no Google credentials the API still created a Pub/Sub
+  client and crashed (passed locally only because of gcloud ADC). Fixed: `env.pubsubEnabled` false for local mode,
+  demo- projects or FIRESTORE_EMULATOR_HOST, and config/pubsub.ts checks it. CI green (136/18/33). Deployed; live
+  Pub/Sub still publishes (logs) and notifications 6/6. Auto-deploy (CD) deliberately not set up before the demo.
