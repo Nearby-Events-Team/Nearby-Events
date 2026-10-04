@@ -456,3 +456,11 @@ Single `app.py` Flask app + plain HTML/JS PWA. Nice UI and good ideas, but:
   rings logo (favicon.svg + `components/layout/RadiusMark.tsx` in navbar/footer/sign-in). Internal names unchanged
   (repo, package names, GCP/Firebase IDs, service names, storage keys `nearby-objects:*`, seed tags, .ics PRODID).
   Not done: PWA PNG icons still show the old pin (artwork is hard-coded in scripts/generate-pwa-icons.mjs).
+- Oct 4: **Fixes from Suhas's hands-on test.** (A) `Button` defaults to type="button": helper buttons in the post
+  form (Improve with AI, Snap-a-Poster, Apply/Discard, map pin) were acting as submit, giving "couldn't publish"
+  and risking accidental publishing. (B) Search skips filler words (shared `FILLER_WORDS`): "music events near me"
+  went 0 -> 5. (C) Smart search maps intents to categories (buy -> Yard Sale...), topic words only, `nearMe` flag ->
+  location filter (also voice / signed out). (E) "Forgot password?" on sign-in. (F) City switcher defaults to All
+  cities ("Around You") + "Did you mean Coimbatore?". (G) demo-day.ps1 refuses to run if backend/.env sets
+  FIRESTORE_EMULATOR_HOST (Suhas's restored older .env did; those 4 lines are now commented out locally).
+  verify 136/136, 18/18, 33/33; live API + Gemini smart search checks; live browser 10/10; check-in verified live.
