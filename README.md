@@ -65,7 +65,7 @@ It replaces the fragmentation and clutter of physical corkboards and generic soc
 
 ## 🏛️ System Architecture
 
-![Radius Architecture](docs/architecture-diagram.svg)
+![Radius Architecture](Architecture diagram.png)
 
 ### Google Cloud Infrastructure & Service Integration
 
