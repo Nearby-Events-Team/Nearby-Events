@@ -475,3 +475,10 @@ Single `app.py` Flask app + plain HTML/JS PWA. Nice UI and good ideas, but:
   client and crashed (passed locally only because of gcloud ADC). Fixed: `env.pubsubEnabled` false for local mode,
   demo- projects or FIRESTORE_EMULATOR_HOST, and config/pubsub.ts checks it. CI green (136/18/33). Deployed; live
   Pub/Sub still publishes (logs) and notifications 6/6. Auto-deploy (CD) deliberately not set up before the demo.
+- Oct 4: **Architecture diagram + README brought in line with the live system.** New `Architecture diagram.png`
+  (same filename Kanishkhan's README link used; replaces his image, which lacked Pub/Sub, Secret Manager, Cloud Build
+  and had a typo) generated from `docs/architecture-diagram.svg` by `scripts/make-architecture-diagram.mjs`.
+  README: relative image link, architecture table now lists all 12 services/tools (Pub/Sub, Scheduler, Secret
+  Manager, Cloud Build/AR, Monitoring, Maps, CI…) and drops overclaims (real-time sync, CDN, "date ASC" index);
+  features add notifications, city switcher, verified email + forgot password, ?event= links; tree adds CI.
+  docs/architecture-diagram.md: Pub/Sub + CI in ASCII, mermaid and table.
