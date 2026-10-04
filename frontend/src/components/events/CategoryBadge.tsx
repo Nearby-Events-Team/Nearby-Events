@@ -49,9 +49,10 @@ export function CategoryBadge({
   const style = CATEGORY_STYLES[category];
 
   return (
-    <Badge tone="custom" size={size} className={cn(style.badge, className)}>
+    <Badge tone="custom" size={size} title={style.blurb} className={cn(style.badge, className)}>
       {withIcon && <CategoryIcon category={category} className="h-3.5 w-3.5" />}
       {category}
     </Badge>
   );
+
 }
