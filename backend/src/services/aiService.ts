@@ -5,6 +5,7 @@ import { AppError } from '../middleware/error';
 import { CATEGORIES, type AiSuggestion, type Category, type DateFilter } from '../types';
 import { parseSearchLocally, suggestLocally } from './localAssistant';
 import { getPlaceIndex } from './statsService';
+import { FILLER_WORDS, wantsNearby } from '../utils/search';
 
 /** Which engine answered: Gemini, or the rule-based assistant that needs no key. */
 export type AiSource = 'gemini' | 'local';
@@ -216,7 +217,8 @@ const SEARCH_SCHEMA = {
   properties: {
     keywords: {
       type: Type.STRING,
-      description: 'The free-text part of the query — topic words only, no place or date words.',
+      description:
+        'Specific topic words an event title might contain (e.g. "yoga", "chess", "biryani"). Empty when the query only implies a category, place or date. Never generic words such as events, things, stuff, buy, near me.',
     },
     category: {
       type: Type.STRING,
@@ -230,8 +232,12 @@ const SEARCH_SCHEMA = {
     },
     neighborhood: { type: Type.STRING, description: 'Neighborhood or area named, else empty.' },
     city: { type: Type.STRING, description: 'City or town named, else empty.' },
+    nearMe: {
+      type: Type.BOOLEAN,
+      description: 'True when the user wants events close to them ("near me", "nearby", "around me").',
+    },
   },
-  required: ['keywords', 'category', 'dateFilter', 'neighborhood', 'city'],
+  required: ['keywords', 'category', 'dateFilter', 'neighborhood', 'city', 'nearMe'],
 } as const;
 
 export interface SearchIntent {
@@ -240,6 +246,8 @@ export interface SearchIntent {
   dateFilter: DateFilter;
   neighborhood: string;
   city: string;
+  /** "near me" / "nearby": the browser should switch on the distance filter. */
+  nearMe: boolean;
   source: AiSource;
 }
 
@@ -261,7 +269,12 @@ export async function parseSearchIntent(query: string): Promise<SearchIntent> {
       contents: `Extract search filters from this query about local community events:\n"${query}"`,
       config: {
         systemInstruction:
-          'You convert a natural-language query into structured event-search filters. Only extract what the query actually says; never invent a city or a date window.',
+          'You convert a natural-language query into structured event-search filters for a local community event board. ' +
+          'Map what the person wants to do onto a category: buying, selling, shopping, second-hand or bargains = "Yard Sale"; eating or food = "Food"; ' +
+          'playing, games, running or fitness = "Sports"; concerts, songs or dance = "Music"; classes, workshops or learning = "Education"; ' +
+          'coding or gadgets = "Technology"; volunteering, cleanups, festivals or meetups = "Community". ' +
+          'Keywords are only specific topic words that would appear in an event title; leave them empty rather than repeating the sentence. ' +
+          'Only extract what the query actually says; never invent a city, area or date window.',
         temperature: 0,
         maxOutputTokens: 2048,
         responseMimeType: 'application/json',
@@ -276,7 +289,11 @@ export async function parseSearchIntent(query: string): Promise<SearchIntent> {
     const rawCategory = String(parsed.category ?? 'Any');
 
     return {
-      keywords: String(parsed.keywords ?? '').trim().slice(0, 120),
+      keywords: String(parsed.keywords ?? '')
+        .split(/\s+/)
+        .filter((word) => word && !FILLER_WORDS.has(word.toLowerCase()))
+        .join(' ')
+        .slice(0, 120),
       category: CATEGORIES.includes(rawCategory as Category) ? (rawCategory as Category) : null,
       dateFilter: (['today', 'tomorrow', 'weekend', 'week', 'upcoming'] as const).includes(
         parsed.dateFilter as DateFilter as 'today',
@@ -285,6 +302,7 @@ export async function parseSearchIntent(query: string): Promise<SearchIntent> {
         : 'upcoming',
       neighborhood: String(parsed.neighborhood ?? '').trim().slice(0, 100),
       city: String(parsed.city ?? '').trim().slice(0, 100),
+      nearMe: parsed.nearMe === true || wantsNearby(query),
       source: 'gemini',
     };
   } catch (error) {

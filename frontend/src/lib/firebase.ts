@@ -6,6 +6,7 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   sendEmailVerification,
+  sendPasswordResetEmail,
   setPersistence,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -107,7 +108,7 @@ export function describeAuthError(error: unknown): string {
     case 'auth/invalid-credential':
       return 'Those sign-in details do not match an account.';
     case 'auth/email-already-in-use':
-      return 'An account already exists with that email. Try signing in instead.';
+      return 'An account already exists with that email. Sign in instead, or use "Forgot password?" on the sign-in page.';
     case 'auth/weak-password':
       return 'Pick a password of at least 6 characters.';
     case 'auth/popup-closed-by-user':
@@ -182,6 +183,14 @@ export async function refreshEmailVerified(): Promise<boolean> {
   await user.reload();
   if (user.emailVerified) await user.getIdToken(true);
   return user.emailVerified;
+}
+
+/**
+ * Emails a password-reset link. Firebase answers the same way whether or not the address
+ * has an account, so the page cannot be used to find out who is registered.
+ */
+export async function sendPasswordReset(email: string): Promise<void> {
+  await sendPasswordResetEmail(getFirebaseAuth(), email.trim(), { url: `${window.location.origin}/login` });
 }
 
 export async function signInWithEmail(email: string, password: string): Promise<User> {

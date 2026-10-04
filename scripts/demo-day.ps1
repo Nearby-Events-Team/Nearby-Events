@@ -24,6 +24,13 @@ if ($Off) {
   return
 }
 
+# backend/.env is read by the seed script. If it names the local emulator, the "live" re-seed
+# would quietly refill the laptop's test database instead, so stop before doing anything.
+$backendEnv = Join-Path $root 'backend\.env'
+if ((Test-Path $backendEnv) -and (Select-String -Path $backendEnv -Pattern '^\s*FIRESTORE_EMULATOR_HOST\s*=\s*\S' -Quiet)) {
+  throw "backend/.env sets FIRESTORE_EMULATOR_HOST, so this would seed the local emulator, not the live site. Put a # in front of that line (local mode sets it by itself) and run again."
+}
+
 Write-Host "Re-seeding the REAL Firestore in $Project ..."
 Push-Location $root
 try {

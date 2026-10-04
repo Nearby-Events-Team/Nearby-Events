@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Field';
 import { Card } from '@/components/ui/Primitives';
 import { useAuth } from '@/context/AuthContext';
+import { describeAuthError, sendPasswordReset } from '@/lib/firebase';
 import { safeRedirectPath } from '@/lib/utils';
 import { useToast } from '@/components/ui/Toast';
 import { LoadingState } from '@/components/common/States';
@@ -112,7 +113,7 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [busy, setBusy] = useState<'email' | 'google' | 'demo' | null>(null);
+  const [busy, setBusy] = useState<'email' | 'google' | 'demo' | 'reset' | null>(null);
 
   // Where to land after signing in — set by ProtectedRoute and the RSVP flow.
   const next = safeRedirectPath(searchParams.get('next'));
@@ -124,6 +125,24 @@ export default function Login() {
   if (!configured) return <AuthNotConfigured />;
   if (initialising) return <LoadingState label="Checking your session" className="min-h-[60vh]" />;
   if (user) return <Navigate to={next} replace />;
+
+  // Real accounts only: the local emulator has no inbox to send to.
+  const onForgotPassword = async () => {
+    setError('');
+    if (!email.trim()) {
+      setError('Type your email above first, then press "Forgot password?" again.');
+      return;
+    }
+    setBusy('reset');
+    try {
+      await sendPasswordReset(email);
+      toast.success('Check your email', `If an account exists for ${email.trim()}, we sent a link to reset the password. Look in spam too.`);
+    } catch (resetError) {
+      setError(describeAuthError(resetError));
+    } finally {
+      setBusy(null);
+    }
+  };
 
   const onSubmit = async (submitEvent: React.FormEvent) => {
     submitEvent.preventDefault();
@@ -217,6 +236,19 @@ export default function Login() {
           onChange={(changeEvent) => setPassword(changeEvent.target.value)}
           placeholder="••••••••"
         />
+
+        {!localMode && (
+          <div className="-mt-2 flex justify-end">
+            <button
+              type="button"
+              onClick={onForgotPassword}
+              disabled={busy !== null}
+              className="text-sm font-medium text-brand transition-colors hover:text-brand-hover disabled:opacity-60"
+            >
+              {busy === 'reset' ? 'Sending…' : 'Forgot password?'}
+            </button>
+          </div>
+        )}
 
         <Button type="submit" variant="primary" full size="lg" loading={busy === 'email'} loadingLabel="Signing in">
           <LogIn className="h-4 w-4" aria-hidden="true" />
