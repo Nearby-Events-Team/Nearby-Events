@@ -77,8 +77,18 @@ export const env = {
   serveStatic: bool('SERVE_STATIC', nodeEnv === 'production'),
   firestoreEmulatorHost: optional('FIRESTORE_EMULATOR_HOST'),
 
-  /** Cloud Pub/Sub: disabled in local mode, enabled when a real project is configured. */
-  pubsubEnabled: bool('PUBSUB_ENABLED', !localMode && Boolean(configuredProjectId)),
+  /**
+   * Cloud Pub/Sub: on only for a real project. Off in local mode, against the emulators and
+   * for a demo- project (tests, CI), where there are no credentials and notifications are
+   * delivered directly instead (notificationService simulates the push outside production).
+   */
+  pubsubEnabled: bool(
+    'PUBSUB_ENABLED',
+    !localMode &&
+      Boolean(configuredProjectId) &&
+      !configuredProjectId.startsWith('demo-') &&
+      !optional('FIRESTORE_EMULATOR_HOST'),
+  ),
 } as const;
 
 /**

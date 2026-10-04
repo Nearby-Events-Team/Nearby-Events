@@ -14,7 +14,8 @@ const topicCache = new Map<string, Topic>();
 export const EVENT_NOTIFICATIONS_TOPIC = 'event-notifications';
 
 function getClient(): PubSub | null {
-  if (env.localMode) return null;
+  // Off in local mode, against the emulators and in tests (see env.pubsubEnabled).
+  if (!env.pubsubEnabled) return null;
   if (!client) {
     client = new PubSub({ projectId: env.projectId });
     logger.info('Pub/Sub client initialised', { projectId: env.projectId });
@@ -110,8 +111,8 @@ export async function publishEventNotification(
  * exists before the first cancel/update request comes in.
  */
 export async function initPubSub(): Promise<void> {
-  if (env.localMode) {
-    logger.info('Pub/Sub disabled in local mode');
+  if (!env.pubsubEnabled) {
+    logger.info('Pub/Sub disabled (local mode, emulators or tests)');
     return;
   }
   await ensureTopic(EVENT_NOTIFICATIONS_TOPIC);
