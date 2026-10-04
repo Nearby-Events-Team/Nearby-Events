@@ -464,3 +464,14 @@ Single `app.py` Flask app + plain HTML/JS PWA. Nice UI and good ideas, but:
   cities ("Around You") + "Did you mean Coimbatore?". (G) demo-day.ps1 refuses to run if backend/.env sets
   FIRESTORE_EMULATOR_HOST (Suhas's restored older .env did; those 4 lines are now commented out locally).
   verify 136/136, 18/18, 33/33; live API + Gemini smart search checks; live browser 10/10; check-in verified live.
+- Oct 4: **PR #10 (Kanish) merged + deployed**: cosmetic/accessibility only (button focus ring, error-screen "Go to
+  Home", tooltips on category badges and card titles, unused truncateText + NotificationFilterOption). Test-merged
+  first: Button type="button" fix kept, typecheck/build clean. Live 13/13 (no AI calls). Thahseen pushed
+  "Architecture diagram.png" + README link straight to main: diagram lacks Pub/Sub, Secret Manager, Cloud Build and
+  has a typo ("autosclding"); asked to fix and to use PRs.
+- Oct 4: **CI added** (`.github/workflows/ci.yml`, GitHub Actions, no secrets, never deploys): on every PR + push to
+  main, job 1 typecheck + build, job 2 Firestore/Auth emulators + seed + verify/intelligence/pulse (~1 min each).
+  First run caught a real bug: against the emulators with no Google credentials the API still created a Pub/Sub
+  client and crashed (passed locally only because of gcloud ADC). Fixed: `env.pubsubEnabled` false for local mode,
+  demo- projects or FIRESTORE_EMULATOR_HOST, and config/pubsub.ts checks it. CI green (136/18/33). Deployed; live
+  Pub/Sub still publishes (logs) and notifications 6/6. Auto-deploy (CD) deliberately not set up before the demo.
