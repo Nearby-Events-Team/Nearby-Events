@@ -464,3 +464,8 @@ Single `app.py` Flask app + plain HTML/JS PWA. Nice UI and good ideas, but:
   cities ("Around You") + "Did you mean Coimbatore?". (G) demo-day.ps1 refuses to run if backend/.env sets
   FIRESTORE_EMULATOR_HOST (Suhas's restored older .env did; those 4 lines are now commented out locally).
   verify 136/136, 18/18, 33/33; live API + Gemini smart search checks; live browser 10/10; check-in verified live.
+- Oct 4: **PR #10 (Kanish) merged + deployed**: cosmetic/accessibility only (button focus ring, error-screen "Go to
+  Home", tooltips on category badges and card titles, unused truncateText + NotificationFilterOption). Test-merged
+  first: Button type="button" fix kept, typecheck/build clean. Live 13/13 (no AI calls). Thahseen pushed
+  "Architecture diagram.png" + README link straight to main: diagram lacks Pub/Sub, Secret Manager, Cloud Build and
+  has a typo ("autosclding"); asked to fix and to use PRs.
