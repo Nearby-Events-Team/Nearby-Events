@@ -1,7 +1,9 @@
 # Radius — System Architecture Diagram
 
 > As deployed on Google Cloud (project `nearby-events-510418`, region `asia-south1`).
-> Live: https://nearby-events-x2gneiue7a-el.a.run.app · Vector version for slides: [`architecture-diagram.svg`](architecture-diagram.svg)
+> Live: https://nearby-events-x2gneiue7a-el.a.run.app · Picture: [`Architecture diagram.png`](../Architecture%20diagram.png) · Vector source: [`architecture-diagram.svg`](architecture-diagram.svg) (regenerate with `node scripts/make-architecture-diagram.mjs docs/architecture-diagram.svg`)
+
+![Radius architecture](../Architecture%20diagram.png)
 
 ---
 
@@ -34,10 +36,17 @@
                |   /rsvps    |  |  images     |  |  -> built-in rules           |
                |   /comments |  +-------------+  +------------------------------+
                |  users      |
-               |   /attending, /saved            Secret Manager: maintenance token
+               |   /attending, /saved,           Secret Manager: maintenance token
+               |   /notifications
                +-------------+
+                      publish +-----------------------------------------+
+   Services  -------------->  | Cloud Pub/Sub  topic event-notifications |
+             <- - - - - - - - | push -> /api/notifications/pubsub-push   |
+                        push  | (token) -> bell of everyone who RSVPd   |
+                              +-----------------------------------------+
 
- Build: scripts/deploy.ps1 -> Cloud Build -> Artifact Registry -> Cloud Run
+ CI:    every pull request -> GitHub Actions: typecheck, build, 187 backend tests (Firebase emulators); never deploys
+ Build: scripts/deploy.ps1 -> Cloud Build -> Artifact Registry -> Cloud Run (manual, after testing)
  Outside GCP, no key: Open-Meteo (event-day weather), OpenStreetMap (fallback map, geocoding, suggestions)
 ```
 
@@ -65,6 +74,7 @@ graph TD
         FS[("Cloud Firestore<br/>events, rsvps, comments, users")]
         GCS["Cloud Storage<br/>event images"]
         AI["Vertex AI (global)<br/>Gemini 3.5 Flash-Lite, fallback 3.1 Flash-Lite"]
+        PS["Cloud Pub/Sub<br/>topic event-notifications"]
     end
 
     subgraph Ops ["Operations"]
@@ -72,6 +82,7 @@ graph TD
         SM["Secret Manager"]
         LOG["Cloud Logging + Monitoring<br/>dashboard, log metrics, uptime alert"]
         CB["Cloud Build + Artifact Registry"]
+        CI["GitHub Actions CI<br/>typecheck, build, 187 tests"]
     end
 
     User --> SPA
@@ -82,10 +93,13 @@ graph TD
     SVC --> FS
     SVC --> GCS
     SVC -->|structured output| AI
+    SVC -->|publish| PS
+    PS -.->|push, token| API
     SCH -->|POST /api/maintenance/expire| API
     SM -.->|runtime secret| API
     API -.->|JSON logs| LOG
     CB -.->|image| Run
+    CI -.->|checks every PR| CB
 ```
 
 ---
@@ -103,7 +117,9 @@ graph TD
 | **Cloud Scheduler** | Expiry | Hourly call with a secret header marks ended events `EXPIRED` |
 | **Secret Manager** | Secrets | Injected at runtime, never in the image or build args |
 | **Cloud Logging + Monitoring** | Observability | Dashboard, 7 log-based metrics, uptime check on `/api/health` with email alert — see [`monitoring/`](../monitoring/README.md) |
-| **Cloud Build + Artifact Registry** | Delivery | `scripts/deploy.ps1` → build → push → deploy (~5 min) |
+| **Cloud Pub/Sub** | Notifications | Topic `event-notifications`; cancel, reactivate, date/time/venue change and delete publish; a token-protected push subscription writes `users/{uid}/notifications` for every attendee (batched), and the bell polls every 30 s |
+| **Cloud Build + Artifact Registry** | Delivery | `scripts/deploy.ps1` → build → push → deploy (~5 min), manual after testing |
+| **GitHub Actions (CI)** | Quality gate | Every pull request: typecheck, production build, 187 backend tests against the Firebase emulators; never deploys |
 
 ---
 
