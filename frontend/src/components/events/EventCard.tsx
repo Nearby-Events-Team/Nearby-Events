@@ -144,9 +144,10 @@ export function EventCard({
             The stretched link makes the card clickable. It carries the accessible name,
             so there is exactly one link per card in the tab order rather than three.
           */}
-          <Link to={`/events/${event.id}`} className="before:absolute before:inset-0 before:z-0">
+          <Link to={`/events/${event.id}`} title={event.title} className="before:absolute before:inset-0 before:z-0">
             {event.title}
           </Link>
+
         </h3>
 
         <dl className="mt-3 space-y-1.5 text-[0.8125rem] text-ink-soft">
