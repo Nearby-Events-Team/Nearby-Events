@@ -6,7 +6,8 @@ import { cn } from '@/lib/utils';
 
 const buttonStyles = cva(
   // `active:scale` gives a physical press; disabled state never looks clickable.
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl font-semibold transition-all duration-150 ease-out active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl font-semibold transition-all duration-150 ease-out active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 focus-visible:ring-offset-2',
+
   {
     variants: {
       variant: {
@@ -40,7 +41,7 @@ type ButtonBaseProps = VariantProps<typeof buttonStyles> & {
 
 export interface ButtonProps
   extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'color'>,
-    ButtonBaseProps {}
+  ButtonBaseProps { }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   { className, variant, size, full, loading = false, loadingLabel, children, disabled, ...props },
@@ -68,7 +69,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
 
 export interface ButtonLinkProps
   extends React.AnchorHTMLAttributes<HTMLAnchorElement>,
-    VariantProps<typeof buttonStyles> {
+  VariantProps<typeof buttonStyles> {
   to: string;
   /** External destinations open in a new tab with the usual rel protections. */
   external?: boolean;
