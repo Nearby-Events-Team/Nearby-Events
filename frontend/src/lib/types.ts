@@ -333,6 +333,11 @@ export interface GeocodeResult {
 
 export type NotificationType = 'event.cancelled' | 'event.updated' | 'event.reactivated' | 'event.deleted';
 
+export interface NotificationFilterOption {
+  value: 'all' | 'unread';
+  label: string;
+}
+
 export interface NotificationRecord {
   id: string;
   type: NotificationType;
@@ -343,3 +348,4 @@ export interface NotificationRecord {
   read: boolean;
   createdAt: string | null;
 }
+
