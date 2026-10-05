@@ -73,7 +73,7 @@ Adhi's Flask version is a prototype; we only port ideas from it (see §6).
   account" on the sign-in page. Needs Java 21. `npm run dev:local` is an alias.
 - `npm run dev:cloud` — API + web against a real Google Cloud project (no emulators).
 - `npm run seed` / `npm run seed:clear` — demo data from `scripts/seed-events.ts`
-  (43 events: 35 upcoming incl. one always "live now" with check-in code `NEARBY`, + 8 expired;
+  (45 events: 37 upcoming incl. one always "live now" with check-in code `NEARBY`, + 8 expired;
   15 Coimbatore neighbourhoods incl. 5 Amrita/Ettimadai events)
 - `npm run typecheck`, `npm run build`
 - `npm run verify --prefix backend` (134 checks), plus `npx tsx src/scripts/verify-intelligence.ts` (18) and
@@ -489,3 +489,19 @@ Single `app.py` Flask app + plain HTML/JS PWA. Nice UI and good ideas, but:
   10 min, AI failures > 3/10 min, availability burn rate > 10x. Two empty "New Dashboard" dashboards deleted.
   demo-day.ps1 now warms up ~2 min of public GETs. At setup: availability 100%, latency SLO 96.0% (budget 20% left,
   used by AI/upload testing and cold starts).
+- Oct 5: **Smart search fallback + "street flyer" look (PR #14, CI green).** "events where i can dance" returned
+  nothing (no event mentions dancing) -> if the keywords match nothing but the category/date/place does, smart
+  search shows that category with a note instead of an empty page; dance words -> Music in the rule-based assistant;
+  +2 dance seed events (45 / 37 upcoming). Deployed + live board re-seeded. UI: Suhas picked option A "street
+  flyer" from 3 previews -> ink / signal yellow / flyer red, Archivo + Source Sans 3, tight corners, hard-shadow
+  cards, date stamp on cards, halftone + rings home banner, red-dot logo/favicon, `--on-brand` token for text on
+  brand fills (yellow on black in light, black on yellow in dark). Visual only; verify 136/136, build clean.
+  **Not deployed yet** — waiting for Suhas to approve the before/after screenshots. PWA PNG icons still old.
+- Oct 5 (later): **Flyer look deployed; must-have audit.** Live check of all Use Case 5 must-haves: sorted soonest
+  first, 0 ended events, area filter, ?event= links OK. Two gaps fixed + deployed: (1) cards had no description
+  (brief's card = title, date/time, location, description) -> 2-line description on every card; (2) category badges
+  were washed out to white on cards and 3 categories were similar blues -> 8 solid, distinct colours (Sports green,
+  Music purple, Food orange, Yard Sale pink, Community blue, Education teal, Technology slate, Other grey) on cards,
+  tiles, Explore chips, calendar dots, map pins and Insights. Deck rebuilt (10 slides, flyer look, footer maps each
+  slide to the judging criteria). **Open:** request logs record the near-me lat/lng in the URL (Cloud Logging);
+  brief's "questionnaire" not in the PDF (ask mentors); deck needs team/mentor names + dashboard screenshot.

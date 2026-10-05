@@ -59,11 +59,11 @@ function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="sm:col-span-2">
             <div className="flex items-center gap-2.5 font-display text-[1.0625rem] font-extrabold tracking-tight text-ink">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-white">
+              <span className="flex h-9 w-9 items-center justify-center rounded-md bg-brand text-on-brand">
                 <RadiusMark className="h-[1.125rem] w-[1.125rem]" />
               </span>
               <span>
-                Radius<span className="text-accent">.</span>
+                Radius<span className="text-danger">.</span>
               </span>
             </div>
 

@@ -36,7 +36,7 @@ function BadgeTile({ badge }: { badge: BadgeRecord }) {
       <span
         className={cn(
           'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl',
-          badge.earned ? 'bg-brand text-white' : 'bg-surface text-ink-muted ring-1 ring-border',
+          badge.earned ? 'bg-brand text-on-brand' : 'bg-surface text-ink-muted ring-1 ring-border',
         )}
       >
         <Icon className="h-[1.125rem] w-[1.125rem]" aria-hidden="true" />

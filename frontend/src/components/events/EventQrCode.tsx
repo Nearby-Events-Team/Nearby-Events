@@ -81,7 +81,7 @@ export function EventQrCode({ event }: EventQrCodeProps) {
                 download={`${event.title}-qrcode.png`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-xl bg-brand text-white px-3 py-2 text-xs font-semibold shadow hover:bg-brand-hover transition"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-brand text-on-brand px-3 py-2 text-xs font-semibold shadow hover:bg-brand-hover transition"
               >
                 <Download className="h-4 w-4" />
                 Download QR

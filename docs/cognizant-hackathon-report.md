@@ -42,7 +42,7 @@ date and pinned on a map → people RSVP and share it → it disappears on its o
 | Identity | Firebase Authentication (email/password or Google) | `users/{uid}` profile |
 | Weather on event day | Open-Meteo (free, no key), looked up by the server | not stored |
 
-**Sample data (breadth):** 43 realistic events: 35 upcoming and 8 past, across **15 Coimbatore
+**Sample data (breadth):** 45 realistic events: 37 upcoming and 8 past, across **15 Coimbatore
 neighbourhoods** and **all 8 categories** (Sports, Music, Food, Yard Sale, Community, Education,
 Technology, Other). Five are at **Amrita Vishwa Vidyapeetham, Ettimadai**, and one is always "live now"
 for the check-in demo. Dates are generated relative to the day of seeding, so the board always looks

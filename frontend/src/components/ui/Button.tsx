@@ -6,19 +6,20 @@ import { cn } from '@/lib/utils';
 
 const buttonStyles = cva(
   // `active:scale` gives a physical press; disabled state never looks clickable.
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl font-semibold transition-all duration-150 ease-out active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 focus-visible:ring-offset-2',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-semibold transition-all duration-150 ease-out active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/50 focus-visible:ring-offset-2',
 
   {
     variants: {
       variant: {
-        primary: 'bg-brand text-white shadow-sm hover:bg-brand-hover hover:shadow-md',
-        secondary: 'bg-surface text-ink ring-1 ring-inset ring-border hover:bg-surface-sunken hover:ring-border-strong',
+        // Poster button: ink fill, yellow type, and a hard offset shadow on hover.
+        primary: 'bg-brand text-on-brand hover:bg-brand-hover hover:shadow-[3px_3px_0_hsl(var(--accent))]',
+        secondary: 'bg-surface text-ink ring-2 ring-inset ring-ink hover:bg-accent hover:text-[hsl(0_0%_7%)]',
         soft: 'bg-brand-soft text-brand-ink hover:bg-brand/15',
         ghost: 'text-ink-soft hover:bg-surface-sunken hover:text-ink',
         danger: 'bg-danger text-white shadow-sm hover:brightness-95',
         'danger-soft': 'bg-danger-soft text-danger-ink hover:bg-danger/15',
         success: 'bg-success text-white shadow-sm hover:brightness-95',
-        outline: 'bg-transparent text-ink ring-1 ring-inset ring-border-strong hover:bg-surface-sunken',
+        outline: 'bg-transparent text-ink ring-2 ring-inset ring-ink hover:bg-surface-sunken',
       },
       size: {
         sm: 'h-9 px-3.5 text-[0.8125rem]',

@@ -179,7 +179,7 @@ export function CalendarView({
                   className={cn(
                     'flex h-6 w-6 items-center justify-center rounded-full text-xs font-semibold tabular-nums',
                     inMonth ? 'text-ink' : 'text-ink-muted',
-                    isToday && 'bg-brand text-white',
+                    isToday && 'bg-brand text-on-brand',
                   )}
                 >
                   {date.getDate()}

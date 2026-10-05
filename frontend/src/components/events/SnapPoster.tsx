@@ -207,7 +207,7 @@ export function SnapPoster({
   return (
     <Panel className="border-0 bg-gradient-to-br from-accent-soft/70 to-brand-soft/60 ring-accent/15">
       <h2 className="flex items-center gap-2 font-display text-base font-bold text-ink">
-        <ScanText className="h-5 w-5 text-accent" aria-hidden="true" />
+        <ScanText className="h-5 w-5 text-accent-ink" aria-hidden="true" />
         Fill from a poster or WhatsApp message
       </h2>
       <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-ink-soft">
@@ -298,7 +298,7 @@ export function SnapPoster({
 
       {busy && (
         <div className="mt-4 flex items-center gap-3 rounded-xl bg-surface/70 p-4" role="status">
-          <Loader2 className="h-5 w-5 animate-spin text-accent" aria-hidden="true" />
+          <Loader2 className="h-5 w-5 animate-spin text-accent-ink" aria-hidden="true" />
           <p className="text-sm text-ink-soft">{file ? 'Reading your poster…' : 'Reading your message…'}</p>
         </div>
       )}

@@ -14,7 +14,7 @@ import {
   type EventFiltersState,
   type SortOption,
 } from '@/lib/types';
-import { cn, DATE_FILTERS } from '@/lib/utils';
+import { CATEGORY_STYLES, cn, DATE_FILTERS } from '@/lib/utils';
 
 /** Same phrases the API treats as "near me" (backend utils/search.ts wantsNearby). */
 const NEAR_ME = /\b(near\s*me|nearby|near\s*by|around\s*me|close\s*to\s*me|close\s*by)\b/i;
@@ -58,7 +58,7 @@ function Chip({
       className={cn(
         'inline-flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[0.8125rem] font-semibold ring-1 ring-inset transition-all duration-150',
         active
-          ? 'bg-brand text-white ring-brand shadow-sm'
+          ? 'bg-brand text-on-brand ring-brand shadow-sm'
           : 'bg-surface text-ink-soft ring-border hover:bg-surface-sunken hover:text-ink hover:ring-border-strong',
         className,
       )}
@@ -208,7 +208,8 @@ export function EventFilters({
 
       toast.success(
         'Filters applied',
-        applied.length ? `Reading that as: ${applied.join(' · ')}` : 'Searching across all upcoming events.',
+        intent.note ??
+          (applied.length ? `Reading that as: ${applied.join(' · ')}` : 'Searching across all upcoming events.'),
       );
     } catch (error) {
       // Smart search needs an account; a spoken query still works as a plain keyword search.
@@ -380,7 +381,15 @@ export function EventFilters({
             active={filters.category === category}
             onClick={() => onChange({ category: filters.category === category ? null : category })}
           >
-            <CategoryIcon category={category as Category} className="h-3.5 w-3.5" />
+            {/* Same colour as the category's badge on the cards, so the filter doubles as a key. */}
+            <span
+              className={cn(
+                'flex h-5 w-5 items-center justify-center rounded',
+                CATEGORY_STYLES[category as Category].badge,
+              )}
+            >
+              <CategoryIcon category={category as Category} className="h-3 w-3" />
+            </span>
             {category}
           </Chip>
         ))}

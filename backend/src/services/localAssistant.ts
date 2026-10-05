@@ -21,7 +21,8 @@ const CATEGORY_KEYWORDS: Record<Exclude<Category, 'Other'>, string[]> = {
   Music: [
     'music', 'concert', 'gig', 'band', 'jam', 'karaoke', 'open mic', 'singing', 'song',
     'songs', 'guitar', 'dj', 'jazz', 'carnatic', 'acoustic', 'choir', 'orchestra', 'veena',
-    'violin', 'drums', 'recital', 'kutcheri', 'playlist',
+    'violin', 'drums', 'recital', 'kutcheri', 'playlist', 'dance', 'dancing', 'bharatanatyam',
+    'salsa', 'zumba', 'garba', 'kathak',
   ],
   Food: [
     'food', 'dinner', 'lunch', 'breakfast', 'brunch', 'cooking', 'cook', 'baking', 'bake',

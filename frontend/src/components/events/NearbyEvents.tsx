@@ -146,7 +146,7 @@ export function NearbyEvents() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h2 className="flex items-center gap-2 text-display-md">
-            <Navigation className="h-6 w-6 text-accent" aria-hidden="true" />
+            <Navigation className="h-6 w-6 text-accent-ink" aria-hidden="true" />
             Happening near you
           </h2>
           <p className="mt-1.5 text-sm text-ink-soft">

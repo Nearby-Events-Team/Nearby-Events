@@ -223,6 +223,8 @@ export interface SearchIntent {
   city: string;
   /** "near me": switch on the distance filter around the visitor's location. */
   nearMe?: boolean;
+  /** Set when the API dropped a keyword nothing matched (e.g. "dance") and kept the category. */
+  note?: string;
   source?: AiProvider;
 }
 

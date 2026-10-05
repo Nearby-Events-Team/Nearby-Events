@@ -342,7 +342,7 @@ function AiPanel({
                 <span
                   className={cn(
                     'mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md ring-1 transition-colors',
-                    selected ? 'bg-brand text-white ring-brand' : 'bg-surface ring-border-strong',
+                    selected ? 'bg-brand text-on-brand ring-brand' : 'bg-surface ring-border-strong',
                   )}
                   aria-hidden="true"
                 >

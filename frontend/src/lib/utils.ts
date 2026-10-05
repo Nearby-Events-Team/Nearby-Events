@@ -165,55 +165,57 @@ export const DATE_FILTERS: Array<{ value: DateFilter; label: string }> = [
  * Per-category colour and icon name. Categories need to be distinguishable at a glance
  * in a dense grid, and a single accent colour would make every card look the same.
  */
+// Solid, clearly different colours so each category reads at a glance (the brief asks for
+// colour-coded badges). Keep in step with CATEGORY_PIN_COLORS and the Insights chart colours.
 export const CATEGORY_STYLES: Record<
   Category,
   { badge: string; dot: string; icon: string; blurb: string }
 > = {
   Sports: {
-    badge: 'bg-emerald-500/12 text-emerald-700 dark:text-emerald-300 ring-emerald-500/25',
-    dot: 'bg-emerald-500',
+    badge: 'bg-[#15803D] text-white ring-[#15803D]',
+    dot: 'bg-[#15803D]',
     icon: 'Trophy',
     blurb: 'Games, matches, runs and rides',
   },
   Music: {
-    badge: 'bg-violet-500/12 text-violet-700 dark:text-violet-300 ring-violet-500/25',
-    dot: 'bg-violet-500',
+    badge: 'bg-[#7E22CE] text-white ring-[#7E22CE]',
+    dot: 'bg-[#7E22CE]',
     icon: 'Music',
     blurb: 'Gigs, open mics and jam sessions',
   },
   Food: {
-    badge: 'bg-orange-500/12 text-orange-700 dark:text-orange-300 ring-orange-500/25',
-    dot: 'bg-orange-500',
+    badge: 'bg-[#C2410C] text-white ring-[#C2410C]',
+    dot: 'bg-[#C2410C]',
     icon: 'UtensilsCrossed',
     blurb: 'Markets, tastings and cook-alongs',
   },
   'Yard Sale': {
-    badge: 'bg-amber-500/12 text-amber-700 dark:text-amber-300 ring-amber-500/25',
-    dot: 'bg-amber-500',
+    badge: 'bg-[#BE185D] text-white ring-[#BE185D]',
+    dot: 'bg-[#BE185D]',
     icon: 'Tag',
     blurb: 'Garage sales and second-hand finds',
   },
   Community: {
-    badge: 'bg-sky-500/12 text-sky-700 dark:text-sky-300 ring-sky-500/25',
-    dot: 'bg-sky-500',
+    badge: 'bg-[#1D4ED8] text-white ring-[#1D4ED8]',
+    dot: 'bg-[#1D4ED8]',
     icon: 'Users',
     blurb: 'Clean-ups, drives and meet-ups',
   },
   Education: {
-    badge: 'bg-blue-500/12 text-blue-700 dark:text-blue-300 ring-blue-500/25',
-    dot: 'bg-blue-500',
+    badge: 'bg-[#0F766E] text-white ring-[#0F766E]',
+    dot: 'bg-[#0F766E]',
     icon: 'GraduationCap',
     blurb: 'Classes, talks and study circles',
   },
   Technology: {
-    badge: 'bg-indigo-500/12 text-indigo-700 dark:text-indigo-300 ring-indigo-500/25',
-    dot: 'bg-indigo-500',
+    badge: 'bg-[#334155] text-white ring-[#334155]',
+    dot: 'bg-[#334155]',
     icon: 'Cpu',
     blurb: 'Workshops, demos and hack nights',
   },
   Other: {
-    badge: 'bg-slate-500/12 text-slate-700 dark:text-slate-300 ring-slate-500/25',
-    dot: 'bg-slate-500',
+    badge: 'bg-[#78716C] text-white ring-[#78716C]',
+    dot: 'bg-[#78716C]',
     icon: 'Sparkles',
     blurb: 'Everything else happening nearby',
   },

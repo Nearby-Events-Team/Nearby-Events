@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CalendarDays, CalendarPlus, Flame, MapPin, Sparkles, TrendingUp, Users } from 'lucide-react';
 import { Button, ButtonLink } from '@/components/ui/Button';
-import { Badge, Card } from '@/components/ui/Primitives';
+import { Card } from '@/components/ui/Primitives';
 import { EventCard } from '@/components/events/EventCard';
 import { CategoryIcon } from '@/components/events/CategoryBadge';
 import { NearbyEvents } from '@/components/events/NearbyEvents';
@@ -21,24 +21,36 @@ function Hero({ city }: { city: string }) {
   return (
     <section className="hero-glow relative overflow-hidden border-b border-border">
       {/* Tightened from py-28: the old spacing left a dead band before the first section. */}
+      {/* The "radius" itself: rings around a pin, printed on the flyer paper. Decorative only. */}
+      <svg
+        viewBox="0 0 400 400"
+        className="pointer-events-none absolute -right-24 top-1/2 hidden h-[34rem] w-[34rem] -translate-y-1/2 text-ink lg:block"
+        aria-hidden="true"
+      >
+        <circle cx="200" cy="200" r="190" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.12" />
+        <circle cx="200" cy="200" r="135" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="6 10" opacity="0.22" />
+        <circle cx="200" cy="200" r="80" fill="none" stroke="currentColor" strokeWidth="3" opacity="0.35" />
+        <circle cx="200" cy="200" r="16" fill="#e63b2e" />
+      </svg>
+
       <div className="container-page relative py-14 sm:py-16 lg:py-20">
         <div className="max-w-3xl">
-          <Badge tone="brand" className="animate-fade-up">
-            <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+          {/* A taped-on label rather than a pill: ink tag, yellow type, slightly askew. */}
+          <span className="inline-block -rotate-1 animate-fade-up bg-brand px-2.5 py-1 font-display text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-on-brand">
             Built on Google Cloud for the Cognizant NPN Hackathon
-          </Badge>
+          </span>
 
-          <h1 className="mt-5 animate-fade-up text-display-xl text-ink [animation-delay:60ms]">
+          <h1 className="mt-5 animate-fade-up text-display-xl font-black uppercase text-ink [animation-delay:60ms]">
             Discover What&rsquo;s
             <br />
             {/* Names the city picked below, so switching city visibly changes the page. */}
             Happening{' '}
             {city ? (
               <>
-                in <span className="text-brand">{city}</span>
+                in <span className="marker">{city}</span>
               </>
             ) : (
-              <span className="text-brand">Around You</span>
+              <span className="marker">Around You</span>
             )}
           </h1>
 
@@ -260,7 +272,7 @@ function HowItWorks() {
             <li key={step.title}>
               <Card className="h-full p-5">
                 <div className="flex items-center gap-3">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-sm font-bold text-white">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-sm font-bold text-on-brand">
                     {index + 1}
                   </span>
                   <step.icon className="h-5 w-5 text-brand" aria-hidden="true" />
@@ -337,7 +349,7 @@ export default function Home() {
       <EventSection
         title="Most popular"
         description="Where your neighbours are already going."
-        icon={<TrendingUp className="h-6 w-6 text-accent" aria-hidden="true" />}
+        icon={<TrendingUp className="h-6 w-6 text-accent-ink" aria-hidden="true" />}
         filters={{ sort: 'popular', city }}
         viewAllHref="/explore?sort=popular"
         onResolved={onPopularResolved}
