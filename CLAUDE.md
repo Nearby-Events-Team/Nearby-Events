@@ -489,3 +489,11 @@ Single `app.py` Flask app + plain HTML/JS PWA. Nice UI and good ideas, but:
   10 min, AI failures > 3/10 min, availability burn rate > 10x. Two empty "New Dashboard" dashboards deleted.
   demo-day.ps1 now warms up ~2 min of public GETs. At setup: availability 100%, latency SLO 96.0% (budget 20% left,
   used by AI/upload testing and cold starts).
+- Oct 5: **Smart search fallback + "street flyer" look (PR #14, CI green).** "events where i can dance" returned
+  nothing (no event mentions dancing) -> if the keywords match nothing but the category/date/place does, smart
+  search shows that category with a note instead of an empty page; dance words -> Music in the rule-based assistant;
+  +2 dance seed events (45 / 37 upcoming). Deployed + live board re-seeded. UI: Suhas picked option A "street
+  flyer" from 3 previews -> ink / signal yellow / flyer red, Archivo + Source Sans 3, tight corners, hard-shadow
+  cards, date stamp on cards, halftone + rings home banner, red-dot logo/favicon, `--on-brand` token for text on
+  brand fills (yellow on black in light, black on yellow in dark). Visual only; verify 136/136, build clean.
+  **Not deployed yet** — waiting for Suhas to approve the before/after screenshots. PWA PNG icons still old.
