@@ -208,7 +208,8 @@ export function EventFilters({
 
       toast.success(
         'Filters applied',
-        applied.length ? `Reading that as: ${applied.join(' · ')}` : 'Searching across all upcoming events.',
+        intent.note ??
+          (applied.length ? `Reading that as: ${applied.join(' · ')}` : 'Searching across all upcoming events.'),
       );
     } catch (error) {
       // Smart search needs an account; a spoken query still works as a plain keyword search.

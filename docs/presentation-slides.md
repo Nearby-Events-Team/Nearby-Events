@@ -33,7 +33,7 @@
   neighbourhood, city, optional map coordinates and image.
 - **Inputs**: the post form · **a poster photo or a forwarded WhatsApp message (Snap-a-Poster)** ·
   Google Places for the address · RSVPs from signed-in users.
-- **Sample data**: **43 realistic events** (35 upcoming, 8 past) across **15 Coimbatore neighbourhoods**,
+- **Sample data**: **45 realistic events** (37 upcoming, 8 past) across **15 Coimbatore neighbourhoods**,
   every category, including **5 events at Amrita Vishwa Vidyapeetham, Ettimadai** — dates generated relative
   to today so the board is always current.
 - Stored in **Cloud Firestore** (`events`, `events/{id}/rsvps`, `users`, `users/{uid}/attending`).

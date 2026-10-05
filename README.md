@@ -230,7 +230,7 @@ VITE_FIREBASE_APP_ID=your_app_id
 
 ### 3. Seed Realistic Demo Data (43 Events)
 
-The dataset includes **43 realistic community events** (35 upcoming — one always "live now" for the check-in demo — and 8 past events to demonstrate automatic archiving) across 15 Coimbatore neighbourhoods. Dates are relative to the day you seed, so **re-seed on the morning of a demo**:
+The dataset includes **45 realistic community events** (37 upcoming — one always "live now" for the check-in demo — and 8 past events to demonstrate automatic archiving) across 15 Coimbatore neighbourhoods. Dates are relative to the day you seed, so **re-seed on the morning of a demo**:
 
 ```bash
 # Populate Firestore with seed events
@@ -308,7 +308,7 @@ Open `http://localhost:5173` in your browser to experience **Radius**!
 
 ## 📊 Dataset Overview (43 Seed Events)
 
-The seed generator (`scripts/seed-events.ts`) populates **43 community events** (35 upcoming, 8 past) across 15 Coimbatore neighbourhoods and 7 categories — including **5 at Amrita Vishwa Vidyapeetham, Ettimadai** and one event that is always **live now** (check-in code `NEARBY`):
+The seed generator (`scripts/seed-events.ts`) populates **45 community events** (37 upcoming, 8 past) across 15 Coimbatore neighbourhoods and 7 categories — including **5 at Amrita Vishwa Vidyapeetham, Ettimadai** and one event that is always **live now** (check-in code `NEARBY`):
 
 - ⚽ **Sports**: 7-a-side Football, Race Course 5K Run, Badminton Ladder, Sunset Vinyasa Yoga.
 - 🎵 **Music**: Carnatic Fusion Night, Acoustic Open Mic, Peelamedu Vinyl Lounge, Community Choir.

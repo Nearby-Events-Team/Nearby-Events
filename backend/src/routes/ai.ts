@@ -5,7 +5,8 @@ import { capabilities } from '../config/env';
 import { currentUser, requireAuth, type AuthedRequest } from '../middleware/auth';
 import { AppError, asyncHandler } from '../middleware/error';
 import { aiAssistSchema, aiExtractSchema } from '../middleware/validate';
-import { extractEventDetails, generateEventSuggestion, parseSearchIntent } from '../services/aiService';
+import { extractEventDetails, generateEventSuggestion, parseSearchIntent, type SearchIntent } from '../services/aiService';
+import { listEvents } from '../services/eventService';
 import { MAX_IMAGE_BYTES, detectImageType } from '../services/storageService';
 import { logger } from '../config/logger';
 
@@ -108,9 +109,36 @@ aiRouter.post(
     }
 
     const intent = await parseSearchIntent(query);
-    res.json({ intent });
+    res.json({ intent: await relaxIfEmpty(intent) });
   }),
 );
+
+/**
+ * "events where I can dance" reads as Music + the word "dance". If no event mentions the
+ * word, an empty page helps nobody: drop the keyword, keep the rest of the filters, and say
+ * so. Only when the relaxed search does find something; otherwise the intent is unchanged.
+ */
+async function relaxIfEmpty(intent: SearchIntent): Promise<SearchIntent & { note?: string }> {
+  if (!intent.keywords) return intent;
+  const base = {
+    category: intent.category ?? undefined,
+    neighborhood: intent.neighborhood || undefined,
+    city: intent.city || undefined,
+    dateFilter: intent.dateFilter,
+    pageSize: 1,
+  };
+  try {
+    const exact = await listEvents({ ...base, search: intent.keywords });
+    if (exact.total > 0) return intent;
+    const relaxed = await listEvents(base);
+    if (relaxed.total === 0) return intent;
+    const what = intent.category ? `${intent.category} events` : 'the closest matches';
+    return { ...intent, keywords: '', note: `Nothing mentions "${intent.keywords}" yet, so here are ${what} instead.` };
+  } catch (error) {
+    logger.warn('Smart search relax check failed', { reason: (error as Error).message });
+    return intent;
+  }
+}
 
 /** Same memory-only, size-capped pattern as event image uploads. */
 const posterUpload = multer({

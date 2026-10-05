@@ -73,7 +73,7 @@ Adhi's Flask version is a prototype; we only port ideas from it (see §6).
   account" on the sign-in page. Needs Java 21. `npm run dev:local` is an alias.
 - `npm run dev:cloud` — API + web against a real Google Cloud project (no emulators).
 - `npm run seed` / `npm run seed:clear` — demo data from `scripts/seed-events.ts`
-  (43 events: 35 upcoming incl. one always "live now" with check-in code `NEARBY`, + 8 expired;
+  (45 events: 37 upcoming incl. one always "live now" with check-in code `NEARBY`, + 8 expired;
   15 Coimbatore neighbourhoods incl. 5 Amrita/Ettimadai events)
 - `npm run typecheck`, `npm run build`
 - `npm run verify --prefix backend` (134 checks), plus `npx tsx src/scripts/verify-intelligence.ts` (18) and
