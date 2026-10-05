@@ -482,3 +482,10 @@ Single `app.py` Flask app + plain HTML/JS PWA. Nice UI and good ideas, but:
   Manager, Cloud Build/AR, Monitoring, Maps, CI…) and drops overclaims (real-time sync, CDN, "date ASC" index);
   features add notifications, city switcher, verified email + forgot password, ?event= links; tree adds CI.
   docs/architecture-diagram.md: Pub/Sub + CI in ASCII, mermaid and table.
+- Oct 5: **Monitoring for the demo.** New dashboard "Radius · Live Operations" (36 tiles, `monitoring/ops-dashboard.json`
+  from `make-ops-dashboard.mjs`): health now + 24 h, SLO compliance + error budgets, rows for Cloud Run, Firestore,
+  Pub/Sub, Vertex AI (Gemini calls by response code, tokens), Scheduler, live log panel, open incidents. SLO service
+  `radius-cloud-run`: availability 99.5% and latency 95% < 500 ms (28 days). Alerts added: 5xx > 5%, p95 > 1.5 s
+  10 min, AI failures > 3/10 min, availability burn rate > 10x. Two empty "New Dashboard" dashboards deleted.
+  demo-day.ps1 now warms up ~2 min of public GETs. At setup: availability 100%, latency SLO 96.0% (budget 20% left,
+  used by AI/upload testing and cold starts).

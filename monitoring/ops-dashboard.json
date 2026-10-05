@@ -1,0 +1,950 @@
+{
+ "displayName": "Radius · Live Operations",
+ "mosaicLayout": {
+  "columns": 12,
+  "tiles": [
+   {
+    "xPos": 0,
+    "yPos": 0,
+    "width": 12,
+    "height": 2,
+    "widget": {
+     "title": "Radius · Live Operations",
+     "text": {
+      "format": "MARKDOWN",
+      "content": "**Every layer of the live architecture on one screen.** Top: health right now and the last 24 h. Then the SLOs and their error budgets, then one row per Google Cloud service (Cloud Run, Firestore, Pub/Sub, Vertex AI / Gemini, Cloud Scheduler), live logs and open incidents. Alerts email the team. Project `nearby-events-510418`, Cloud Run `nearby-events`, asia-south1."
+     }
+    }
+   },
+   {
+    "xPos": 0,
+    "yPos": 2,
+    "width": 2,
+    "height": 3,
+    "widget": {
+     "title": "Uptime checks passing (1 = 100%)",
+     "scorecard": {
+      "timeSeriesQuery": {
+       "timeSeriesFilter": {
+        "filter": "metric.type=\"monitoring.googleapis.com/uptime_check/check_passed\" AND resource.type=\"uptime_url\" AND metric.label.check_id=\"nearby-events-health-7yUxI29KmOc\"",
+        "aggregation": {
+         "alignmentPeriod": "3600s",
+         "perSeriesAligner": "ALIGN_FRACTION_TRUE",
+         "crossSeriesReducer": "REDUCE_MEAN",
+         "groupByFields": []
+        }
+       }
+      },
+      "sparkChartView": {
+       "sparkChartType": "SPARK_LINE"
+      }
+     }
+    }
+   },
+   {
+    "xPos": 2,
+    "yPos": 2,
+    "width": 2,
+    "height": 3,
+    "widget": {
+     "title": "Requests · last hour",
+     "scorecard": {
+      "timeSeriesQuery": {
+       "timeSeriesFilter": {
+        "filter": "metric.type=\"run.googleapis.com/request_count\" AND resource.type=\"cloud_run_revision\" AND resource.label.service_name=\"nearby-events\"",
+        "aggregation": {
+         "alignmentPeriod": "3600s",
+         "perSeriesAligner": "ALIGN_SUM",
+         "crossSeriesReducer": "REDUCE_SUM",
+         "groupByFields": []
+        }
+       }
+      },
+      "sparkChartView": {
+       "sparkChartType": "SPARK_LINE"
+      }
+     }
+    }
+   },
+   {
+    "xPos": 4,
+    "yPos": 2,
+    "width": 2,
+    "height": 3,
+    "widget": {
+     "title": "Response time p95 (ms) · target < 500",
+     "scorecard": {
+      "timeSeriesQuery": {
+       "timeSeriesFilter": {
+        "filter": "metric.type=\"run.googleapis.com/request_latencies\" AND resource.type=\"cloud_run_revision\" AND resource.label.service_name=\"nearby-events\"",
+        "aggregation": {
+         "alignmentPeriod": "3600s",
+         "perSeriesAligner": "ALIGN_DELTA",
+         "crossSeriesReducer": "REDUCE_PERCENTILE_95",
+         "groupByFields": []
+        }
+       }
+      },
+      "sparkChartView": {
+       "sparkChartType": "SPARK_LINE"
+      },
+      "thresholds": [
+       {
+        "value": 500,
+        "color": "YELLOW",
+        "direction": "ABOVE"
+       },
+       {
+        "value": 1500,
+        "color": "RED",
+        "direction": "ABOVE"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "xPos": 6,
+    "yPos": 2,
+    "width": 2,
+    "height": 3,
+    "widget": {
+     "title": "Server errors (5xx) · last hour",
+     "scorecard": {
+      "timeSeriesQuery": {
+       "timeSeriesFilter": {
+        "filter": "metric.type=\"run.googleapis.com/request_count\" AND resource.type=\"cloud_run_revision\" AND resource.label.service_name=\"nearby-events\" AND metric.label.response_code_class=\"5xx\"",
+        "aggregation": {
+         "alignmentPeriod": "3600s",
+         "perSeriesAligner": "ALIGN_SUM",
+         "crossSeriesReducer": "REDUCE_SUM",
+         "groupByFields": []
+        }
+       }
+      },
+      "sparkChartView": {
+       "sparkChartType": "SPARK_LINE"
+      },
+      "thresholds": [
+       {
+        "value": 1,
+        "color": "RED",
+        "direction": "ABOVE"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "xPos": 8,
+    "yPos": 2,
+    "width": 2,
+    "height": 3,
+    "widget": {
+     "title": "Cloud Run instances now (scales to 0)",
+     "scorecard": {
+      "timeSeriesQuery": {
+       "timeSeriesFilter": {
+        "filter": "metric.type=\"run.googleapis.com/container/instance_count\" AND resource.type=\"cloud_run_revision\" AND resource.label.service_name=\"nearby-events\"",
+        "aggregation": {
+         "alignmentPeriod": "60s",
+         "perSeriesAligner": "ALIGN_MAX",
+         "crossSeriesReducer": "REDUCE_SUM",
+         "groupByFields": []
+        }
+       }
+      },
+      "sparkChartView": {
+       "sparkChartType": "SPARK_LINE"
+      }
+     }
+    }
+   },
+   {
+    "xPos": 10,
+    "yPos": 2,
+    "width": 2,
+    "height": 3,
+    "widget": {
+     "title": "Gemini calls · 24 h (Vertex AI)",
+     "scorecard": {
+      "timeSeriesQuery": {
+       "timeSeriesFilter": {
+        "filter": "metric.type=\"aiplatform.googleapis.com/publisher/online_serving/model_invocation_count\" AND metric.label.method=\"GenerateContent\"",
+        "aggregation": {
+         "alignmentPeriod": "86400s",
+         "perSeriesAligner": "ALIGN_SUM",
+         "crossSeriesReducer": "REDUCE_SUM",
+         "groupByFields": []
+        }
+       }
+      },
+      "sparkChartView": {
+       "sparkChartType": "SPARK_LINE"
+      }
+     }
+    }
+   },
+   {
+    "xPos": 0,
+    "yPos": 5,
+    "width": 2,
+    "height": 3,
+    "widget": {
+     "title": "Events posted · 24 h",
+     "scorecard": {
+      "timeSeriesQuery": {
+       "timeSeriesFilter": {
+        "filter": "metric.type=\"logging.googleapis.com/user/events_created\" AND resource.type=\"cloud_run_revision\"",
+        "aggregation": {
+         "alignmentPeriod": "86400s",
+         "perSeriesAligner": "ALIGN_SUM",
+         "crossSeriesReducer": "REDUCE_SUM",
+         "groupByFields": []
+        }
+       }
+      },
+      "sparkChartView": {
+       "sparkChartType": "SPARK_LINE"
+      }
+     }
+    }
+   },
+   {
+    "xPos": 2,
+    "yPos": 5,
+    "width": 2,
+    "height": 3,
+    "widget": {
+     "title": "RSVPs ('I'm Going') · 24 h",
+     "scorecard": {
+      "timeSeriesQuery": {
+       "timeSeriesFilter": {
+        "filter": "metric.type=\"logging.googleapis.com/user/rsvps_created\" AND resource.type=\"cloud_run_revision\"",
+        "aggregation": {
+         "alignmentPeriod": "86400s",
+         "perSeriesAligner": "ALIGN_SUM",
+         "crossSeriesReducer": "REDUCE_SUM",
+         "groupByFields": []
+        }
+       }
+      },
+      "sparkChartView": {
+       "sparkChartType": "SPARK_LINE"
+      }
+     }
+    }
+   },
+   {
+    "xPos": 4,
+    "yPos": 5,
+    "width": 2,
+    "height": 3,
+    "widget": {
+     "title": "Notifications delivered (Pub/Sub) · 24 h",
+     "scorecard": {
+      "timeSeriesQuery": {
+       "timeSeriesFilter": {
+        "filter": "metric.type=\"pubsub.googleapis.com/subscription/push_request_count\" AND resource.type=\"pubsub_subscription\" AND metric.label.response_class=\"ack\"",
+        "aggregation": {
+         "alignmentPeriod": "86400s",
+         "perSeriesAligner": "ALIGN_SUM",
+         "crossSeriesReducer": "REDUCE_SUM",
+         "groupByFields": []
+        }
+       }
+      },
+      "sparkChartView": {
+       "sparkChartType": "SPARK_LINE"
+      }
+     }
+    }
+   },
+   {
+    "xPos": 6,
+    "yPos": 5,
+    "width": 2,
+    "height": 3,
+    "widget": {
+     "title": "Snap-a-Poster reads · 24 h",
+     "scorecard": {
+      "timeSeriesQuery": {
+       "timeSeriesFilter": {
+        "filter": "metric.type=\"logging.googleapis.com/user/poster_extractions\" AND resource.type=\"cloud_run_revision\"",
+        "aggregation": {
+         "alignmentPeriod": "86400s",
+         "perSeriesAligner": "ALIGN_SUM",
+         "crossSeriesReducer": "REDUCE_SUM",
+         "groupByFields": []
+        }
+       }
+      },
+      "sparkChartView": {
+       "sparkChartType": "SPARK_LINE"
+      }
+     }
+    }
+   },
+   {
+    "xPos": 8,
+    "yPos": 5,
+    "width": 2,
+    "height": 3,
+    "widget": {
+     "title": "AI fallbacks / failures · 24 h",
+     "scorecard": {
+      "timeSeriesQuery": {
+       "timeSeriesFilter": {
+        "filter": "metric.type=\"logging.googleapis.com/user/ai_failures\" AND resource.type=\"cloud_run_revision\"",
+        "aggregation": {
+         "alignmentPeriod": "86400s",
+         "perSeriesAligner": "ALIGN_SUM",
+         "crossSeriesReducer": "REDUCE_SUM",
+         "groupByFields": []
+        }
+       }
+      },
+      "sparkChartView": {
+       "sparkChartType": "SPARK_LINE"
+      },
+      "thresholds": [
+       {
+        "value": 3,
+        "color": "YELLOW",
+        "direction": "ABOVE"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "xPos": 10,
+    "yPos": 5,
+    "width": 2,
+    "height": 3,
+    "widget": {
+     "title": "Expiry sweeps (Cloud Scheduler) · 24 h",
+     "scorecard": {
+      "timeSeriesQuery": {
+       "timeSeriesFilter": {
+        "filter": "metric.type=\"logging.googleapis.com/user/expiry_sweeps\" AND resource.type=\"cloud_run_revision\"",
+        "aggregation": {
+         "alignmentPeriod": "86400s",
+         "perSeriesAligner": "ALIGN_SUM",
+         "crossSeriesReducer": "REDUCE_SUM",
+         "groupByFields": []
+        }
+       }
+      },
+      "sparkChartView": {
+       "sparkChartType": "SPARK_LINE"
+      }
+     }
+    }
+   },
+   {
+    "xPos": 0,
+    "yPos": 8,
+    "width": 12,
+    "height": 1,
+    "widget": {
+     "title": "Service level objectives",
+     "sectionHeader": {
+      "subtitle": "Targets we hold ourselves to, measured over a rolling 28 days. The error budget is how much failure the target still allows.",
+      "dividerBelow": true
+     }
+    }
+   },
+   {
+    "xPos": 0,
+    "yPos": 9,
+    "width": 3,
+    "height": 3,
+    "widget": {
+     "title": "Availability SLO 99.5% · compliance",
+     "scorecard": {
+      "timeSeriesQuery": {
+       "timeSeriesFilter": {
+        "filter": "select_slo_compliance(\"projects/nearby-events-510418/services/radius-cloud-run/serviceLevelObjectives/availability-99-5\")"
+       }
+      },
+      "sparkChartView": {
+       "sparkChartType": "SPARK_LINE"
+      }
+     }
+    }
+   },
+   {
+    "xPos": 3,
+    "yPos": 9,
+    "width": 3,
+    "height": 3,
+    "widget": {
+     "title": "Availability · error budget left (1 = all)",
+     "scorecard": {
+      "timeSeriesQuery": {
+       "timeSeriesFilter": {
+        "filter": "select_slo_budget_fraction(\"projects/nearby-events-510418/services/radius-cloud-run/serviceLevelObjectives/availability-99-5\")"
+       }
+      },
+      "sparkChartView": {
+       "sparkChartType": "SPARK_LINE"
+      }
+     }
+    }
+   },
+   {
+    "xPos": 6,
+    "yPos": 9,
+    "width": 3,
+    "height": 3,
+    "widget": {
+     "title": "Latency SLO (95% < 500 ms) · compliance",
+     "scorecard": {
+      "timeSeriesQuery": {
+       "timeSeriesFilter": {
+        "filter": "select_slo_compliance(\"projects/nearby-events-510418/services/radius-cloud-run/serviceLevelObjectives/latency-500ms-95\")"
+       }
+      },
+      "sparkChartView": {
+       "sparkChartType": "SPARK_LINE"
+      }
+     }
+    }
+   },
+   {
+    "xPos": 9,
+    "yPos": 9,
+    "width": 3,
+    "height": 3,
+    "widget": {
+     "title": "Latency · error budget left (1 = all)",
+     "scorecard": {
+      "timeSeriesQuery": {
+       "timeSeriesFilter": {
+        "filter": "select_slo_budget_fraction(\"projects/nearby-events-510418/services/radius-cloud-run/serviceLevelObjectives/latency-500ms-95\")"
+       }
+      },
+      "sparkChartView": {
+       "sparkChartType": "SPARK_LINE"
+      }
+     }
+    }
+   },
+   {
+    "xPos": 0,
+    "yPos": 12,
+    "width": 12,
+    "height": 1,
+    "widget": {
+     "title": "Compute · Cloud Run",
+     "sectionHeader": {
+      "subtitle": "Traffic, speed and how many copies of the server are running.",
+      "dividerBelow": true
+     }
+    }
+   },
+   {
+    "xPos": 0,
+    "yPos": 13,
+    "width": 4,
+    "height": 4,
+    "widget": {
+     "title": "Requests per second by result",
+     "xyChart": {
+      "dataSets": [
+       {
+        "timeSeriesQuery": {
+         "timeSeriesFilter": {
+          "filter": "metric.type=\"run.googleapis.com/request_count\" AND resource.type=\"cloud_run_revision\" AND resource.label.service_name=\"nearby-events\"",
+          "aggregation": {
+           "alignmentPeriod": "60s",
+           "perSeriesAligner": "ALIGN_RATE",
+           "crossSeriesReducer": "REDUCE_SUM",
+           "groupByFields": [
+            "metric.label.response_code_class"
+           ]
+          }
+         }
+        },
+        "plotType": "STACKED_BAR"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "xPos": 4,
+    "yPos": 13,
+    "width": 4,
+    "height": 4,
+    "widget": {
+     "title": "Response time (ms) · p50 and p95 vs 500 ms target",
+     "xyChart": {
+      "dataSets": [
+       {
+        "timeSeriesQuery": {
+         "timeSeriesFilter": {
+          "filter": "metric.type=\"run.googleapis.com/request_latencies\" AND resource.type=\"cloud_run_revision\" AND resource.label.service_name=\"nearby-events\"",
+          "aggregation": {
+           "alignmentPeriod": "60s",
+           "perSeriesAligner": "ALIGN_DELTA",
+           "crossSeriesReducer": "REDUCE_PERCENTILE_50",
+           "groupByFields": []
+          }
+         }
+        },
+        "plotType": "LINE",
+        "legendTemplate": "p50"
+       },
+       {
+        "timeSeriesQuery": {
+         "timeSeriesFilter": {
+          "filter": "metric.type=\"run.googleapis.com/request_latencies\" AND resource.type=\"cloud_run_revision\" AND resource.label.service_name=\"nearby-events\"",
+          "aggregation": {
+           "alignmentPeriod": "60s",
+           "perSeriesAligner": "ALIGN_DELTA",
+           "crossSeriesReducer": "REDUCE_PERCENTILE_95",
+           "groupByFields": []
+          }
+         }
+        },
+        "plotType": "LINE",
+        "legendTemplate": "p95"
+       }
+      ],
+      "thresholds": [
+       {
+        "value": 500,
+        "label": "SLO target 500 ms"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "xPos": 8,
+    "yPos": 13,
+    "width": 4,
+    "height": 4,
+    "widget": {
+     "title": "Instances running (0 when idle = no cost)",
+     "xyChart": {
+      "dataSets": [
+       {
+        "timeSeriesQuery": {
+         "timeSeriesFilter": {
+          "filter": "metric.type=\"run.googleapis.com/container/instance_count\" AND resource.type=\"cloud_run_revision\" AND resource.label.service_name=\"nearby-events\"",
+          "aggregation": {
+           "alignmentPeriod": "60s",
+           "perSeriesAligner": "ALIGN_MAX",
+           "crossSeriesReducer": "REDUCE_SUM",
+           "groupByFields": [
+            "metric.label.state"
+           ]
+          }
+         }
+        },
+        "plotType": "STACKED_AREA"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "xPos": 0,
+    "yPos": 17,
+    "width": 12,
+    "height": 1,
+    "widget": {
+     "title": "Data & messaging · Firestore and Pub/Sub",
+     "sectionHeader": {
+      "subtitle": "Database reads and writes; notification messages published and delivered.",
+      "dividerBelow": true
+     }
+    }
+   },
+   {
+    "xPos": 0,
+    "yPos": 18,
+    "width": 4,
+    "height": 4,
+    "widget": {
+     "title": "Firestore document reads vs writes (per min)",
+     "xyChart": {
+      "dataSets": [
+       {
+        "timeSeriesQuery": {
+         "timeSeriesFilter": {
+          "filter": "metric.type=\"firestore.googleapis.com/document/read_count\"",
+          "aggregation": {
+           "alignmentPeriod": "60s",
+           "perSeriesAligner": "ALIGN_RATE",
+           "crossSeriesReducer": "REDUCE_SUM",
+           "groupByFields": []
+          }
+         }
+        },
+        "plotType": "LINE",
+        "legendTemplate": "reads"
+       },
+       {
+        "timeSeriesQuery": {
+         "timeSeriesFilter": {
+          "filter": "metric.type=\"firestore.googleapis.com/document/write_count\"",
+          "aggregation": {
+           "alignmentPeriod": "60s",
+           "perSeriesAligner": "ALIGN_RATE",
+           "crossSeriesReducer": "REDUCE_SUM",
+           "groupByFields": []
+          }
+         }
+        },
+        "plotType": "LINE",
+        "legendTemplate": "writes"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "xPos": 4,
+    "yPos": 18,
+    "width": 4,
+    "height": 4,
+    "widget": {
+     "title": "Pub/Sub notifications: published vs delivered",
+     "xyChart": {
+      "dataSets": [
+       {
+        "timeSeriesQuery": {
+         "timeSeriesFilter": {
+          "filter": "metric.type=\"pubsub.googleapis.com/topic/send_message_operation_count\" AND resource.type=\"pubsub_topic\"",
+          "aggregation": {
+           "alignmentPeriod": "300s",
+           "perSeriesAligner": "ALIGN_SUM",
+           "crossSeriesReducer": "REDUCE_SUM",
+           "groupByFields": []
+          }
+         }
+        },
+        "plotType": "STACKED_BAR",
+        "legendTemplate": "published"
+       },
+       {
+        "timeSeriesQuery": {
+         "timeSeriesFilter": {
+          "filter": "metric.type=\"pubsub.googleapis.com/subscription/push_request_count\" AND resource.type=\"pubsub_subscription\"",
+          "aggregation": {
+           "alignmentPeriod": "300s",
+           "perSeriesAligner": "ALIGN_SUM",
+           "crossSeriesReducer": "REDUCE_SUM",
+           "groupByFields": [
+            "metric.label.response_class"
+           ]
+          }
+         }
+        },
+        "plotType": "STACKED_BAR",
+        "legendTemplate": "delivered (${metric.labels.response_class})"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "xPos": 8,
+    "yPos": 18,
+    "width": 4,
+    "height": 4,
+    "widget": {
+     "title": "Pub/Sub backlog: oldest undelivered message (s)",
+     "xyChart": {
+      "dataSets": [
+       {
+        "timeSeriesQuery": {
+         "timeSeriesFilter": {
+          "filter": "metric.type=\"pubsub.googleapis.com/subscription/oldest_unacked_message_age\" AND resource.type=\"pubsub_subscription\"",
+          "aggregation": {
+           "alignmentPeriod": "60s",
+           "perSeriesAligner": "ALIGN_MAX",
+           "crossSeriesReducer": "REDUCE_MAX",
+           "groupByFields": []
+          }
+         }
+        },
+        "plotType": "LINE"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "xPos": 0,
+    "yPos": 22,
+    "width": 12,
+    "height": 1,
+    "widget": {
+     "title": "AI · Vertex AI (Gemini 3.5 Flash-Lite)",
+     "sectionHeader": {
+      "subtitle": "Gemini calls as Google sees them, tokens used, and how our app experienced them.",
+      "dividerBelow": true
+     }
+    }
+   },
+   {
+    "xPos": 0,
+    "yPos": 23,
+    "width": 4,
+    "height": 4,
+    "widget": {
+     "title": "Gemini calls by response code",
+     "xyChart": {
+      "dataSets": [
+       {
+        "timeSeriesQuery": {
+         "timeSeriesFilter": {
+          "filter": "metric.type=\"aiplatform.googleapis.com/publisher/online_serving/model_invocation_count\" AND metric.label.method=\"GenerateContent\"",
+          "aggregation": {
+           "alignmentPeriod": "300s",
+           "perSeriesAligner": "ALIGN_SUM",
+           "crossSeriesReducer": "REDUCE_SUM",
+           "groupByFields": [
+            "metric.label.response_code"
+           ]
+          }
+         }
+        },
+        "plotType": "STACKED_BAR"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "xPos": 4,
+    "yPos": 23,
+    "width": 4,
+    "height": 4,
+    "widget": {
+     "title": "Gemini tokens: input vs output",
+     "xyChart": {
+      "dataSets": [
+       {
+        "timeSeriesQuery": {
+         "timeSeriesFilter": {
+          "filter": "metric.type=\"aiplatform.googleapis.com/publisher/online_serving/token_count\"",
+          "aggregation": {
+           "alignmentPeriod": "300s",
+           "perSeriesAligner": "ALIGN_SUM",
+           "crossSeriesReducer": "REDUCE_SUM",
+           "groupByFields": [
+            "metric.label.type"
+           ]
+          }
+         }
+        },
+        "plotType": "STACKED_BAR"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "xPos": 8,
+    "yPos": 23,
+    "width": 4,
+    "height": 4,
+    "widget": {
+     "title": "AI health in the app (per hour)",
+     "xyChart": {
+      "dataSets": [
+       {
+        "timeSeriesQuery": {
+         "timeSeriesFilter": {
+          "filter": "metric.type=\"logging.googleapis.com/user/poster_extractions\" AND resource.type=\"cloud_run_revision\"",
+          "aggregation": {
+           "alignmentPeriod": "3600s",
+           "perSeriesAligner": "ALIGN_SUM",
+           "crossSeriesReducer": "REDUCE_SUM",
+           "groupByFields": []
+          }
+         }
+        },
+        "plotType": "STACKED_BAR",
+        "legendTemplate": "Snap-a-Poster OK"
+       },
+       {
+        "timeSeriesQuery": {
+         "timeSeriesFilter": {
+          "filter": "metric.type=\"logging.googleapis.com/user/ai_retries\" AND resource.type=\"cloud_run_revision\"",
+          "aggregation": {
+           "alignmentPeriod": "3600s",
+           "perSeriesAligner": "ALIGN_SUM",
+           "crossSeriesReducer": "REDUCE_SUM",
+           "groupByFields": []
+          }
+         }
+        },
+        "plotType": "STACKED_BAR",
+        "legendTemplate": "retried on fallback model"
+       },
+       {
+        "timeSeriesQuery": {
+         "timeSeriesFilter": {
+          "filter": "metric.type=\"logging.googleapis.com/user/ai_failures\" AND resource.type=\"cloud_run_revision\"",
+          "aggregation": {
+           "alignmentPeriod": "3600s",
+           "perSeriesAligner": "ALIGN_SUM",
+           "crossSeriesReducer": "REDUCE_SUM",
+           "groupByFields": []
+          }
+         }
+        },
+        "plotType": "STACKED_BAR",
+        "legendTemplate": "failed / used rules"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "xPos": 0,
+    "yPos": 27,
+    "width": 12,
+    "height": 1,
+    "widget": {
+     "title": "Board activity & scheduled jobs",
+     "sectionHeader": {
+      "subtitle": "What residents and organisers did, and the hourly expiry job.",
+      "dividerBelow": true
+     }
+    }
+   },
+   {
+    "xPos": 0,
+    "yPos": 28,
+    "width": 6,
+    "height": 4,
+    "widget": {
+     "title": "Events posted and RSVPs (per hour)",
+     "xyChart": {
+      "dataSets": [
+       {
+        "timeSeriesQuery": {
+         "timeSeriesFilter": {
+          "filter": "metric.type=\"logging.googleapis.com/user/events_created\" AND resource.type=\"cloud_run_revision\"",
+          "aggregation": {
+           "alignmentPeriod": "3600s",
+           "perSeriesAligner": "ALIGN_SUM",
+           "crossSeriesReducer": "REDUCE_SUM",
+           "groupByFields": []
+          }
+         }
+        },
+        "plotType": "STACKED_BAR",
+        "legendTemplate": "events posted"
+       },
+       {
+        "timeSeriesQuery": {
+         "timeSeriesFilter": {
+          "filter": "metric.type=\"logging.googleapis.com/user/rsvps_created\" AND resource.type=\"cloud_run_revision\"",
+          "aggregation": {
+           "alignmentPeriod": "3600s",
+           "perSeriesAligner": "ALIGN_SUM",
+           "crossSeriesReducer": "REDUCE_SUM",
+           "groupByFields": []
+          }
+         }
+        },
+        "plotType": "STACKED_BAR",
+        "legendTemplate": "RSVPs"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "xPos": 6,
+    "yPos": 28,
+    "width": 6,
+    "height": 4,
+    "widget": {
+     "title": "Cloud Scheduler expiry sweeps and server errors (per hour)",
+     "xyChart": {
+      "dataSets": [
+       {
+        "timeSeriesQuery": {
+         "timeSeriesFilter": {
+          "filter": "metric.type=\"logging.googleapis.com/user/expiry_sweeps\" AND resource.type=\"cloud_run_revision\"",
+          "aggregation": {
+           "alignmentPeriod": "3600s",
+           "perSeriesAligner": "ALIGN_SUM",
+           "crossSeriesReducer": "REDUCE_SUM",
+           "groupByFields": []
+          }
+         }
+        },
+        "plotType": "STACKED_BAR",
+        "legendTemplate": "expiry sweeps"
+       },
+       {
+        "timeSeriesQuery": {
+         "timeSeriesFilter": {
+          "filter": "metric.type=\"logging.googleapis.com/user/app_errors\" AND resource.type=\"cloud_run_revision\"",
+          "aggregation": {
+           "alignmentPeriod": "3600s",
+           "perSeriesAligner": "ALIGN_SUM",
+           "crossSeriesReducer": "REDUCE_SUM",
+           "groupByFields": []
+          }
+         }
+        },
+        "plotType": "STACKED_BAR",
+        "legendTemplate": "ERROR logs"
+       }
+      ]
+     }
+    }
+   },
+   {
+    "xPos": 0,
+    "yPos": 32,
+    "width": 12,
+    "height": 1,
+    "widget": {
+     "title": "Live",
+     "sectionHeader": {
+      "subtitle": "Key moments from the structured logs as they happen, and any open incident.",
+      "dividerBelow": true
+     }
+    }
+   },
+   {
+    "xPos": 0,
+    "yPos": 33,
+    "width": 8,
+    "height": 7,
+    "widget": {
+     "title": "Live log: posts, RSVPs, notifications, AI, expiry, warnings",
+     "logsPanel": {
+      "filter": "resource.type=\"cloud_run_revision\" AND resource.labels.service_name=\"nearby-events\" AND (jsonPayload.message=(\"Event created\" OR \"RSVP created\" OR \"Pub/Sub message published\" OR \"Notifications delivered\" OR \"Poster extraction complete\" OR \"Expiration sweep complete\" OR \"Gemini busy or slow, retrying once\") OR severity>=WARNING)",
+      "resourceNames": [
+       "projects/nearby-events-510418"
+      ]
+     }
+    }
+   },
+   {
+    "xPos": 8,
+    "yPos": 33,
+    "width": 4,
+    "height": 7,
+    "widget": {
+     "title": "Open incidents (alert policies)",
+     "incidentList": {}
+    }
+   }
+  ]
+ }
+}
