@@ -91,7 +91,7 @@ export function EventCard({
         )}
 
         <div className="absolute left-3 top-3 flex flex-wrap items-center gap-1.5">
-          <CategoryBadge category={event.category} size="sm" className="bg-surface/95 backdrop-blur" />
+          <CategoryBadge category={event.category} size="sm" className="shadow-sm" />
 
           {live && (
             <Badge tone="success" size="sm" className="bg-surface/95 backdrop-blur">
@@ -152,6 +152,9 @@ export function EventCard({
           </Link>
 
         </h3>
+
+        {/* The brief's card shows the description too; two lines keep the grid even. */}
+        <p className="clamp-2 mt-1.5 text-[0.8125rem] leading-snug text-ink-soft">{event.description}</p>
 
         <dl className="mt-3 space-y-1.5 text-[0.8125rem] text-ink-soft">
           <div className="flex items-center gap-2">

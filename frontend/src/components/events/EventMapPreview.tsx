@@ -7,14 +7,14 @@ import type { EventRecord } from '@/lib/types';
 
 /** Pin colour per category — shared by both map engines so they look identical. */
 export const CATEGORY_PIN_COLORS: Record<string, string> = {
-  Sports: '#10b981',
-  Music: '#8b5cf6',
-  Food: '#f97316',
-  'Yard Sale': '#f59e0b',
-  Community: '#0ea5e9',
-  Education: '#3b82f6',
-  Technology: '#6366f1',
-  Other: '#64748b',
+  Sports: '#15803D',
+  Music: '#7E22CE',
+  Food: '#C2410C',
+  'Yard Sale': '#BE185D',
+  Community: '#1D4ED8',
+  Education: '#0F766E',
+  Technology: '#334155',
+  Other: '#78716C',
 };
 
 /** Coimbatore city centre — the fallback view when no event has coordinates. */

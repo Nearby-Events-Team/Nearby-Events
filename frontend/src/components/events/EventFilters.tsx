@@ -14,7 +14,7 @@ import {
   type EventFiltersState,
   type SortOption,
 } from '@/lib/types';
-import { cn, DATE_FILTERS } from '@/lib/utils';
+import { CATEGORY_STYLES, cn, DATE_FILTERS } from '@/lib/utils';
 
 /** Same phrases the API treats as "near me" (backend utils/search.ts wantsNearby). */
 const NEAR_ME = /\b(near\s*me|nearby|near\s*by|around\s*me|close\s*to\s*me|close\s*by)\b/i;
@@ -381,7 +381,15 @@ export function EventFilters({
             active={filters.category === category}
             onClick={() => onChange({ category: filters.category === category ? null : category })}
           >
-            <CategoryIcon category={category as Category} className="h-3.5 w-3.5" />
+            {/* Same colour as the category's badge on the cards, so the filter doubles as a key. */}
+            <span
+              className={cn(
+                'flex h-5 w-5 items-center justify-center rounded',
+                CATEGORY_STYLES[category as Category].badge,
+              )}
+            >
+              <CategoryIcon category={category as Category} className="h-3 w-3" />
+            </span>
             {category}
           </Chip>
         ))}
