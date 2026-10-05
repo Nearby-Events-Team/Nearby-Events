@@ -85,7 +85,7 @@ arrow('M820,730 L768,730', { dashed: true }); label(794, 750, 'push');
 // Lane 4
 box(1236, 140, 320, 96, 'Cloud Scheduler', ['Hourly: POST /api/maintenance/expire', 'with a secret header'], { accent: '#b3261e' });
 box(1236, 262, 320, 92, 'Secret Manager', ['Maintenance token, injected', 'into Cloud Run at start-up'], { accent: '#b3261e' });
-box(1236, 380, 320, 152, 'Cloud Logging + Monitoring', ['Structured JSON logs', 'Dashboard + 7 log-based metrics', '(posts, RSVPs, AI health, errors)', 'Uptime check every 5 min', '→ email alert'], { accent: '#b3261e' });
+box(1236, 380, 320, 152, 'Cloud Logging + Monitoring', ['Structured JSON logs · 7 log-based metrics', 'Live Operations dashboard (36 tiles)', 'SLOs: 99.5% available, 95% < 500 ms', 'Alerts: 5xx, p95, AI failures, burn rate', 'Uptime check every 5 min → email'], { accent: '#b3261e' });
 box(1236, 558, 320, 152, 'Delivery', ['GitHub → GitHub Actions CI:', 'typecheck, build, 187 tests on PRs', 'deploy.ps1 → Cloud Build →', 'Artifact Registry → Cloud Run', '(manual, after testing)'], { accent: '#b3261e' });
 box(1236, 736, 320, 98, 'Cost guardrails', ['$300 free trial · $25 budget alert', 'Maps quota caps · cheapest model', 'Cloud Run scales to zero'], { accent: '#b3261e' });
 
@@ -97,7 +97,7 @@ add(`<line x1="24" y1="952" x2="64" y2="952" stroke="#4a5568" stroke-width="2" m
 add(`<text x="74" y="957" font-size="14" fill="#3c4858">request / data</text>`);
 add(`<line x1="200" y1="952" x2="240" y2="952" stroke="#4a5568" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#ah)"/>`);
 add(`<text x="250" y="957" font-size="14" fill="#3c4858">asynchronous push (Pub/Sub)</text>`);
-add(`<text x="${W - 24}" y="957" font-size="14" fill="#4a5568" text-anchor="end">Radius · everything happening within your radius · github.com/kanishmanickam/Nearby-Events</text>`);
+add(`<text x="${W - 24}" y="957" font-size="14" fill="#4a5568" text-anchor="end">Radius · everything happening within your radius · github.com/Nearby-Events-Team/Nearby-Events</text>`);
 add(`<text x="24" y="990" font-size="13" fill="#6b7686">Without keys the same code runs locally: Firebase emulators, photos on disk, OpenStreetMap maps and a rule-based AI fallback (npm run dev).</text>`);
 
 add('</svg>');
