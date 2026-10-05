@@ -516,3 +516,9 @@ Single `app.py` Flask app + plain HTML/JS PWA. Nice UI and good ideas, but:
   above corrected from git history: Kanishkhan built the first version, Kanish Kumaran built recommendations/trending.
   docs/team.md = who did what. **Open:** AI-filled Snap-a-Poster screenshot for slide 7 (needs a real sign-in);
   near-me lat/lng still appears in request logs; brief says 8-10 slides (deck has 12; ask the mentor).
+- Oct 6 (early): **OSM "Access blocked" tiles fixed + deployed.** The event-form pin map (LocationPicker, Leaflet +
+  OpenStreetMap tiles even with a Google key) showed OSM's 403 "Access blocked" tiles for Suhas. Cause: Helmet's
+  site-wide `Referrer-Policy: no-referrer` means tile requests carry no Referer, which OSM's tile policy can block (not
+  reproducible from every network). Fix: Leaflet tileLayer `referrerPolicy: 'strict-origin-when-cross-origin'` in
+  LocationPicker and LeafletEventMap (origin only; site-wide header unchanged). Deployed (build f59b6ab7); live bundles
+  carry the setting. Suhas to confirm in his browser; fallback if still blocked = Google map in the pin picker.
