@@ -232,6 +232,18 @@ Open `docs/architecture.md` or the diagram slide.
 
 ---
 
+### 13b · Live monitoring  ⭐ *(60s)*
+
+Have **Cloud Monitoring → Dashboards → "Radius · Live Operations"** open in a tab (signed in as the project owner).
+
+1. Point at the top row: "Uptime, requests, p95 response time, errors and how many servers are running right now, which is zero when nobody uses it."
+2. On your phone, RSVP to an event (or cancel one you organise).
+3. Within about a minute: the **live log** shows "RSVP created" (and "Pub/Sub message published"), and the **RSVPs** and **Pub/Sub delivered** numbers tick up. Say: "every layer is watched: Cloud Run, Firestore, Pub/Sub and Gemini on Vertex AI, with Google's own metrics."
+4. Click **SLOs** (Monitoring → SLOs): "We target 99.5% availability and 95% of requests under 500 ms, each with an error budget, and an SRE burn-rate alert emails us if we use it up too fast."
+5. If asked about the latency budget: testing with AI calls (1–2 s each) and photo uploads used most of it; that is the SLO doing its job, telling us where to improve (a minimum instance, and a separate SLO for AI requests).
+
+> Log-based numbers appear with a delay of about a minute; do the RSVP first, then talk through the top row while it arrives.
+
 ### 14 · On a phone  ⭐ *(15s)*
 
 Show the **Radius** icon on the phone's home screen and open it — it runs full-screen like an app,

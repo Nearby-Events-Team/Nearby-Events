@@ -4,6 +4,9 @@ What watches the live service (project `nearby-events-510418`, Cloud Run `nearby
 
 | What | Where | Why |
 |---|---|---|
+| **Dashboard "Radius · Live Operations"** (the demo one) | Cloud Monitoring → Dashboards (`ops-dashboard.json`, built by `make-ops-dashboard.mjs`) | One screen per architecture layer: health now and last 24 h, SLOs + error budgets, Cloud Run, Firestore, Pub/Sub, Vertex AI (Gemini calls and tokens), Cloud Scheduler, a live log panel and open incidents |
+| **SLOs** on service "Radius (Cloud Run nearby-events)" | Monitoring → SLOs | **Availability 99.5%** and **95% of requests under 500 ms**, both over a rolling 28 days, each with an error budget |
+| **Alert policies** (all email the team) | Monitoring → Alerting | Site down (uptime check) · 5xx above 5% for 5 min · p95 above 1.5 s for 10 min · AI failures > 3 in 10 min · availability error budget burning > 10x (1 h) |
 | **Dashboard** "Nearby-Events - live monitoring" | Cloud Monitoring → Dashboards (`dashboard.json`) | One screen for traffic, speed, errors, uptime, board activity and AI health |
 | **Uptime check** "Nearby-Events health" | Calls `GET /api/health` every 5 min from several regions | Proves the app *and* its Firestore connection are up |
 | **Alert policy** "Nearby-Events is down" | `uptime-alert-policy.json` → email | Someone hears about an outage before users do |
