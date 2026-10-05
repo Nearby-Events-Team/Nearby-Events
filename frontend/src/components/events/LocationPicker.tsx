@@ -52,6 +52,9 @@ export default function LocationPicker({
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
       maxZoom: 19,
+      // The site sends no Referer (Helmet's no-referrer), and OpenStreetMap's tile servers can
+      // block tiles that arrive without one ("Access blocked" tiles). Send only our origin here.
+      referrerPolicy: 'strict-origin-when-cross-origin',
     }).addTo(map);
 
     const marker = L.marker([latitude, longitude], {
