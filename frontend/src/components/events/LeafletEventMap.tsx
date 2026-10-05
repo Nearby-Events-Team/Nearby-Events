@@ -114,7 +114,12 @@ export default function LeafletEventMap({
     const map = mapRef.current;
     if (!map || tilesRef.current) return;
 
-    tilesRef.current = L.tileLayer(TILE_URL, { attribution: ATTRIBUTION, maxZoom: 19 }).addTo(map);
+    // Origin-only Referer for OpenStreetMap's tile policy (the site itself sends none).
+    tilesRef.current = L.tileLayer(TILE_URL, {
+      attribution: ATTRIBUTION,
+      maxZoom: 19,
+      referrerPolicy: 'strict-origin-when-cross-origin',
+    }).addTo(map);
   }, [ready]);
 
   /* ---------------------------------------------------------------- markers */
