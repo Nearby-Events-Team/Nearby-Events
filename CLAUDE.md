@@ -249,10 +249,13 @@ Single `app.py` Flask app + plain HTML/JS PWA. Nice UI and good ideas, but:
 
 ---
 
-## 8. Team
-- Kanish (kanishmanickam) — built main version, repo owner.
-- Adhi — built the Flask prototype; should now work on main (e.g. Snap-a-Poster port).
-- Me (Suhas) — coordinating, reviewing, building features with Claude Code in Antigravity.
+## 8. Team (Team APEX · mentor M N Sujeeth) — details and one-liners in docs/team.md
+- Kanishkhan J (Kanishkhan / kanishkhan) — built the first full version of the app (base of `main`), calendar export, QR flyers.
+- Kanish Kumaran M (kanishmanickam) — repo owner; Event Intelligence (Recommended for you) and Event Pulse (trending).
+- Mohammed Thahseen A (Thahseen2005) — QR check-in, points + leaderboard, Q&A, saved events, weather, map pins, local mode.
+- Sanjay Thangavel (Sanjay) — Cloud Pub/Sub attendee notifications.
+- Adithyaraman R (ADITHYARAMAN7, "Adhi") — Flask + Gemini prototype; Snap-a-Poster idea (not merged on purpose, see §6).
+- Me (Suhas, suhas107) — integration, Google Cloud deployment, Snap-a-Poster, monitoring, CI, deck; working with Claude Code.
 
 ## 9. Progress log
 - Oct 2: Brief analysed, plan agreed. Both versions reviewed; main chosen as base. CLAUDE.md rewritten for the
@@ -505,3 +508,11 @@ Single `app.py` Flask app + plain HTML/JS PWA. Nice UI and good ideas, but:
   tiles, Explore chips, calendar dots, map pins and Insights. Deck rebuilt (10 slides, flyer look, footer maps each
   slide to the judging criteria). **Open:** request logs record the near-me lat/lng in the URL (Cloud Logging);
   brief's "questionnaire" not in the PDF (ask mentors); deck needs team/mentor names + dashboard screenshot.
+- Oct 5 (night): **Deck + team.** Final deck (12 slides, Slides artifact 3F2DamwhxGCdaEyGFWtrur): problem, Use Case 5
+  mapping, process flow, detailed architecture (13 GCP services), services/data, AI, Event Intelligence + Pulse, insights
+  and impact, security/performance/monitoring, roadmap (report button → trusted users → verified badge → paid events via
+  a payment gateway) with limitations, risks and learnings, team "who built what". Every claim checked in code; real
+  screenshots only. Architecture diagram updated (Live Operations dashboard, SLOs, alerts, new repo URL). Team section
+  above corrected from git history: Kanishkhan built the first version, Kanish Kumaran built recommendations/trending.
+  docs/team.md = who did what. **Open:** AI-filled Snap-a-Poster screenshot for slide 7 (needs a real sign-in);
+  near-me lat/lng still appears in request logs; brief says 8-10 slides (deck has 12; ask the mentor).
