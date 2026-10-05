@@ -13,7 +13,8 @@ export function Card({
       className={cn(
         'rounded-card bg-surface ring-1 ring-border',
         interactive &&
-          'transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-md hover:ring-border-strong',
+          // Lifts off the wall like a flyer: hard ink shadow and an ink edge.
+          'transition-all duration-200 ease-out hover:-translate-x-1 hover:-translate-y-1 hover:shadow-flyer hover:ring-2 hover:ring-ink',
         className,
       )}
       {...props}
@@ -28,7 +29,7 @@ export function Panel({ className, ...props }: React.HTMLAttributes<HTMLDivEleme
 /* ----------------------------------------------------------------- Badge */
 
 const badgeStyles = cva(
-  'inline-flex items-center gap-1.5 rounded-full font-semibold ring-1 ring-inset',
+  'inline-flex items-center gap-1.5 rounded font-bold uppercase tracking-[0.06em] ring-1 ring-inset',
   {
     variants: {
       tone: {
@@ -42,8 +43,8 @@ const badgeStyles = cva(
         custom: '',
       },
       size: {
-        sm: 'px-2 py-0.5 text-[0.6875rem]',
-        md: 'px-2.5 py-1 text-xs',
+        sm: 'px-1.5 py-0.5 text-[0.625rem]',
+        md: 'px-2 py-1 text-[0.6875rem]',
       },
     },
     defaultVariants: { tone: 'neutral', size: 'md' },
@@ -187,7 +188,7 @@ export function SegmentedControl<T extends string>({
     <div
       role="group"
       aria-label={ariaLabel}
-      className={cn('inline-flex rounded-xl bg-surface-sunken p-1 ring-1 ring-border', className)}
+      className={cn('inline-flex rounded-md bg-surface-sunken p-1 ring-1 ring-border', className)}
     >
       {options.map((option) => {
         const active = option.value === value;
@@ -198,9 +199,9 @@ export function SegmentedControl<T extends string>({
             onClick={() => onChange(option.value)}
             aria-pressed={active}
             className={cn(
-              'inline-flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-sm font-semibold transition-all duration-150',
+              'inline-flex items-center gap-1.5 rounded px-3.5 py-1.5 text-sm font-semibold transition-all duration-150',
               active
-                ? 'bg-surface text-ink shadow-xs ring-1 ring-border'
+                ? 'bg-brand text-on-brand'
                 : 'text-ink-soft hover:text-ink',
             )}
           >

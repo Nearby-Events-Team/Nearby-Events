@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Crosshair } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { RecommendedEventCard } from './RecommendedEventCard';
 import { EventGridSkeleton } from '@/components/common/States';
@@ -73,7 +73,7 @@ export function RecommendedSection({ city = '' }: { city?: string }) {
                         id="recommended-heading"
                         className="flex items-center gap-2 text-display-md"
                     >
-                        <Sparkles className="h-6 w-6 text-brand" aria-hidden="true" />
+                        <Crosshair className="h-6 w-6 text-danger" aria-hidden="true" />
                         Recommended for You
                     </h2>
                     <p className="mt-1.5 text-sm text-ink-soft">

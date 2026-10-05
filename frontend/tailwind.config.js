@@ -24,6 +24,7 @@ export default {
           soft: 'hsl(var(--brand-soft) / <alpha-value>)',
           ink: 'hsl(var(--brand-ink) / <alpha-value>)',
         },
+        'on-brand': 'hsl(var(--on-brand) / <alpha-value>)',
         accent: {
           DEFAULT: 'hsl(var(--accent) / <alpha-value>)',
           soft: 'hsl(var(--accent-soft) / <alpha-value>)',
@@ -46,8 +47,8 @@ export default {
         },
       },
       fontFamily: {
-        display: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Archivo', 'system-ui', 'sans-serif'],
+        sans: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         // A tighter scale than the default — display sizes get negative tracking so
@@ -58,8 +59,12 @@ export default {
         'display-sm': ['1.375rem', { lineHeight: '1.25', letterSpacing: '-0.015em' }],
       },
       borderRadius: {
-        card: '1.125rem',
-        panel: '1.5rem',
+        // Flyer corners: tighter than Tailwind's defaults everywhere, not just on cards.
+        xl: '0.5rem',
+        '2xl': '0.625rem',
+        '3xl': '0.75rem',
+        card: '0.375rem',
+        panel: '0.5rem',
       },
       boxShadow: {
         // Layered, low-opacity shadows rather than one dark blur.
@@ -67,6 +72,8 @@ export default {
         sm: '0 2px 4px -2px hsl(var(--shadow) / 0.12), 0 2px 8px -4px hsl(var(--shadow) / 0.08)',
         md: '0 4px 12px -4px hsl(var(--shadow) / 0.14), 0 8px 24px -12px hsl(var(--shadow) / 0.10)',
         lg: '0 12px 28px -8px hsl(var(--shadow) / 0.18), 0 20px 48px -20px hsl(var(--shadow) / 0.14)',
+        // Hard offset shadow, like a flyer stuck slightly off the wall.
+        flyer: '5px 5px 0 hsl(var(--ink))',
         glow: '0 0 0 1px hsl(var(--brand) / 0.18), 0 8px 24px -8px hsl(var(--brand) / 0.28)',
       },
       transitionTimingFunction: {

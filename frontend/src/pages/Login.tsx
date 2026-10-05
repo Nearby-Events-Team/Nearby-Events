@@ -53,11 +53,11 @@ export function AuthShell({
         to="/"
         className="mx-auto flex items-center gap-2.5 font-display text-lg font-extrabold tracking-tight text-ink"
       >
-        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand text-white shadow-sm">
+        <span className="flex h-10 w-10 items-center justify-center rounded-md bg-brand text-on-brand shadow-sm">
           <RadiusMark className="h-5 w-5" />
         </span>
         <span>
-          Radius<span className="text-accent">.</span>
+          Radius<span className="text-danger">.</span>
         </span>
       </Link>
 

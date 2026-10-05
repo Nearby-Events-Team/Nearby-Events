@@ -58,7 +58,7 @@ function Chip({
       className={cn(
         'inline-flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[0.8125rem] font-semibold ring-1 ring-inset transition-all duration-150',
         active
-          ? 'bg-brand text-white ring-brand shadow-sm'
+          ? 'bg-brand text-on-brand ring-brand shadow-sm'
           : 'bg-surface text-ink-soft ring-border hover:bg-surface-sunken hover:text-ink hover:ring-border-strong',
         className,
       )}

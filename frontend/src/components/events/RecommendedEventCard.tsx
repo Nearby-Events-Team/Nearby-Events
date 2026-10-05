@@ -1,4 +1,4 @@
-import { Sparkles } from 'lucide-react';
+import { Crosshair } from 'lucide-react';
 import { EventCard } from './EventCard';
 import { cn } from '@/lib/utils';
 import type { RecommendedEvent } from '@/lib/types';
@@ -47,7 +47,7 @@ export function RecommendedEventCard({
                     )}
                     title="Local Relevance Score — a heuristic based on distance, interests, timing and engagement"
                 >
-                    <Sparkles className="h-3 w-3" aria-hidden="true" />
+                    <Crosshair className="h-3 w-3" aria-hidden="true" />
                     {score}% relevant
                 </span>
             </div>

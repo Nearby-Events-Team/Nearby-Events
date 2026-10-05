@@ -99,11 +99,11 @@ export function Navbar({ theme, onToggleTheme }: { theme: 'light' | 'dark'; onTo
             to="/"
             className="flex shrink-0 items-center gap-2.5 rounded-lg font-display text-[1.0625rem] font-extrabold tracking-tight text-ink"
           >
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-white shadow-sm">
+            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-brand text-on-brand">
               <RadiusMark className="h-[1.125rem] w-[1.125rem]" />
             </span>
             <span>
-              Radius<span className="text-accent">.</span>
+              Radius<span className="text-danger">.</span>
             </span>
           </Link>
 

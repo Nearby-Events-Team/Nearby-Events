@@ -110,6 +110,9 @@ export function EventCard({
           )}
         </div>
 
+        {/* Flyer-style date stamp, so the grid can be scanned by day at a glance. */}
+        <DateStamp iso={event.startsAt} />
+
         {/* Above the stretched link, so saving never opens the event. */}
         <SaveButton event={event} onChange={onSaveChange} className="absolute right-3 top-3 z-10" />
 
@@ -176,7 +179,7 @@ export function EventCard({
           {distanceKm !== null && (
             <div className="flex items-center gap-2">
               <dt className="sr-only">Distance from you</dt>
-              <Navigation className="h-4 w-4 shrink-0 text-accent" aria-hidden="true" />
+              <Navigation className="h-4 w-4 shrink-0 text-accent-ink" aria-hidden="true" />
               <dd className="font-semibold text-accent-ink">{formatDistance(distanceKm)}</dd>
             </div>
           )}
@@ -194,5 +197,25 @@ export function EventCard({
         </div>
       </div>
     </Card>
+  );
+}
+
+function DateStamp({ iso }: { iso: string }) {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return null;
+
+  return (
+    <div
+      className="absolute bottom-3 left-3 w-12 rounded-sm border-2 border-[hsl(0_0%_7%)] bg-accent py-1 text-center font-display leading-none text-[hsl(0_0%_7%)] shadow-[3px_3px_0_hsl(0_0%_7%)]"
+      aria-hidden="true"
+    >
+      <span className="block text-[0.5625rem] font-bold uppercase tracking-[0.12em]">
+        {date.toLocaleDateString('en-IN', { weekday: 'short' })}
+      </span>
+      <span className="block text-xl font-black">{date.getDate()}</span>
+      <span className="block text-[0.5625rem] font-bold uppercase tracking-[0.12em]">
+        {date.toLocaleDateString('en-IN', { month: 'short' })}
+      </span>
+    </div>
   );
 }
