@@ -497,3 +497,11 @@ Single `app.py` Flask app + plain HTML/JS PWA. Nice UI and good ideas, but:
   cards, date stamp on cards, halftone + rings home banner, red-dot logo/favicon, `--on-brand` token for text on
   brand fills (yellow on black in light, black on yellow in dark). Visual only; verify 136/136, build clean.
   **Not deployed yet** — waiting for Suhas to approve the before/after screenshots. PWA PNG icons still old.
+- Oct 5 (later): **Flyer look deployed; must-have audit.** Live check of all Use Case 5 must-haves: sorted soonest
+  first, 0 ended events, area filter, ?event= links OK. Two gaps fixed + deployed: (1) cards had no description
+  (brief's card = title, date/time, location, description) -> 2-line description on every card; (2) category badges
+  were washed out to white on cards and 3 categories were similar blues -> 8 solid, distinct colours (Sports green,
+  Music purple, Food orange, Yard Sale pink, Community blue, Education teal, Technology slate, Other grey) on cards,
+  tiles, Explore chips, calendar dots, map pins and Insights. Deck rebuilt (10 slides, flyer look, footer maps each
+  slide to the judging criteria). **Open:** request logs record the near-me lat/lng in the URL (Cloud Logging);
+  brief's "questionnaire" not in the PDF (ask mentors); deck needs team/mentor names + dashboard screenshot.
