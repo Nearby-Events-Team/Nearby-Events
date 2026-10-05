@@ -105,11 +105,11 @@
 <text x="1252" y="334" font-size="14" fill="#3c4858">into Cloud Run at start-up</text>
 <rect x="1236" y="380" width="320" height="152" rx="12" fill="#ffffff" stroke="#b3261e" stroke-width="1.5"/>
 <text x="1252" y="408" font-size="17" font-weight="700" fill="#13213a">Cloud Logging + Monitoring</text>
-<text x="1252" y="432" font-size="14" fill="#3c4858">Structured JSON logs</text>
-<text x="1252" y="452" font-size="14" fill="#3c4858">Dashboard + 7 log-based metrics</text>
-<text x="1252" y="472" font-size="14" fill="#3c4858">(posts, RSVPs, AI health, errors)</text>
-<text x="1252" y="492" font-size="14" fill="#3c4858">Uptime check every 5 min</text>
-<text x="1252" y="512" font-size="14" fill="#3c4858">→ email alert</text>
+<text x="1252" y="432" font-size="14" fill="#3c4858">Structured JSON logs · 7 log-based metrics</text>
+<text x="1252" y="452" font-size="14" fill="#3c4858">Live Operations dashboard (36 tiles)</text>
+<text x="1252" y="472" font-size="14" fill="#3c4858">SLOs: 99.5% available, 95% &lt; 500 ms</text>
+<text x="1252" y="492" font-size="14" fill="#3c4858">Alerts: 5xx, p95, AI failures, burn rate</text>
+<text x="1252" y="512" font-size="14" fill="#3c4858">Uptime check every 5 min → email</text>
 <rect x="1236" y="558" width="320" height="152" rx="12" fill="#ffffff" stroke="#b3261e" stroke-width="1.5"/>
 <text x="1252" y="586" font-size="17" font-weight="700" fill="#13213a">Delivery</text>
 <text x="1252" y="610" font-size="14" fill="#3c4858">GitHub → GitHub Actions CI:</text>
@@ -128,6 +128,6 @@
 <text x="74" y="957" font-size="14" fill="#3c4858">request / data</text>
 <line x1="200" y1="952" x2="240" y2="952" stroke="#4a5568" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#ah)"/>
 <text x="250" y="957" font-size="14" fill="#3c4858">asynchronous push (Pub/Sub)</text>
-<text x="1576" y="957" font-size="14" fill="#4a5568" text-anchor="end">Radius · everything happening within your radius · github.com/kanishmanickam/Nearby-Events</text>
+<text x="1576" y="957" font-size="14" fill="#4a5568" text-anchor="end">Radius · everything happening within your radius · github.com/Nearby-Events-Team/Nearby-Events</text>
 <text x="24" y="990" font-size="13" fill="#6b7686">Without keys the same code runs locally: Firebase emulators, photos on disk, OpenStreetMap maps and a rule-based AI fallback (npm run dev).</text>
 </svg>
