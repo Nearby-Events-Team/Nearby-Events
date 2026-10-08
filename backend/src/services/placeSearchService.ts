@@ -11,7 +11,7 @@ import { getPlaceIndex } from './statsService';
 
 const SEARCH = 'https://photon.komoot.io/api/';
 const REVERSE = 'https://photon.komoot.io/reverse';
-const USER_AGENT = 'NearbyEvents/1.0 (community event board; hackathon project)';
+const USER_AGENT = 'NearbyEvents/1.0 (community event board)';
 const TIMEOUT_MS = 4000;
 const CACHE_TTL_MS = 10 * 60 * 1000;
 /** Coimbatore city centre: results are ranked by distance from here. */

@@ -37,7 +37,7 @@ function Hero({ city }: { city: string }) {
         <div className="max-w-3xl">
           {/* A taped-on label rather than a pill: ink tag, yellow type, slightly askew. */}
           <span className="inline-block -rotate-1 animate-fade-up bg-brand px-2.5 py-1 font-display text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-on-brand">
-            Built on Google Cloud for the Cognizant NPN Hackathon
+            Built on Google Cloud for your community
           </span>
 
           <h1 className="mt-5 animate-fade-up text-display-xl font-black uppercase text-ink [animation-delay:60ms]">

@@ -20,7 +20,7 @@ export interface GeocodeInput {
 
 const ENDPOINT = 'https://nominatim.openstreetmap.org/search';
 /** Nominatim's usage policy asks for an identifying User-Agent and at most one request a second. */
-const USER_AGENT = 'NearbyEvents/1.0 (community event board; hackathon project)';
+const USER_AGENT = 'NearbyEvents/1.0 (community event board)';
 const MIN_INTERVAL_MS = 1100;
 const REQUEST_TIMEOUT_MS = 5000;
 /** Geocoding must never hold up publishing an event for long. */

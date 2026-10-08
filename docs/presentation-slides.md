@@ -1,6 +1,6 @@
-# Radius: hackathon presentation (12 slides)
+# Radius: project presentation (12 slides)
 
-**Cognizant NPN GCP Hackathon · Use Case 5: Local Event Bulletin Board · Team APEX · Mentor: M N Sujeeth**
+**Radius · Local Event Bulletin Board · Team APEX · Mentor: M N Sujeeth**
 
 > Text version of the final deck (the designed deck, with screenshots and speaker notes, is the Slides
 > artifact). Everything listed as built runs on the live site; targets are labelled as targets.

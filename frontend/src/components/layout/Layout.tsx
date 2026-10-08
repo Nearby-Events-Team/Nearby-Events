@@ -110,7 +110,7 @@ function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-border pt-6 text-xs text-ink-muted sm:flex-row sm:items-center">
-          <p>© {year} Radius · Cognizant NPN GCP Hackathon prototype</p>
+          <p>© {year} Radius · Local events, connected communities</p>
           <p className="flex items-center gap-1.5">
             <BarChart3 className="h-3.5 w-3.5" aria-hidden="true" />
             Cloud Run · Firestore · Cloud Storage · Gemini · Maps Platform
