@@ -65,7 +65,7 @@ it was the first thing considered. One service won for three concrete reasons:
    second DNS lookup, no second TLS handshake on the critical path.
 2. **No CORS surface.** Cross-origin credentials are where auth bugs live. Here the token
    never crosses an origin boundary.
-3. **One deploy, one URL, one set of logs.** During a hackathon that is worth more than
+3. **One deploy, one URL, one set of logs.** For this project that is worth more than
    the theoretical scaling independence of two services.
 
 The cost is that the frontend and backend scale together. At this size that is irrelevant,

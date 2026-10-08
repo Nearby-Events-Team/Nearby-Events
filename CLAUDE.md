@@ -1,29 +1,13 @@
 # Nearby-Events — Local Event Bulletin Board
-Cognizant NPN GCP Hackathon · Use Case 5
+Radius · Local Event Bulletin Board
 
 This file is the shared brief for everyone on the team and for Claude Code. Read it fully before doing anything.
 Last updated: Oct 2, 2026 (plan changed: local-first build today, deployment moved to tonight/tomorrow).
 
 ---
 
-## 1. The hackathon (non-negotiable rules)
-- Build window Oct 2–5, 2026. **In-person evaluation Oct 6, 2026** by a Cognizant panel, with a live demo.
-- Team of max 6, one use case (ours is Use Case 5), one college mentor + one Cognizant mentor.
-  "Participation in mentor connects" is itself scored — attend them.
-- The solution **must be tied to Google Cloud Platform**.
-- Submit by email before the deadline the mentors give, as **PPT and/or video** (do both to be safe).
-- Deliverable format: 8–10 slides (or a 4–6 page report) covering: problem understanding, data & inputs,
-  solution design, implementation & outcomes, KPIs, risks & mitigation, adoption/change management, reflection.
-- "Best solution" checklist: architecture diagram + clean code, working demoable UI, short video walkthrough,
-  roadmap (built now vs next), presentation covering problem, demo, impact and limits.
-- Judges score: use-case & process-flow understanding, **architecture + alternatives considered**,
-  **breadth of sample data**, architecture considerations, performance, UX, integration options, reusability,
-  ease of implementation, real-time decision capability, **monitoring approach**, presentation quality,
-  mentor participation.
-- Original brief: `docs/hackathon_brief.pdf` — kept locally only, **never committed** (it is marked
-  Cognizant-confidential and contains the other teams' use cases). Use Case 5 only.
+## 1. Product requirements
 
-### Use Case 5 requirements from the brief
 Must have:
 1. Grid of event cards (title, date/time, location, description).
 2. Post form (name, date/time, location, description).
@@ -176,7 +160,7 @@ Follow `docs/gcp-deployment.md`; deploy **this branch's code** (after Kanish mer
   Restrict the Maps key by HTTP referrer (localhost + the Cloud Run URL) and by API.
   Autocomplete must use session tokens (the official widget does this). Never call Maps APIs in loops or polling.
 - Google Maps Platform free caps since March 2025 are per-SKU (e.g. 10,000/month for Essentials SKUs);
-  hackathon usage is far below them, but the quota cap is the real safety net.
+  typical usage is far below them, but the quota cap is the real safety net.
 - Gemini key only in `.env` locally and Secret Manager in prod — never committed, never a build arg.
 - `.env`, `.env.*` (except `.env.example`), `service-account*.json` and `docs/hackathon_brief.pdf` must never
   be committed (`.gitignore` covers the key files).

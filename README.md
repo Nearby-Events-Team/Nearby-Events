@@ -1,6 +1,6 @@
 # Radius 📍
 
-> **Cognizant GCP Hackathon — Use Case 5: Local Event Bulletin Board**  
+> **Local Event Bulletin Board**
 > *Everything happening within your radius.*
 
 [![Google Cloud Platform](https://img.shields.io/badge/GCP-Cloud%20Run%20%7C%20Firestore%20%7C%20Storage%20%7C%20Vertex%20AI-4285F4?logo=googlecloud&logoColor=white)](https://cloud.google.com)
@@ -23,7 +23,7 @@ It replaces the fragmentation and clutter of physical corkboards and generic soc
 
 ## 🚀 Key Features & Capability Breakdown
 
-### 🎯 Use Case 5 Core Requirements
+### 🎯 Core Features
 - 🗂️ **Grid Board Layout**: Clean, responsive card grid layout showing upcoming community gatherings.
 - ⏱️ **Automatic Date Sorting**: The next event appears top-left; Firestore orders by each event's start time (`startsAt ASC`).
 - 🧹 **Automatic Expiration Logic**: An event leaves the board as soon as its end time passes; a protected endpoint (for Cloud Scheduler) marks old events `EXPIRED`, and they stay viewable under "Past / Expired".
@@ -120,8 +120,8 @@ Nearby-Events/
 │   └── vite.config.ts
 ├── scripts/
 │   └── seed-events.ts            # Realistic seed script (43 upcoming & past events)
-├── docs/                         # Hackathon submission documentation & presentation material
-│   ├── cognizant-hackathon-report.md  # 5-page submission report
+├── docs/                         # Project documentation & presentation material
+│   ├── project-report.md  # 5-page project report
 │   ├── presentation-slides.md         # 10-slide ready presentation deck
 │   ├── architecture-diagram.md        # Technical architecture specifications
 │   ├── architecture-diagram.svg       # Presentation-ready architecture SVG diagram
@@ -336,13 +336,13 @@ First-time setup: [`docs/gcp-deployment.md`](docs/gcp-deployment.md). Monitoring
 
 ---
 
-## 🏆 Hackathon Submission Deliverables
+## 🏆 Project Documentation
 
-Full submission documentation prepared for the **Cognizant GCP Hackathon**:
+Project documentation for **Radius**:
 
 | Document | Description | Link |
 |---|---|---|
-| 📄 **Submission Report** | 5-page detailed project report addressing problem, data, KPIs, and GCP architecture | [docs/cognizant-hackathon-report.md](docs/cognizant-hackathon-report.md) |
+| 📄 **Project Report** | 5-page detailed project report addressing problem, data, KPIs, and GCP architecture | [docs/project-report.md](docs/project-report.md) |
 | 📊 **Presentation Deck** | 10-slide ready presentation deck for evaluators | [docs/presentation-slides.md](docs/presentation-slides.md) |
 | 📐 **Architecture Specs** | Technical specifications & SVG schematic of the GCP stack | [docs/architecture-diagram.md](docs/architecture-diagram.md) |
 | 🎯 **Demo Script** | Step-by-step evaluator testing walkthrough | [docs/demo-script.md](docs/demo-script.md) |

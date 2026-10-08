@@ -1,6 +1,6 @@
 # Team APEX: who did what
 
-Cognizant NPN GCP Hackathon · Use Case 5 (Local Event Bulletin Board) · Mentor: M N Sujeeth
+Radius · Local Event Bulletin Board · Mentor: M N Sujeeth
 
 Taken from the git history (every branch), not from memory. Where work was not merged into `main`,
 it says so, and why.
@@ -22,7 +22,7 @@ it says so, and why.
 - First complete app (2 Oct, 103 files): event board, post form, sorting, expiry, RSVP, categories,
   search, share links, Firebase sign-in, Firestore, Cloud Storage, Cloud Run setup.
 - Google Calendar sync, iCal export and printable QR flyers.
-- First hackathon report, slide outline, README and architecture diagram.
+- First project report, slide outline, README and architecture diagram.
 
 **Kanish Kumaran M** (repo owner)
 - Event Intelligence: a relevance score from distance 30%, interest 25%, time 20%, freshness 15%,

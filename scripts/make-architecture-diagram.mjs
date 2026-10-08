@@ -40,7 +40,7 @@ add(`<rect width="${W}" height="${H}" fill="#ffffff"/>`);
 
 // Header
 add(`<text x="24" y="44" font-size="30" font-weight="800" fill="#13213a">Radius · System architecture</text>`);
-add(`<text x="24" y="72" font-size="16" fill="#4a5568">Live on Google Cloud · project nearby-events-510418 · Cloud Run + Firestore in asia-south1 (Mumbai) · Use Case 5, Cognizant NPN GCP Hackathon</text>`);
+add(`<text x="24" y="72" font-size="16" fill="#4a5568">Live on Google Cloud · project nearby-events-510418 · Cloud Run + Firestore in asia-south1 (Mumbai)</text>`);
 
 // Lanes
 for (const l of lanes) {

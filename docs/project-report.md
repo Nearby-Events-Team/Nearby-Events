@@ -2,7 +2,7 @@
 
 *Everything happening within your radius.*
 
-**Cognizant NPN GCP Hackathon · Use Case 5: Local Event Bulletin Board**
+**Radius · Local Event Bulletin Board**
 **Live:** https://nearby-events-x2gneiue7a-el.a.run.app · **Code:** github.com/kanishmanickam/Nearby-Events (private)
 **Team:** Kanish, Adhi, Suhas *(add the remaining members and mentors)*
 
